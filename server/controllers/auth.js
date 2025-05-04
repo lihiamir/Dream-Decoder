@@ -1,31 +1,30 @@
 const authService = require('../services/auth.js');
 
 exports.register = async (req, res) => {
-    const { email, password, username } = req.body;
+    const token = req.headers.authorization?.split('Bearer ')[1];
+    
+    if (!token) return res.status(401).json({ error: 'Token missing' });
   
     try {
-      const userRecord = await authService.createUser(email, password, username);
-      res.status(201).json({ message: 'User created successfully', uid: userRecord.uid });
+      const userInfo = await authService.registerUser(token);
+      
+      res.status(201).json({ message: 'User registered seccessfuly', user:userInfo});
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(401).json({ error: 'Invalid token' });
     }
   };
   
   exports.login = async (req, res) => {
-    const { idToken } = req.body;
-  
+    const token = req.headers.authorization?.split('Bearer ')[1];
+
+    if (!token) return res.status(401).json({ error: 'Token missing' });
+
     try {
-      const decodedToken = await authService.verifyToken(idToken);
-      const uid = decodedToken.uid;
-  
-      res.status(200).json({
-        message: 'Login successful',
-        uid: uid,
-        email: decodedToken.email,
-        name: decodedToken.name || decodedToken.displayName
-      });
+      const userInfo = await authService.loginUser(token);
+      res.status(200).json({ message: 'Login successful', user: userInfo });
     } catch (error) {
-      res.status(401).json({ error: 'Invalid token' });
+      console.error('Login error:', error);
+      res.status(401).json({ error: 'Invalid or expired token' });
     }
   };
   

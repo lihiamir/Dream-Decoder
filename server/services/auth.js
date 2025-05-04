@@ -1,24 +1,29 @@
 const admin = require('../config/firebase');
 
-exports.createUser = async (email, password, username) => {
-  // Check if user with this email already exists
-  try {
-    await admin.auth().getUserByEmail(email);
-    throw new Error('User with this email already exists');
-  } catch (error) {
-    if (error.code !== 'auth/user-not-found') {
-      throw error; // If it's any other error, rethrow it
-    }
-  }
-
-  // If no user found, create new user
-  return await admin.auth().createUser({
-    email: email,
-    password: password,
-    displayName: username
-  });
+exports.registerUser = async (token) => {
+    const decoded = await verifyToken(token);
+    const uid = decoded.uid;
+    const email = decoded.email;
+    const displayName = decoded.name || null;
+    const userData = {
+      uid,
+      email,
+      displayName,
+      createdAt: new Date()
+    };
+    await saveUserToFirestore(userData);
+    return userData;
 };
 
 exports.verifyToken = async (idToken) => {
   return await admin.auth().verifyIdToken(idToken);
 };
+
+exports.loginUser= async (token) => {
+  const decoded = await this.verifyToken(token);
+  return {
+    uid: decoded.uid,
+    email: decoded.email,
+    displayName: decoded.name || null
+  };
+}
