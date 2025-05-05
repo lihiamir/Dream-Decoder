@@ -11,7 +11,9 @@
     
     app.use(express.json());
     const authRoutes = require('./routes/auth.js');
+    const dreamsRouts = require('./routes/dreams.js');
     app.use('/api/auth', authRoutes);
+    app.use('/api/dreams',dreamsRouts);
 
     app.get('/', (req, res) => {
     res.send('Hello Dream World!');
