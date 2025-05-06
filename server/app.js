@@ -16,6 +16,13 @@
     app.use('/api/auth', authRoutes);
     app.use('/api/dreams',dreamsRouts);
 
+    const { processVoiceDream } = require('./services/dreams.js');
+    (async () => {
+        const result = await processVoiceDream('../server/audio.mp3');
+        console.log(result);
+      })();
+
+      
     app.get('/', (req, res) => {
     res.send('Hello Dream World!');
     });
