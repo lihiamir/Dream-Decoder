@@ -6,6 +6,7 @@
     // Allow to accept requests from diffrent origins
     const cors = require('cors');
 
+    
     // For using postman.com  
     app.use(cors());
     
