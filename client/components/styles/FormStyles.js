@@ -88,12 +88,10 @@ export default StyleSheet.create({
     backgroundColor: '#351b64',
     borderRadius: 25,
     paddingVertical: 13,
+    width: '75%',
+    alignSelf: 'center',
     alignItems: 'center',
     marginTop: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
   },
   buttonText: {
     color: '#fff',
@@ -156,35 +154,11 @@ export default StyleSheet.create({
     width: 24,
     height: 24,
   },
-
-
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 30,
     paddingHorizontal: 5,
-  },
-
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  checkbox: {
-    width: 18,
-    height: 18,
-    borderWidth: 1.5,
-    borderColor: '#351B64',
-    borderRadius: 9,
-    marginRight: 8,
-    backgroundColor: 'transparent',
-  },
-  checkboxChecked: {
-    backgroundColor: '#351B64',
-  },
-
-  rememberText: {
-    color: '#8B8B8B',
-    fontSize: 13,
   },
   forgotText: {
     color: '#351B64',

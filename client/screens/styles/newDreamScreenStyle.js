@@ -15,13 +15,12 @@ export default StyleSheet.create({
       resizeMode: 'cover',
     },
     moon: {
-      width: 390,
-      height: 390,
+      width: '75%',
+      height: '75%',
       position: "absolute",
-      top: -200,
-      textAlign: "center",
-
-    },
+      top: "-55%",
+      resizeMode: "contain",
+        },
     overlap: {
       position: "absolute",
       top: 200,
@@ -42,25 +41,20 @@ export default StyleSheet.create({
     c1: {
       position: "absolute",
       top: 195,
-      left: 0,
-      width: 276,
-      height: 448,
-      resizeMode: "cover",
-      opacity: 0.5,
-      
+      left: -150,
+      resizeMode: "contain",
+      opacity: 0.4,
     },
     c2: {
       position: "absolute",
       bottom: 200,
-      right: 0,
-      width: 238,
-      height: 104,
-      resizeMode: "cover",
-      opacity: 0.5,
+      right: -100,
+      resizeMode: "contain",
+      opacity: 0.4,
     },
     voice: {
-      position: "relative",
-      top: '10%',
+      position: "absolute",
+      top: '15%',
     },
     textArea: {
       position: "relative",
@@ -79,32 +73,12 @@ export default StyleSheet.create({
       fontWeight: "300",
       padding: 10,
     },
-    continue: {
-      position: "relative",
-      top: '20%',
-      width: '40%',
-      height: 50,
-      backgroundColor: "#240a53",
-      borderRadius: 25,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    continueText: {
-      color: "#fff",
-      fontSize: 20,
-      fontWeight: "500",
+    continueButton: {
+      position: "absolute",
+      top: '55%',
     },
     steps: {
-      position: "relative",
-      top: '30%',
-    },
-    menu: {
       position: "absolute",
-      top: 0,
-      left: 0,
-      width: 30,
-      resizeMode: "contain",
-      margin: 20,
+      top: '90%',
     },
   });
-  

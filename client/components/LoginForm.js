@@ -6,36 +6,50 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../config/firebase";
 import styles from "./styles/FormStyles";
+import { useGoogleAuth } from '../auth/googleAuth';
+import { checkLogin } from "../auth/api";
+
 
 export default function LoginForm({ navigation }) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const toggleCheckbox = () => setRememberMe(!rememberMe);
+  const { promptAsync } = useGoogleAuth(navigation);
 
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      console.log(userCredential._tokenResponse.idToken);
-      navigation.navigate('NewDream');
+      const idToken = await userCredential.user.getIdToken();
+      
+      await checkLogin(idToken); //check if token is valid with the server
+      navigation.navigate('Drawer', { user: user });
     } catch (error) {
       alert(error.message);
     }
   };
 
   const handleForgotPassword = async () => {
-
+    if (!email) {
+      alert("Please enter your email address first.");
+      return;
+    }
+  
+    try {
+      await sendPasswordResetEmail(auth, email);
+      alert("Password reset email sent!");
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Image source={require('../assets/images/rectangle7.png')} style={styles.rectangle} />
-      <Image source={require('../assets/images/vector1.png')} style={styles.vector} />
+      <Image source={require('../assets/images/background.png')} style={styles.rectangle} />
+      <Image source={require('../assets/images/backLogin.png')} style={styles.vector} />
       <Image source={require('../assets/images/moon.png')} style={styles.logMoon} />
       
       <Text style={styles.title}>Welcome Back</Text> 
@@ -72,10 +86,6 @@ export default function LoginForm({ navigation }) {
 
         {/* Remember Me and Forgot Password */}
         <View style={styles.row}>
-          <TouchableOpacity style={styles.checkboxContainer} onPress={toggleCheckbox}>
-            <View style={[styles.checkbox, rememberMe && styles.checkboxChecked]} />
-            <Text style={styles.rememberText}>Remember me</Text>
-          </TouchableOpacity>
           <TouchableOpacity onPress={handleForgotPassword}>
             <Text style={styles.forgotText}>Forgot password?</Text>
           </TouchableOpacity>
@@ -103,7 +113,7 @@ export default function LoginForm({ navigation }) {
         </View>
 
         <View style={styles.authIcons}>
-          <TouchableOpacity style={styles.authIconButton}>
+          <TouchableOpacity style={styles.authIconButton} onPress={() => promptAsync()}>
             <Image source={require('../assets/images/google.png')} style={styles.authIcon} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.authIconButton}>

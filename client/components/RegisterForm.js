@@ -1,26 +1,28 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from "react-native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../config/firebase";
 import styles from "./styles/FormStyles";
+import { useGoogleAuth } from '../auth/googleAuth';
+import { checkRegister } from '../auth/api';
 
 export default function RegisterForm({ navigation }) { 
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setusername] = useState("");
+  const [name, setname] = useState("");
+  const { promptAsync } = useGoogleAuth(navigation);
+
 
   const handleRegister = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const idToken = await user.getIdToken();
+      await checkRegister(idToken); //check if token is valid with the server
+      await updateProfile(user, { displayName: name, });
       alert('Account created!');
-      navigation.navigate('Login');
+      navigation.navigate('Drawer', { user: user });
     } catch (error) {
       alert(error.message);
     }
@@ -29,8 +31,8 @@ export default function RegisterForm({ navigation }) {
   return (
     <View style={styles.container}>
       {/* Background & top graphics */}
-      <Image source={require('../assets/images/rectangle7.png')} style={styles.rectangle} />
-      <Image source={require('../assets/images/vector3.png')} style={styles.vector} />
+      <Image source={require('../assets/images/background.png')} style={styles.rectangle} />
+      <Image source={require('../assets/images/backRegister.png')} style={styles.vector} />
       <Image source={require('../assets/images/moon.png')} style={styles.regMoon} />
 
       <Text style={styles.title}>Register</Text>
@@ -42,10 +44,10 @@ export default function RegisterForm({ navigation }) {
           <Image source={require('../assets/images/userIcon.png')} style={styles.icon} />
           <TextInput
             style={styles.input}
-            value={username}
-            placeholder="Username"
+            value={name}
+            placeholder="Your Name"
             placeholderTextColor="#351b64"
-            onChangeText={setusername}
+            onChangeText={setname}
              />
         </View>
 
@@ -95,7 +97,7 @@ export default function RegisterForm({ navigation }) {
         </View>
 
         <View style={styles.authIcons}>
-          <TouchableOpacity style={styles.authIconButton}>
+          <TouchableOpacity style={styles.authIconButton} onPress={() => promptAsync()}>
             <Image source={require('../assets/images/google.png')} style={styles.authIcon} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.authIconButton}>
