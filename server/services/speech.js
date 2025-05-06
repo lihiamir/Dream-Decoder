@@ -1,5 +1,7 @@
+require('dotenv').config();
 const fs = require('fs');
 const { OpenAI } = require('openai');
+
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -7,8 +9,14 @@ const openai = new OpenAI({
 
 async function transcribeAudio(audioPath) {
     try {
+      const stats = fs.statSync(audioPath);
+      console.log('📦 ', stats.size);
       const audioFile = fs.createReadStream(audioPath);
-  
+      // console.log(audioFile, "p");
+      if (!fs.existsSync(audioPath)) {
+        console.error('❌ ');
+        return;
+      }
       const response = await openai.audio.transcriptions.create({
         file: audioFile,
         model: 'whisper-1',
@@ -21,5 +29,11 @@ async function transcribeAudio(audioPath) {
       console.error('שגיאה בתמלול:', error.message);
     }
   }
-  
-  transcribeAudio('./audio.ogg');
+
+// async function run() {
+// const models = await openai.models.list();
+// console.log("S" + models.data.length + " P");
+
+// }
+// run();
+transcribeAudio('../server/audio.mp3');

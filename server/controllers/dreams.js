@@ -1,6 +1,6 @@
 const dreamsService = require('../services/dreams');
 
-exports.voice = async (req, res) => {
+exports.text = async (req, res) => {
     const {text} = req.body;
     if (!text) return res.status(400).json({ error: 'Missing text' });
     try {
@@ -11,7 +11,7 @@ exports.voice = async (req, res) => {
       }
 };
 
-exports.text = async (req, res) => {
+exports.voice = async (req, res) => {
     const file = req.file;
     if (!file) return res.status(400).json({ error: 'Missing audio file' });
   

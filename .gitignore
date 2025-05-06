@@ -1,5 +1,5 @@
-.env
-firebaseServiceKey.json
+server/.env
+server/firebaseServiceKey.json
 server/node_modules/ 
 node_modules/ 
 
