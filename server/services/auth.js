@@ -15,6 +15,13 @@ exports.registerUser = async (token) => {
     return userData;
 };
 
+exports.saveUserToFirestore = async(userData) => {
+  const db = admin.firestore();
+  const usersCollection = db.collection('users');
+
+  await usersCollection.doc(userData.uid).set(userData, { merge: true });
+}
+
 exports.verifyToken = async (idToken) => {
   return await admin.auth().verifyIdToken(idToken);
 };

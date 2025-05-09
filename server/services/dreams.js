@@ -10,7 +10,7 @@ const prompt = `Number of scenes: 4
 3. Scene description 3: The woman sitting beside a laptop in an outdoor setting (within the wheat fields), coding/programming.
 4. Scene description 4: The woman excitedly receiving an acceptance letter with a logo of "Indolinia" company, the wheat fields in the background.`;
 
-  exports.processTextDream = async (text) => {
+  exports.processTextDream = async (uid, text) => {
     const rawOutput = prompt;
     // const rawOutput = await chatService.extractScenes(text); 
     const lines = rawOutput.trim().split('\n');
@@ -21,20 +21,26 @@ const prompt = `Number of scenes: 4
         const scene = scenes[i];
         const imageUrl = await imageService.generateImageUrl(scene);
         console.log(imageUrl, "URL");
-        // imageUrls.push(imageUrl);
+        imageUrls.push(imageUrl);
       }
+    
+    await saveDreamForUser(uid, {
+        text,
+        scenes,
+        images: imageUrls,
+        createdAt: new Date()
+    });
     // const symbols = await symbolService.extractSymbols(text);
-    // const images = await imageService.generateImages(scenes);
   
-    // return { scenes, images, symbols };
     return scenes;
 };
 
+
 const text = "אני רק חולמת לראות שזה מתרגם לי את החלום כמו שצריך אז אני חולמת שאני בשדות של טוטים עם ערנבים ליד מתכנתת ומתקבלת לחברת אינדוליניה."
-exports.processVoiceDream = async (audioPath) => {
+exports.processVoiceDream = async (uid, audioPath) => {
     // const transcribedText = await speechService.transcribeAudio(audioPath);
     // console.log(transcribedText, "hope this work");
     // return await this.processTextDream(transcribedText);
-    return await this.processTextDream(text);
+    return await this.processTextDream(uid, text);
 };
 
