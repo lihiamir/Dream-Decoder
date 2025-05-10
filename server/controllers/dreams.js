@@ -3,7 +3,7 @@ const speechService = require('../services/speech');
 const clarificationService = require('../services/clarification');
 
 // Handles dream submission (from either audio or text)
-exports.submitDream = async (req, res) => {
+exports.submitDream = async(req, res) => {
   const uid = req.uid;
 
   try {
@@ -33,7 +33,7 @@ exports.submitDream = async (req, res) => {
 };
 
 // Handles user's clarifications after follow-up questions
-exports.clarifyDream = async (req, res) => {
+exports.clarifyDream = async(req, res) => {
   const uid = req.uid;
   const { text } = req.body;
 
@@ -67,7 +67,7 @@ exports.clarifyDream = async (req, res) => {
 };
 
 // Extracts dream text from request (audio or text input)
-async function getDreamText(req) {
+exports.getDreamText = async(req) => {
   if (req.file) {
     const path = req.file.path;
     const text = await speechService.transcribeAudio(path);
@@ -83,7 +83,7 @@ async function getDreamText(req) {
 }
 
 // Extracts clarification text from request (audio or text input)
-async function getClarificationsText(req) {
+exports.getClarificationsText= async(req) => {
   if (req.file) {
     const path = req.file.path;
     const text = await speechService.transcribeAudio(path);
@@ -98,7 +98,7 @@ async function getClarificationsText(req) {
 }
 
 // Checks if the submitted dream needs follow-up questions
-async function checkForClarifications(text) {
+exports.checkForClarifications = async(text) => {
   const { needsFollowUp, questions } = await clarificationService.analyzeDreamForClarifications(text);
 
   if (needsFollowUp) {
@@ -107,4 +107,18 @@ async function checkForClarifications(text) {
 
   return { followUp: false };
 }
+
+
+exports.getAllDreams = async (req, res) => {
+  const uid = req.uid;
+  if (!uid) return res.status(400).json({ error: "Missing user ID" });
+
+  try {
+    const dreams = await dreamsService.getAllDreams(uid);
+    res.status(200).json(dreams);
+  } catch (error) {
+    console.error("❌ Error fetching user dreams:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
 

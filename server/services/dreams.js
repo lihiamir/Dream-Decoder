@@ -2,6 +2,8 @@ const speechService = require('./speech');
 const chatService = require('./chat');
 const imageService = require('./image');
 const symbolService = require('./symbol');
+const admin = require('../config/firebase');
+
 
 const prompt = `Number of scenes: 4
 
@@ -41,3 +43,22 @@ const prompt = `Number of scenes: 4
     return scenes;
 };
 
+const saveDreamForUser = async (uid, dreamData) => {
+  const db = admin.firestore();
+  const userDreamsRef = db.collection('users').doc(uid).collection('dreams');
+  await userDreamsRef.add(dreamData); // ← THIS creates a unique document with auto-ID
+};
+
+exports.getAllDreams = async (uid) => {
+  const db = admin.firestore();
+  const dreamsRef = db.collection('users').doc(uid).collection('dreams');
+
+  const snapshot = await dreamsRef.orderBy('createdAt', 'desc').get();
+
+  const dreams = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+
+  return dreams;
+};

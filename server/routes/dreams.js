@@ -8,6 +8,6 @@ const { authenticateToken } = require('../middlewares/auth');
 router.post('/submit', authenticateToken, upload.single('audio'), dreamsController.submitDream);
 router.post('/clarify', authenticateToken, upload.single('audio'), dreamsController.clarifyDream);
 
-// router.get('/my-dreams', authenticateToken, dreamsController.getAllDreams); I will create it later <3
+router.get('/my-dreams', authenticateToken, dreamsController.getAllDreams); 
 
 module.exports = router;
