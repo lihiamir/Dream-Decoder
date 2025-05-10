@@ -10,9 +10,12 @@ const prompt = `Number of scenes: 4
 3. Scene description 3: The woman sitting beside a laptop in an outdoor setting (within the wheat fields), coding/programming.
 4. Scene description 4: The woman excitedly receiving an acceptance letter with a logo of "Indolinia" company, the wheat fields in the background.`;
 
-  exports.processTextDream = async (uid, text) => {
-    const rawOutput = prompt;
-    // const rawOutput = await chatService.extractScenes(text); 
+// const text = "אני רק חולמת לראות שזה מתרגם לי את החלום כמו שצריך אז אני חולמת שאני בשדות של טוטים עם ערנבים ליד מתכנתת ומתקבלת לחברת אינדוליניה."
+
+
+  exports.processTextDream = async (uid, text, metadata = {}) => {
+    // const rawOutput = prompt;
+    const rawOutput = await chatService.extractScenes(text); 
     const lines = rawOutput.trim().split('\n');
     const sceneLines = lines.slice(2);
     const scenes = sceneLines.map(line => line.replace(/^\d+\.\s*/, ''));
@@ -24,23 +27,17 @@ const prompt = `Number of scenes: 4
         imageUrls.push(imageUrl);
       }
     
+
     await saveDreamForUser(uid, {
-        text,
-        scenes,
-        images: imageUrls,
-        createdAt: new Date()
+      ...metadata,
+      parsedText: text,
+      scenes,
+      images: imageUrls,
+      // Store the current date and time when the dream was created
+      createdAt: new Date()
     });
     // const symbols = await symbolService.extractSymbols(text);
   
     return scenes;
-};
-
-
-const text = "אני רק חולמת לראות שזה מתרגם לי את החלום כמו שצריך אז אני חולמת שאני בשדות של טוטים עם ערנבים ליד מתכנתת ומתקבלת לחברת אינדוליניה."
-exports.processVoiceDream = async (uid, audioPath) => {
-    // const transcribedText = await speechService.transcribeAudio(audioPath);
-    // console.log(transcribedText, "hope this work");
-    // return await this.processTextDream(transcribedText);
-    return await this.processTextDream(uid, text);
 };
 

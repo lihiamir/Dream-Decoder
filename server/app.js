@@ -16,14 +16,6 @@
     app.use('/api/auth', authRoutes);
     app.use('/api/dreams',dreamsRouts);
 
-    // This block is for internal testing only, using a local audio file
-    const { processVoiceDream } = require('./services/dreams.js');
-    (async () => {
-        const result = await processVoiceDream('../server/audio.mp3');
-        console.log(result);
-      })();
-
-      
     app.listen(port, () => {
     console.log(`Server running on port ${port}`);
     });
