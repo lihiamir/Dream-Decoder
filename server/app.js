@@ -17,8 +17,8 @@
     app.use('/api/dreams',dreamsRouts);
 
     app.get('/', (req, res) => {
-    res.send('Hello Dream World!');
-    });
+        res.send('Hello Dream World!');
+        });
 
     app.listen(port, () => {
     console.log(`Server running on port ${port}`);
