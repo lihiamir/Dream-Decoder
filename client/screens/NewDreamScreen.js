@@ -1,19 +1,45 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, Text, Image, TouchableOpacity, TextInput, SafeAreaView } from "react-native";
 import styles from "./styles/newDreamScreenStyle";
 import ContinueButton from "../components/ContinueButton";
 import Menu from "../components/Menu";
-import AudioButton from "../components/AudioButton";
+import {AudioButton, uploadRecording, audioUri} from "../components/AudioButton";
+import { uploadDreamText } from "../api/dream";
+import { auth } from "../config/firebase";
+
 
 export default function NewDreamScreen({ navigation, route }) {
+
+  const [audioUri, setAudioUri] = useState(null);
   const { user } = route.params;
+  
   console.log(user);
 
-  const [text, setText] = React.useState("");
+  const [text, setText] = useState("");
 
 
-  const handleContinue = () => {
-    navigation.navigate('QuestionsPrompt', { user: user });
+  const handleContinue = async () => {
+    if (!audioUri && !text) {
+      alert("Please provide either a voice recording or text input.");
+      return;
+    }
+    const idToken = await auth.currentUser.getIdToken(true);
+
+    if (audioUri) { 
+      const response = await uploadRecording(idToken, audioUri);
+    } else if (text) {
+      const response = await uploadDreamText(idToken, text).catch((error) => {
+        console.error('Error uploading recording:', error);
+      });
+        return;
+      }
+    const result = await response.json();
+    if (result.followUp) {
+      navigation.navigate('QuestionsPrompt', { user: user , questions: result.questions, text: result.originalText});
+
+    }
+
+
   };
 
   return (
@@ -28,7 +54,7 @@ export default function NewDreamScreen({ navigation, route }) {
 
         <Image source={require("../assets/images/c1.png")} style={styles.c1} />
         <Image source={require("../assets/images/c2.png")} style={styles.c2} />
-        <AudioButton style={styles.voice} />
+        <AudioButton style={styles.voice} setAudioUri={setAudioUri} />
 
         <View style={styles.textArea}>
           <TextInput
@@ -36,7 +62,7 @@ export default function NewDreamScreen({ navigation, route }) {
             placeholderTextColor="#FFF"
             style={styles.input}
             value={text}
-            onChange={text => setText(text)}
+            onChangeText={setText}
             multiline
           />
         </View>

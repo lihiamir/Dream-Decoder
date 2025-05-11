@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../config/firebase";
 import styles from "./styles/FormStyles";
 import { useGoogleAuth } from '../auth/googleAuth';
-import { checkRegister } from '../auth/api';
+import { checkRegister } from '../api/auth';
 
 export default function RegisterForm({ navigation }) { 
 
@@ -18,9 +18,12 @@ export default function RegisterForm({ navigation }) {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      const idToken = await user.getIdToken();
-      await checkRegister(idToken); //check if token is valid with the server
       await updateProfile(user, { displayName: name, });
+ 
+      await user.reload();
+      const idToken = await auth.currentUser.getIdToken(true);
+      await checkRegister(idToken); //check if token is valid with the server
+      
       alert('Account created!');
       navigation.navigate('Drawer', { user: user });
     } catch (error) {

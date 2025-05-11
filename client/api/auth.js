@@ -7,13 +7,13 @@ async function checkRegister(token) {
       method: "POST",
       headers: {
         accept: "*/*",
-        Authorization: `${token}`,
+        Authorization: `Bearer ${token}`,
       }});
 
     if (!response.ok) {
       alert("error registering user");
     } else {
-        let result = await res.text();
+        let result = await response.text();
         return JSON.parse(result);
     }
   };
@@ -23,13 +23,13 @@ async function checkRegister(token) {
       method: "POST",
       headers: {
         accept: "*/*",
-        Authorization: `${token}`,
+        Authorization: `Bearer ${token}`,
       }});
 
     if (!response.ok) {
-        alert("error registering user");
+        alert("error login user");
     } else {
-        let result = await res.text();
+        let result = await response.text();
         return JSON.parse(result);;
     }
   };
