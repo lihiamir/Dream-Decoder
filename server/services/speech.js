@@ -7,7 +7,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-async function transcribeAudio(audioPath) {
+exports.transcribeAudio = async (audioPath) =>  {
     try {
       const stats = fs.statSync(audioPath);
       console.log('📦 ', stats.size);
@@ -23,8 +23,8 @@ async function transcribeAudio(audioPath) {
         language: 'he', // עברית
       });
   
-      console.log('תמלול הקובץ:');
       console.log(response.text);
+      return response.text;
     } catch (error) {
       console.error('שגיאה בתמלול:', error.message);
     }
@@ -36,4 +36,5 @@ async function transcribeAudio(audioPath) {
 
 // }
 // run();
-transcribeAudio('../server/audio.mp3');
+// transcribeAudio('../server/audio.mp3');
+
