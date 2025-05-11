@@ -35,6 +35,8 @@ exports.submitDream = async(req, res) => {
 // Handles user's clarifications after follow-up questions
 exports.clarifyDream = async(req, res) => {
   const uid = req.uid;
+  
+  // This is the original dream text (before user clarifications), not the clarification response
   const { text } = req.body;
 
   if (!text) return res.status(400).json({ error: 'Missing original dream text' });
@@ -67,7 +69,7 @@ exports.clarifyDream = async(req, res) => {
 };
 
 // Extracts dream text from request (audio or text input)
-exports.getDreamText = async(req) => {
+async function getDreamText(req) {
   if (req.file) {
     const path = req.file.path;
     const text = await speechService.transcribeAudio(path);
@@ -83,7 +85,7 @@ exports.getDreamText = async(req) => {
 }
 
 // Extracts clarification text from request (audio or text input)
-exports.getClarificationsText= async(req) => {
+async function getClarificationsText(req) {
   if (req.file) {
     const path = req.file.path;
     const text = await speechService.transcribeAudio(path);
@@ -98,7 +100,7 @@ exports.getClarificationsText= async(req) => {
 }
 
 // Checks if the submitted dream needs follow-up questions
-exports.checkForClarifications = async(text) => {
+async function checkForClarifications(text) {
   const { needsFollowUp, questions } = await clarificationService.analyzeDreamForClarifications(text);
 
   if (needsFollowUp) {
