@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    //client
     "@react-navigation/native": "^7.1.6",
     "expo-auth-session": "~6.0.3",
     "expo-av": "^15.1.4",
@@ -16,4 +17,9 @@
     "@types/react": "~19.1.2",
     "typescript": "^5.8.3"
   }
+  // server
+    "dotenv": "^16.5.0",
+    "openai": "^4.97.0"
+  }
+  
 }
