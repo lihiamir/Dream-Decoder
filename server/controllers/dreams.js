@@ -108,7 +108,6 @@ exports.checkForClarifications = async(text) => {
   return { followUp: false };
 }
 
-
 exports.getAllDreams = async (req, res) => {
   const uid = req.uid;
   if (!uid) return res.status(400).json({ error: "Missing user ID" });
