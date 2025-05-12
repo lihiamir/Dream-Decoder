@@ -17,29 +17,36 @@ export default function NewDreamScreen({ navigation, route }) {
 
   const [text, setText] = useState("");
 
-
   const handleContinue = async () => {
-    if (!audioUri && !text) {
-      alert("Please provide either a voice recording or text input.");
-      return;
-    }
-    const idToken = await auth.currentUser.getIdToken(true);
+    // if (!audioUri && !text) {
+    //   alert("Please provide either a voice recording or text input.");
+    //   return;
+    // }
+    // const idToken = await auth.currentUser.getIdToken(true);
+    // let response;
+    // if (audioUri) { 
+    //   response = await uploadRecording(idToken, audioUri);
+    // } else {
+    //   response = await uploadDreamText(idToken, {text}).catch((error) => {
+    //     console.error('Error uploading recording:', error);
+    //     return;
+    //   });
+    // }
 
-    if (audioUri) { 
-      const response = await uploadRecording(idToken, audioUri);
-    } else if (text) {
-      const response = await uploadDreamText(idToken, text).catch((error) => {
-        console.error('Error uploading recording:', error);
-      });
-        return;
-      }
-    const result = await response.json();
-    if (result.followUp) {
-      navigation.navigate('QuestionsPrompt', { user: user , questions: result.questions, text: result.originalText});
+    // if (!response) {
+    //   console.error("No response received from the server.");
+    //   return;
+    // }
+    // const result = await response.json();
 
-    }
-
-
+    // if (result.followUp) {
+    const questions = [
+        "What is the significance of the book you were reading in your dream?",
+        "Can you describe the field of flowers in more detail?",
+        "Did you feel any specific emotions while reading the book in the field of flowers?"
+    ];
+    const text = "חלמתי שאני קוראת ספר בשדה של פרחים";
+    navigation.navigate('QuestionsPrompt', { user: user , questions: questions, text: text});
   };
 
   return (

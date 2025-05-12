@@ -9,7 +9,7 @@ export default function QuestionPromptScreen({ navigation, route }) {
   console.log(user); // Log the user object to check its structure
 
   const handleContinue = () => {
-    navigation.navigate('Dream', { user: user });
+    navigation.navigate('QuestionScreen', route.params);
   }
 
   return (

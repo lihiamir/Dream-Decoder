@@ -9,6 +9,7 @@ dist/
 web-build/
 expo-env.d.ts
 
+config/
 
 # Native
 *.orig.*
@@ -35,7 +36,3 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
-
-app-example
-
-config/firebase

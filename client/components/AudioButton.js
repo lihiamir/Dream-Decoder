@@ -5,9 +5,9 @@ import * as FileSystem from 'expo-file-system';
 import mime from 'mime';
 import { uploadDreamAudio } from '../api/dream';
 import { auth } from "../config/firebase";
+import { Asset } from 'expo-asset';
 
-
-function AudioButton({ onPress, style, setAudioUri }) {
+function AudioButton({ style, setAudioUri }) {
   
   const [recording, setRecording] = useState(null);
   // const [audioUri, setAudioUri] = useState(null);
@@ -76,24 +76,31 @@ const styles = StyleSheet.create({
 
 
 async function uploadRecording(idToken, audioUri) {
-  if (!audioUri) return;
-  
-  const fileInfo = await FileSystem.getInfoAsync(audioUri);
-  const fileType = mime.getType(fileInfo.uri);
+  // if (!audioUri) return;
+  const audio = '../public/audio.mp3';
   const data = new FormData();
   data.append('audio', {
-    uri: fileInfo.uri,
+    uri: audioUri,
     name: 'dream-audio.mp3',
-    type: fileType || 'audio/mpeg',
+    type: 'audio/mpeg',
   });
 
-  await uploadDreamAudio(idToken, data)
-    .then((response) => {
-      console.log('Recording uploaded successfully:', response);
-    })
-    .catch((error) => {
-      console.error('Error uploading recording:', error);
-    });
+  // const fileInfo = await FileSystem.getInfoAsync(audioUri);
+  // const fileType = mime.getType(fileInfo.uri);
+  // const data = new FormData();
+  // data.append('audio', {
+  //   uri: fileInfo.uri,
+  //   name: 'dream-audio.mp3',
+  //   type: fileType || 'audio/mpeg',
+  // });
+
+  try {
+    const response = await uploadDreamAudio(idToken, data);
+    console.log('Recording uploaded successfully:', response);
+  } catch (error) {
+    console.error('Error uploading recording:', error);
+  }
+
 };
 
 export { AudioButton, uploadRecording };

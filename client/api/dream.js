@@ -16,7 +16,6 @@ async function uploadDreamAudio(token, data) {
 
   } catch (error) {
     console.error("Error uploading dream:", error);
-    return {ok : false }
   }
 };
 
@@ -28,14 +27,13 @@ async function uploadDreamText(token, data) {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: data,
+        body: JSON.stringify(data),
       });
 
     return response;
 
   } catch (error) {
     console.error("Error uploading dream:", error);
-    return {ok : false }
   }
 };
 
