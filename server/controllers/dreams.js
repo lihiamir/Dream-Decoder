@@ -86,11 +86,19 @@ async function getDreamText(req) {
 
 // Extracts clarification text from request (audio or text input)
 async function getClarificationsText(req) {
-  if (req.file) {
-    const path = req.file.path;
-    const text = await speechService.transcribeAudio(path);
-    return text;
+  if (req.files && req.files.length > 0) {
+    const transcribedList = [];
+    
+  for (const file of req.files) {
+    const text = await speechService.transcribeAudio(file.path);
+    transcribedList.push(text);
   }
+
+  return transcribedList
+  .map((text, i) => `Answer ${i + 1}: ${text}`)
+  .join('\n');
+  }
+
 
   if (req.body.clarificationsText) {
     return req.body.clarificationsText;
