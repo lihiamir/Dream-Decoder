@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, TextInput, SafeAreaView } from "re
 import styles from "./styles/newDreamScreenStyle";
 import ContinueButton from "../components/ContinueButton";
 import Menu from "../components/Menu";
-import {AudioButton, uploadRecording, audioUri} from "../components/AudioButton";
+import {AudioButton, uploadRecording} from "../components/AudioButton";
 import { uploadDreamText } from "../api/dream";
 import { auth } from "../config/firebase";
 
@@ -37,16 +37,19 @@ export default function NewDreamScreen({ navigation, route }) {
     //   console.error("No response received from the server.");
     //   return;
     // }
-    // const result = await response.json();
 
     // if (result.followUp) {
+
+
     const questions = [
         "What is the significance of the book you were reading in your dream?",
         "Can you describe the field of flowers in more detail?",
         "Did you feel any specific emotions while reading the book in the field of flowers?"
     ];
-    const text = "חלמתי שאני קוראת ספר בשדה של פרחים";
-    navigation.navigate('QuestionsPrompt', { user: user , questions: questions, text: text});
+    const ogText = "חלמתי שאני קוראת ספר בשדה של פרחים";
+    navigation.navigate('QuestionsPrompt', { user: user , questions: questions, text: ogText});
+    // } else {
+    //   navigation.navigate("Dream", { user: user, response: response });
   };
 
   return (

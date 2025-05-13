@@ -30,7 +30,7 @@ export default function NewDreamStack({ route }) {
       <Stack.Screen
         name="Dream"
         component={DreamScreen}
-        initialParams={{ user: user }}
+        initialParams={{ user: user, dream: {} }}
       />
     </Stack.Navigator>
   );

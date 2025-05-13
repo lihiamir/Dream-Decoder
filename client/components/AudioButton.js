@@ -3,7 +3,7 @@ import { Image, TouchableOpacity, StyleSheet} from "react-native";
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 import mime from 'mime';
-import { uploadDreamAudio } from '../api/dream';
+import { uploadDreamAudio, sendClarifications } from '../api/dream';
 import { auth } from "../config/firebase";
 import { Asset } from 'expo-asset';
 
@@ -97,10 +97,38 @@ async function uploadRecording(idToken, audioUri) {
   try {
     const response = await uploadDreamAudio(idToken, data);
     console.log('Recording uploaded successfully:', response);
+    return response;
   } catch (error) {
     console.error('Error uploading recording:', error);
   }
 
 };
 
-export { AudioButton, uploadRecording };
+async function uploadAnswers(idToken, answers) {
+  const data = new FormData();
+
+  answers.forEach((answer, index) => {
+    if (answer.type === "audio") {
+      // If the answer is an audio file
+      data.append("audio", {
+        uri: answer.uri,
+        name: `answer-${index}.wav`,
+        type: "audio/wav",
+      });
+    } else if (answer.type === "text") {
+      // If the answer is plain text
+      data.append(`text-${index}`, answer.text);
+    }
+  });
+
+  try {
+    const response = await sendClarifications(idToken, data);
+    console.log("Answers uploaded successfully:", response);
+    return response;
+  } catch (error) {
+    console.error("Error uploading answers:", error);
+    throw error;
+  }
+}
+
+export { AudioButton, uploadRecording, uploadAnswers };
