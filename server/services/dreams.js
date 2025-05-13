@@ -2,6 +2,7 @@ const speechService = require('./speech');
 const chatService = require('./chat');
 const imageService = require('./image');
 const symbolService = require('./symbol');
+const moodService = require('./mood');
 const admin = require('../config/firebase');
 
 const prompt = `Number of scenes: 4
@@ -19,11 +20,16 @@ const prompt = `Number of scenes: 4
     const lines = rawOutput.trim().split('\n');
     const sceneLines = lines.slice(2);
     const scenes = sceneLines.map(line => line.replace(/^\d+\.\s*/, ''));
-
+    
+    const { dreamMood, sceneMoods, tags } = await moodService.classifyDreamMood(scenes);
+    const symbolInterpretations = await symbolService.extractSymbolInterpretations(scenes, sceneMoods);
+ 
     const dreamId = await saveDreamForUser(uid, {
       ...metadata,
       parsedText: text,
       scenes,
+      dreamMood,
+      tags,
       createdAt: new Date()
     });
 
@@ -39,12 +45,16 @@ const prompt = `Number of scenes: 4
     
     await updateDreamImages(uid, dreamId, imageUrls);
 
-    // const symbols = await symbolService.extractSymbols(text);
-  
+    const enrichedScenes = scenes.map((scene, i) => ({
+      scene,
+      image: imageUrls[i],
+      mood: symbolInterpretations[i].mood,
+      symbols: symbolInterpretations[i].symbols
+    }));
+
     return {
       dreamId,
-      scenes,
-      images: imageUrls
+      scenes: enrichedScenes
     };
   };
 

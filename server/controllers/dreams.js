@@ -98,7 +98,7 @@ async function getClarificationsText(req) {
   .map((text, i) => `Answer ${i + 1}: ${text}`)
   .join('\n');
   }
-
+  //  לברר האם זה אפשרי לשלוח טקסט ואודיו ביחד? כי בדר"כ אתה כותב contenttype .
 
   if (req.body.clarificationsText) {
     return req.body.clarificationsText;
