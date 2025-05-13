@@ -10,7 +10,7 @@ import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/aut
 import { auth } from "../config/firebase";
 import styles from "./styles/FormStyles";
 import { useGoogleAuth } from '../auth/googleAuth';
-import { checkLogin } from "../auth/api";
+import { checkLogin } from "../api/auth";
 
 
 export default function LoginForm({ navigation }) {
@@ -23,7 +23,7 @@ export default function LoginForm({ navigation }) {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      const idToken = await userCredential.user.getIdToken();
+      const idToken = await auth.currentUser.getIdToken(true);
       
       await checkLogin(idToken); //check if token is valid with the server
       navigation.navigate('Drawer', { user: user });

@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Image, FlatList, ScrollView, SafeAreaView, TextInput } from "react-native";
-import RoundedMicIcon from "../assets/images/mic.png";
+import RoundedMicIcon from "../assets/images/micOff.png";
 import styles from "./styles/journalScreenStyle";
 import Search from "../components/SearchButton";
 import DreamCard from "../components/DreamCard";
