@@ -6,8 +6,8 @@ const upload = multer({ dest: 'uploads/' });
 const { authenticateToken } = require('../middlewares/auth');
 
 router.post('/submit', authenticateToken, upload.single('audio'), dreamsController.submitDream);
-router.post('/clarify', authenticateToken, upload.single('audio'), dreamsController.clarifyDream);
+router.post('/clarify', authenticateToken, upload.array('audio'), dreamsController.clarifyDream);
 
-router.get('/my-dreams', authenticateToken, dreamsController.getAllDreams); 
+// router.get('/my-dreams', authenticateToken, dreamsController.getAllDreams); 
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const admin = require('../config/firebase');
 
 exports.registerUser = async (token) => {
-    const decoded = await verifyToken(token);
+    const decoded = await this.verifyToken(token);
     const uid = decoded.uid;
     const email = decoded.email;
     const displayName = decoded.name || null;
@@ -11,7 +11,7 @@ exports.registerUser = async (token) => {
       displayName,
       createdAt: new Date()
     };
-    await saveUserToFirestore(userData);
+    await this.saveUserToFirestore(userData);
     return userData;
 };
 
