@@ -20,17 +20,17 @@ export default function NewDreamStack({ route }) {
       <Stack.Screen
         name="QuestionsPrompt"
         component={QuestionsPromptScreen}
-        initialParams={{ user: user }}
+        initialParams={{ user: user, questions: [], text: "" }}
       />
       <Stack.Screen
         name="QuestionScreen"
         component={QuestionScreen}
-        initialParams={{ user: user }}
+        initialParams={{ user: user, questions: [], text: "" }}
       />
       <Stack.Screen
         name="Dream"
         component={DreamScreen}
-        initialParams={{ user: user }}
+        initialParams={{ user: user, dream: {} }}
       />
     </Stack.Navigator>
   );
