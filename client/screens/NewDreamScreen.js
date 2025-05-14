@@ -38,7 +38,7 @@ export default function NewDreamScreen({ navigation, route }) {
     //   return;
     // }
 
-    // if (result.followUp) {
+    // if (response.followUp) {
 
 
     const questions = [
@@ -48,9 +48,12 @@ export default function NewDreamScreen({ navigation, route }) {
     ];
     const ogText = "חלמתי שאני קוראת ספר בשדה של פרחים";
     navigation.navigate('QuestionsPrompt', { user: user , questions: questions, text: ogText});
+
+      // navigation.navigate('QuestionsPrompt', { user: user , questions: response.questions, text: response.originalText});
     // } else {
     //   navigation.navigate("Dream", { user: user, response: response });
-  };
+    // };
+  }
 
   return (
     <SafeAreaView style={styles.container}>

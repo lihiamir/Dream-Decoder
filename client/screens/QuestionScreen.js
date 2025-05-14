@@ -41,7 +41,7 @@ export default function QuestionScreen({ navigation, route }) {
       // All questions answered, send answers to the server
         try {
         const idToken = await auth.currentUser.getIdToken();
-        const response = await uploadAnswers(idToken, Object.values(answers));
+        const response = await uploadAnswers(idToken, Object.values(answers), text);
 
         console.log("Server response:", response);
 

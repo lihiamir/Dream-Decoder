@@ -1,42 +1,36 @@
-// import React from "react";
-// import { View, Text, Image, FlatList, ScrollView, SafeAreaView, TextInput } from "react-native";
-// import RoundedMicIcon from "../assets/images/micOff.png";
-// import styles from "./styles/journalScreenStyle";
-// import Search from "../components/SearchButton";
-// import DreamCard from "../components/DreamCard";
-// import Menu from "../components/Menu";
-// import { useState, useEffect } from "react";
+import React from "react";
+import { View, Text, Image, FlatList, ScrollView, SafeAreaView, TextInput } from "react-native";
+import RoundedMicIcon from "../assets/images/micOff.png";
+import styles from "./styles/journalScreenStyle";
+import Search from "../components/SearchButton";
+import DreamCard from "../components/DreamCard";
+import Menu from "../components/Menu";
+import { useState, useEffect } from "react";
+import { getAllDreams, getDreamById } from "../api/dream";
+import { auth } from "../config/firebase";
 
-// export default function Journal ({ navigation, route }) {
-//     const { user } = route.params;
-//     // const { userKey } = user.key;
+export default function Journal ({ navigation, route }) {
+    // const { user } = route.params;
+    // // const { userKey } = user.key;
 
-//     const [dreams, setDreams] = useState([]);
-//     const [searchTerm, setSearchTerm] = useState("");
-//     const [filteredDreams, setFilteredDreams] = useState([]);
+    // const [dreams, setDreams] = useState([]);
+    // const [searchTerm, setSearchTerm] = useState("");
+    // const [filteredDreams, setFilteredDreams] = useState([]);
   
-//     // useEffect(() => {
-//     //   // Fetch dreams from backend
-//     //   const fetchDreams = async () => {
-//     //     try {
-//     //       const response = await axios.get(`https://your-api.com/users/${userKey}/dreams`);
-//     //       setDreams(response.data);
-//     //     } catch (error) {
-//     //       console.error("Failed to fetch dreams", error);
-//     //     }
-//     //   };
-  
-//     //   fetchDreams();
-//     // }, [userKey]);
+    // useEffect(() => {
+    //   // Fetch dreams from backend
+    //   const idToken = auth.currentUser.getIdToken();
+    //   dreams = getAllDreams(idToken, userKey);
+    // });
 
-//     const handleSearch = () => {
-//         const filtered = dreams.filter(dream =>
-//           dream.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-//         );
-//         setFilteredDreams(filtered);
-//       };
+    // const handleSearch = () => {
+    //     const filtered = dreams.filter(dream =>
+    //       dream.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+    //     );
+    //     setFilteredDreams(filtered);
+    //   };
 
-//       const dreamsToDisplay = searchTerm ? filteredDreams : dreams;
+    //   const dreamsToDisplay = searchTerm ? filteredDreams : dreams;
 
 
 
@@ -76,4 +70,4 @@
 //         <Menu navigation={navigation} />
 //     </SafeAreaView>
 //   );
-// };
+};
