@@ -1,4 +1,4 @@
-const admin = require('../config/firebase');
+const { admin } = require('../config/firebase');
 
 exports.registerUser = async (token) => {
     const decoded = await this.verifyToken(token);

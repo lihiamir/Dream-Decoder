@@ -5,5 +5,5 @@ import AuthNavigation from "./navigation/AuthNavigator.js";
 export default function App() {
   return (
       <AuthNavigation />
-  );
+);
 }

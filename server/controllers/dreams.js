@@ -131,3 +131,20 @@ exports.getAllDreams = async (req, res) => {
   }
 };
 
+exports.getDreamById = async (req, res) => {
+  const { uid } = req.user;
+  const { dreamId } = req.params;
+
+  try {
+    const dream = await dreamsService.getDreamById(uid, dreamId);
+
+    if (!dream) {
+      return res.status(404).json({ error: 'Dream not found' });
+    }
+
+    res.json(dream);
+  } catch (error) {
+    console.error('Error fetching dream:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
