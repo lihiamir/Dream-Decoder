@@ -41,11 +41,11 @@ async function uploadDreamText(token, data) {
 
 async function sendClarifications(token, data) {
   try {
-    const response = await fetch(`https://${server}/api/dreams/clarify`, {
+    const response = await fetch(`http://${server}/api/dreams/clarify`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
+        // "Content-Type": "multipart/form-data",
       },
       body: data
     });

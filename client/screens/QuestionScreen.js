@@ -46,7 +46,7 @@ export default function QuestionScreen({ navigation, route }) {
         console.log("Server response:", response);
 
       // Navigate to the Dream screen with the server response
-        navigation.navigate("Dream", { user: user, response: response });
+        // navigation.navigate("Dream", { user: user, response: response });
       } catch (error) {
         console.error("Error uploading answers:", error);
         alert("Failed to upload answers. Please try again.");

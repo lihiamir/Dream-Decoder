@@ -39,7 +39,7 @@ export default function Journal ({ navigation, route }) {
       const dreamsToDisplay = searchTerm ? filteredDreams : dreams;
 
 
-
+ 
   return (
     <SafeAreaView style={styles.container}>
       <Image source={require('../assets/images/background.png')} style={styles.rectangle} />
