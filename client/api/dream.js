@@ -41,13 +41,12 @@ async function uploadDreamText(token, data) {
 
 async function sendClarifications(token, data) {
   try {
-    const response = await fetch(`https://${server}/api/dreams/clarify`, {
+    const response = await fetch(`http://${server}/api/dreams/clarify`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
       },
-      body: data
+      body: data,
     });
 
     const result = await response.json();
@@ -56,7 +55,40 @@ async function sendClarifications(token, data) {
   } catch (error) {
     console.error('Upload failed:', error);
   }
-
 };
 
-    export { uploadDreamAudio, uploadDreamText, sendClarifications };
+
+async function getAllDreams(token) {
+  try {
+    const response = await fetch(`http://${server}/api/dreams`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const result = await response.json();
+    return result;
+    
+  } catch (error) {
+    console.error('Error fetching dreams:', error);
+  }
+}
+
+async function getDreamById(token, id) {
+  try {
+    const response = await fetch(`http://${server}/api/my-dreams/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }});
+      
+    const result = await response.json();
+    return result;
+  }
+  catch (error) {
+    console.error('Error fetching dream by ID:', error);
+  }
+}
+
+export { uploadDreamAudio, uploadDreamText, sendClarifications, getAllDreams, getDreamById };

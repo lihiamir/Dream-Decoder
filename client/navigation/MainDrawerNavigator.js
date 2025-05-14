@@ -32,7 +32,7 @@ export default function MainDrawerNavigator({ route, navigation }) {
         fontSize: 16,
       }, }}>
       <Drawer.Screen name="New Dream" component={NewDreamStack} initialParams={{ user: user }} />
-      <Drawer.Screen name="dream" component={DreamScreen} initialParams={{ user: user }} />
+      <Drawer.Screen name="dream" component={DreamScreen} initialParams={{ user: user, dream: {} }} />
       <Drawer.Screen name="Journal" component={JournalScreen} initialParams={{ user: user }} />
       <Drawer.Screen
         name="Log out"
