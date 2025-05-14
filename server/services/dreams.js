@@ -1,9 +1,8 @@
-const speechService = require('./speech');
 const chatService = require('./chat');
 const imageService = require('./image');
 const symbolService = require('./symbol');
 const moodService = require('./mood');
-const admin = require('../config/firebase');
+const { admin } = require('../config/firebase');
 
 const prompt = `Number of scenes: 4
 
@@ -58,10 +57,20 @@ const prompt = `Number of scenes: 4
     };
   };
 
-const saveDreamForUser = async (uid, dreamData) => {
+const saveDreamForUser = async ({ uid, parsedText, scenes, dreamMood, tags, metadata }) => {
   const db = admin.firestore();
   const userDreamsRef = db.collection('users').doc(uid).collection('dreams');
-  const docRef = await userDreamsRef.add(dreamData);// ← THIS creates a unique document with auto-ID
+
+  const dreamData = {
+    ...metadata,
+    parsedText,
+    scenes,
+    dreamMood,
+    tags,
+    createdAt: new Date(),
+  };
+
+  const docRef = await userDreamsRef.add(dreamData);
   return docRef.id;
 };
 
@@ -82,4 +91,24 @@ exports.getAllDreams = async (uid) => {
   }));
 
   return dreams;
+};
+
+exports.getDreamById = async (uid, dreamId) => {
+  const dreamRef = admin
+    .firestore()
+    .collection('users')
+    .doc(uid)
+    .collection('dreams')
+    .doc(dreamId);
+
+  const dreamDoc = await dreamRef.get();
+
+  if (!dreamDoc.exists) {
+    return null;
+  }
+
+  return {
+    id: dreamDoc.id,
+    ...dreamDoc.data()
+  };
 };
