@@ -86,25 +86,31 @@ async function getDreamText(req) {
 
 // Extracts clarification text from request (audio or text input)
 async function getClarificationsText(req) {
-  if (req.files && req.files.length > 0) {
-    const transcribedList = [];
-    
-  for (const file of req.files) {
-    const text = await speechService.transcribeAudio(file.path);
-    transcribedList.push(text);
+  const combinedAnswers = [];
+
+  for (let i = 0; i < 3; i++) {
+    const type = req.body[`answer_${i}_type`];
+
+    if (!type) continue;
+
+    if (type === "text" && req.body[`answer_${i}_text`]) {
+      combinedAnswers.push(`Answer ${i + 1}: ${req.body[`answer_${i}_text`]}`);
+    }
+
+    if (type === "audio") {
+      const file = req.files.find(f => f.fieldname === `answer_${i}_audio`);
+      if (file) {
+        const text = await speechService.transcribeAudio(file.path);
+        combinedAnswers.push(`Answer ${i + 1}: ${text}`);
+      }
+    }
   }
 
-  return transcribedList
-  .map((text, i) => `Answer ${i + 1}: ${text}`)
-  .join('\n');
-  }
-  //  לברר האם זה אפשרי לשלוח טקסט ואודיו ביחד? כי בדר"כ אתה כותב contenttype .
-
-  if (req.body.clarificationsText) {
-    return req.body.clarificationsText;
+  if (combinedAnswers.length === 0) {
+    throw new Error("Missing clarifications input");
   }
 
-  throw new Error('Missing clarifications input');
+  return combinedAnswers.join('\n');
 }
 
 // Checks if the submitted dream needs follow-up questions

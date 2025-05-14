@@ -1,5 +1,8 @@
 const { OpenAI } = require("openai");
 const { bucket } = require('../config/firebase');
+const path = require("path");
+const fs = require("fs");
+const axios = require("axios");
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
