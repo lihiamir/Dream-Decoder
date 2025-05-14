@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Image, TouchableOpacity, StyleSheet} from "react-native";
 import { Audio } from 'expo-av';
-import * as FileSystem from 'expo-file-system';
-import mime from 'mime';
 import { uploadDreamAudio, sendClarifications } from '../api/dream';
 import { auth } from "../config/firebase";
 import { Asset } from 'expo-asset';

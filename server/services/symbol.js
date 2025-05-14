@@ -1,7 +1,6 @@
-const admin = require('../config/firebase');
+const { admin } = require('../config/firebase');
 const chatService = require('./chat');
 const db = admin.firestore();
-const { classifyMood, findMissingSymbolsFromGPT } = require('./gptService');
 
 // Load all symbols into memory from Firestore
 async function loadAllSymbols() {
