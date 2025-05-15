@@ -47,8 +47,8 @@ export default function QuestionScreen({ navigation, route }) {
       console.log("Server response:", response);
 
       // Navigate to the Dream screen with the server response
-      // navigation.navigate("Dream", { user: user, response: response });
-      
+      navigation.navigate("Dream", { user: user, dream: response });
+
       } catch (error) {
         console.error("Error uploading answers:", error);
         alert("Failed to upload answers. Please try again.");
@@ -88,7 +88,7 @@ export default function QuestionScreen({ navigation, route }) {
 
       <Image source={require("../assets/images/step2.png")} style={styles.steps}/>
 
-      <Menu navigation={navigation} />
+      {/* <Menu navigation={navigation} /> */}
           
     </SafeAreaView>
   );

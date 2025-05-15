@@ -26,7 +26,7 @@ export default function QuestionPromptScreen({ navigation, route }) {
         {"\n"}Can I ask you a few quick questions?</Text>
 
         <ContinueButton style={styles.continueButton} onPress={handleContinue}/>
-        <Menu navigation={navigation} />
+        {/* <Menu navigation={navigation} /> */}
         
         <Image source={require("../assets/images/step2.png")} style={styles.steps} />
         

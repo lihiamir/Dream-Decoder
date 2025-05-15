@@ -31,7 +31,20 @@ export default function MainDrawerNavigator({ route, navigation }) {
       drawerLabelStyle: {
         fontSize: 16,
       }, }}>
-      <Drawer.Screen name="New Dream" component={NewDreamStack} initialParams={{ user: user }} />
+      <Drawer.Screen
+        name="New Dream"
+        component={NewDreamStack}
+        initialParams={{ user: user }}
+        listeners={{
+          drawerItemPress: (e) => {
+            e.preventDefault(); // Prevent default navigation behavior
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "New Dream", params: { user: user } }],
+            });
+          },
+        }}
+      />
       <Drawer.Screen name="dream" component={DreamScreen} initialParams={{ user: user, dream: {} }} />
       <Drawer.Screen name="Journal" component={JournalScreen} initialParams={{ user: user }} />
       <Drawer.Screen
