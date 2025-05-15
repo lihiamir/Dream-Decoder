@@ -8,10 +8,10 @@ WebBrowser.maybeCompleteAuthSession();
 
 export function useGoogleAuth(navigation) {
   const [request, response, promptAsync] = Google.useAuthRequest({
-  expoClientId: '366168998435-fjgre61k3oce6cfnnngi5ggsl7hj889t.apps.googleusercontent.com',
-  iosClientId: '366168998435-fjgre61k3oce6cfnnngi5ggsl7hj889t.apps.googleusercontent.com',
-  androidClientId: '366168998435-fjgre61k3oce6cfnnngi5ggsl7hj889t.apps.googleusercontent.com',
-  webClientId: '366168998435-fjgre61k3oce6cfnnngi5ggsl7hj889t.apps.googleusercontent.com',
+    expoClientId: '366168998435-fjgre61k3oce6cfnnngi5ggsl7hj889t.apps.googleusercontent.com',
+    iosClientId: '366168998435-fjgre61k3oce6cfnnngi5ggsl7hj889t.apps.googleusercontent.com',
+    androidClientId: '366168998435-fjgre61k3oce6cfnnngi5ggsl7hj889t.apps.googleusercontent.com',
+    webClientId: '366168998435-fjgre61k3oce6cfnnngi5ggsl7hj889t.apps.googleusercontent.com',
   });
 
   useEffect(() => {

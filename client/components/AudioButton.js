@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Image, TouchableOpacity, StyleSheet} from "react-native";
 import { Audio } from 'expo-av';
+import * as FileSystem from 'expo-file-system';
 import { uploadDreamAudio, sendClarifications } from '../api/dream';
-import { auth } from "../config/firebase";
-import { Asset } from 'expo-asset';
 
 function AudioButton({ style, setAudioUri }) {
   
   const [recording, setRecording] = useState(null);
-  // const [audioUri, setAudioUri] = useState(null);
 
   const startRecording = async () => {
     try {
@@ -102,30 +100,29 @@ async function uploadRecording(idToken, audioUri) {
 
 };
 
-async function uploadAnswers(idToken, answers) {
+async function uploadAnswers(idToken, answers, originalText) {
   const data = new FormData();
-
+  data.append("text", originalText);
   answers.forEach((answer, index) => {
     if (answer.type === "audio") {
-      // If the answer is an audio file
-      data.append("audio", {
+      data.append(`answer_${index}_type`, "audio");
+      data.append(`answer_${index}_audio`, {
         uri: answer.uri,
         name: `answer-${index}.wav`,
         type: "audio/wav",
       });
     } else if (answer.type === "text") {
-      // If the answer is plain text
-      data.append(`text-${index}`, answer.text);
+      data.append(`answer_${index}_type`, "text");
+      data.append(`answer_${index}_text`, answer.text);
     }
-  });
 
+  });
   try {
     const response = await sendClarifications(idToken, data);
     console.log("Answers uploaded successfully:", response);
     return response;
   } catch (error) {
     console.error("Error uploading answers:", error);
-    throw error;
   }
 }
 

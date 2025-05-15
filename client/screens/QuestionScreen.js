@@ -41,12 +41,12 @@ export default function QuestionScreen({ navigation, route }) {
       // All questions answered, send answers to the server
         try {
         const idToken = await auth.currentUser.getIdToken();
-        const response = await uploadAnswers(idToken, Object.values(answers));
+        const response = await uploadAnswers(idToken, Object.values(answers), text);
 
         console.log("Server response:", response);
 
       // Navigate to the Dream screen with the server response
-        navigation.navigate("Dream", { user: user, response: response });
+        // navigation.navigate("Dream", { user: user, response: response });
       } catch (error) {
         console.error("Error uploading answers:", error);
         alert("Failed to upload answers. Please try again.");

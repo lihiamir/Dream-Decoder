@@ -11,7 +11,7 @@ const prompt = `Number of scenes: 4
 3. Scene description 3: The woman sitting beside a laptop in an outdoor setting (within the wheat fields), coding/programming.
 4. Scene description 4: The woman excitedly receiving an acceptance letter with a logo of "Indolinia" company, the wheat fields in the background.`;
 
-// const text = "אני רק חולמת לראות שזה מתרגם לי את החלום כמו שצריך אז אני חולמת שאני בשדות של טוטים עם ערנבים ליד מתכנתת ומתקבלת לחברת אינדוליניה."
+// const text = "אני רק חולמת לראות שזה מתרגם לי את החלום כמו שצריך אז אני חולמת שאני בשדות של טוטים עם ערנבים ליד מתכנתת ומתקבלתב לחברת אינדוליניה."
 
   exports.processTextDream = async (uid, text, metadata = {}) => {
     // const rawOutput = prompt;
@@ -23,7 +23,8 @@ const prompt = `Number of scenes: 4
     const { dreamMood, sceneMoods, tags } = await moodService.classifyDreamMood(scenes);
     const symbolInterpretations = await symbolService.extractSymbolInterpretations(scenes, sceneMoods);
  
-    const dreamId = await saveDreamForUser(uid, {
+    const dreamId = await saveDreamForUser({
+      uid,
       ...metadata,
       parsedText: text,
       scenes,
@@ -36,6 +37,7 @@ const prompt = `Number of scenes: 4
     for (let i = 0; i < scenes.length; i++) {
         const scene = scenes[i];
         const destinationPath = `users/${uid}/dreams/${dreamId}/scene_${i + 1}.png`;
+        console.log(destinationPath)
         const imageUrl = await imageService.generateAndUploadImage(scene, destinationPath);
         console.log(imageUrl, "URL");
 
