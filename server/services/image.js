@@ -28,10 +28,12 @@ const generateImageFromPrompt = async (prompt) => {
   return response.data[0].url;
 };
 
-const downloadImageToTemp = async (url, fileName = "temp.png") => {
-  const localPath = path.join(__dirname, fileName);
+const downloadImageToTemp = async (url) => {
+  const tempName = `temp_${Date.now()}_${Math.random().toString(36).slice(2)}.png`;
+  const localPath = path.join(__dirname, tempName);
   const imageResponse = await axios.get(url, { responseType: "stream" });
   const writer = fs.createWriteStream(localPath);
+
   await new Promise((resolve, reject) => {
     imageResponse.data.pipe(writer);
     writer.on("finish", resolve);

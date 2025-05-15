@@ -5,13 +5,14 @@
     credential: admin.credential.cert(serviceAccount),
     storageBucket: 'dream-decoder-1fcb8.firebasestorage.app' 
   });
-  admin
-  .storage()
-  .bucket()
-  .exists()
-  .then(([exists]) => {
-    console.log("📦 Firebase bucket exists?", exists);
-  });
+  
+  // admin
+  // .storage()
+  // .bucket()
+  // .exists()
+  // .then(([exists]) => {
+  //   console.log("📦 Firebase bucket exists?", exists);
+  // });
 
   const bucket = admin.storage().bucket();
 

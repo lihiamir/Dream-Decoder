@@ -17,7 +17,7 @@
     app.use('/api/dreams',dreamsRouts);
 
     // For checking
-    // app.get('/api/dreams/test-process', async (req, res) => {
+    // app.get('/api/dreams/test-process', async (req, res) => {..
     // const uid = '5Tps6Rrb88Qau3CxfLEIRfInRT32';
     // const text = "אני רק חולמת לראות שזה מתרגם לי את החלום כמו שצריך אז אני חולמת שאני בשדות של טוטים עם ערנבים ליד מתכנתת ומתקבלת לחברת אינדוליניה.";
 
