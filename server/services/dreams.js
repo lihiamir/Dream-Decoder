@@ -27,9 +27,9 @@ const prompt = `Number of scenes: 4
       uid,
       ...metadata,
       parsedText: text,
-      scenes,
       dreamMood,
       tags,
+      scenes: enrichedScenes,
       createdAt: new Date()
     });
 
@@ -66,9 +66,9 @@ const saveDreamForUser = async ({ uid, parsedText, scenes, dreamMood, tags, meta
   const dreamData = {
     ...metadata,
     parsedText,
-    scenes,
     dreamMood,
     tags,
+    scenes, 
     createdAt: new Date(),
   };
 
@@ -87,10 +87,13 @@ exports.getAllDreams = async (uid) => {
 
   const snapshot = await dreamsRef.orderBy('createdAt', 'desc').get();
 
-  const dreams = snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  }));
+const dreams = snapshot.docs.map(doc => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      scenes: data.scenes || []
+    };
+  });
 
   return dreams;
 };
@@ -111,6 +114,6 @@ exports.getDreamById = async (uid, dreamId) => {
 
   return {
     id: dreamDoc.id,
-    ...dreamDoc.data()
+    scenes: data.scenes || []
   };
 };
