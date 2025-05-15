@@ -9,41 +9,43 @@ import tempImage from "../assets/images/temp.png"; // Placeholder image for the 
 
 export default function DreamScreen({ navigation, route }) {
 
-  const mockResult = {
-    dreamId: "12345",
-    scenes: [
-      {
-        scene: "You are walking through a beautiful forest.",
-        image: tempImage,
-        mood: "Peaceful",
-        symbols: [
-          { symbol: "Tree", meaning: "Growth and stability" },
-          { symbol: "Bird", meaning: "Freedom and hope" },
-        ],
-      },
-      {
-        scene: "You are standing on a beach watching the sunset.",
-        image: tempImage,
-        mood: "Calm",
-        symbols: [
-          { symbol: "Sunset", meaning: "Endings and transitions" },
-          { symbol: "Ocean", meaning: "Depth of emotions" },
-        ],
-      },
-      {
-        scene: "You are flying over a city at night.",
-        image: tempImage,
-        mood: "Excited",
-        symbols: [
-          { symbol: "City", meaning: "Community and ambition" },
-          { symbol: "Night", meaning: "Mystery and the unknown" },
-        ],
-      },
-    ],
-  };
+  ////
+  // const mockResult = {
+  //   dreamId: "12345",
+  //   scenes: [
+  //     {
+  //       scene: "You are walking through a beautiful forest.",
+  //       image: tempImage,
+  //       mood: "Peaceful",
+  //       symbols: [
+  //         { symbol: "Tree", meaning: "Growth and stability" },
+  //         { symbol: "Bird", meaning: "Freedom and hope" },
+  //       ],
+  //     },
+  //     {
+  //       scene: "You are standing on a beach watching the sunset.",
+  //       image: tempImage,
+  //       mood: "Calm",
+  //       symbols: [
+  //         { symbol: "Sunset", meaning: "Endings and transitions" },
+  //         { symbol: "Ocean", meaning: "Depth of emotions" },
+  //       ],
+  //     },
+  //     {
+  //       scene: "You are flying over a city at night.",
+  //       image: tempImage,
+  //       mood: "Excited",
+  //       symbols: [
+  //         { symbol: "City", meaning: "Community and ambition" },
+  //         { symbol: "Night", meaning: "Mystery and the unknown" },
+  //       ],
+  //     },
+  //   ],
+  // };
+  ////
 
-  const dream = mockResult; // Use the mock data
-  // const { user, dream } = route.params; // Get the result object from the params
+  // const dream = mockResult; // Use the mock data
+  const { user, dream } = route.params; // Get the result object from the params
   const { dreamId, scenes } = dream; // Destructure dreamId and scenes
 
   const [currentSceneIndex, setCurrentSceneIndex] = useState(0); // Track the current scene index

@@ -30,23 +30,25 @@ export default function QuestionScreen({ navigation, route }) {
         : { type: "text", text: textAnswer },
     }));
 
-    // Reset the input fields
-    setAudioUri(null);
-    setTextAnswer("");
-
     // Move to the next question or finish
     if (currentQuestionIndex < questionArray.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      // Reset the input fields
+      setAudioUri(null);
+      setTextAnswer("");
+      //move to the next question
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+
     } else {
       // All questions answered, send answers to the server
-        try {
-        const idToken = await auth.currentUser.getIdToken();
-        const response = await uploadAnswers(idToken, Object.values(answers), text);
+      try {
+      const idToken = await auth.currentUser.getIdToken();
+      const response = await uploadAnswers(idToken, Object.values(answers), text);
 
-        console.log("Server response:", response);
+      console.log("Server response:", response);
 
       // Navigate to the Dream screen with the server response
-        // navigation.navigate("Dream", { user: user, response: response });
+      // navigation.navigate("Dream", { user: user, response: response });
+      
       } catch (error) {
         console.error("Error uploading answers:", error);
         alert("Failed to upload answers. Please try again.");

@@ -121,6 +121,7 @@ async function uploadAnswers(idToken, answers, originalText) {
     const response = await sendClarifications(idToken, data);
     console.log("Answers uploaded successfully:", response);
     return response;
+    
   } catch (error) {
     console.error("Error uploading answers:", error);
   }
