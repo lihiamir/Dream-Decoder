@@ -7,16 +7,11 @@ import QuestionScreen from "../screens/QuestionScreen";
 
 const Stack = createNativeStackNavigator();
 
-export default function NewDreamStack({ route }) {
+export default function NewDreamStack({route}) {
   const { user } = route.params;
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="NewDreamScreen"
-        component={NewDreamScreen}
-        initialParams={{ user: user }}
-      />
       <Stack.Screen
         name="QuestionsPrompt"
         component={QuestionsPromptScreen}
@@ -26,11 +21,6 @@ export default function NewDreamStack({ route }) {
         name="QuestionScreen"
         component={QuestionScreen}
         initialParams={{ user: user, questions: [], text: "" }}
-      />
-      <Stack.Screen
-        name="Dream"
-        component={DreamScreen}
-        initialParams={{ user: user, dream: {} }}
       />
     </Stack.Navigator>
   );

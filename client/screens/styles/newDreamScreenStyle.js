@@ -69,7 +69,6 @@ export default StyleSheet.create({
   },
   input: {
     color: "#fff",
-    opacity: 1,
     fontSize: 16,
     height: '100%',
     fontWeight: "300",

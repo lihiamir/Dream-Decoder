@@ -60,7 +60,7 @@ async function sendClarifications(token, data) {
 
 async function getAllDreams(token) {
   try {
-    const response = await fetch(`http://${server}/api/dreams`, {
+    const response = await fetch(`http://${server}/api/dreams/my-dreams`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -77,7 +77,7 @@ async function getAllDreams(token) {
 
 async function getDreamById(token, id) {
   try {
-    const response = await fetch(`http://${server}/api/my-dreams/${id}`, {
+    const response = await fetch(`http://${server}/api/dreams/my-dreams/${id}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,

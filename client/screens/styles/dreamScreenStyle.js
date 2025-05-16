@@ -84,7 +84,7 @@ export default StyleSheet.create({
     },
     sceneContainer: {
       flex: 1,
-      top: "20%",
+      top: "10%",
       width: "100%",
       height: "100%",
       alignItems: "center",
@@ -102,40 +102,61 @@ export default StyleSheet.create({
       fontWeight: "bold",
       marginBottom: 10,
     },
-    sceneDescription: {
-      fontSize: 16,
-      textAlign: "center",
-      marginBottom: 10,
-    },
+    
     sceneImage: { 
-      width: 400, // Adjust the width as needed
-      height: 400, // Adjust the height as needed
+      width: 300, // Adjust the width as needed
+      height: 300, // Adjust the height as needed
       resizeMode: "contain",
       marginHorizontal: 10, // Add spacing between the image and arrows
       borderRadius: 20,
       borderWidth: 5,
       borderColor: "#000",
     },
+    interpretationContainer: {
+      flex: 1,
+      width: "90%",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 20,
+      backgroundColor: "rgba(97, 54, 164, 0.2)", // Semi-transparent white background
+      borderRadius: 20,
+    },
+    sceneDescription: {
+      fontSize: 20,
+      textAlign: "center",
+      marginBottom: 10,
+      color: "#fff",
+      fontWeight: "bold",
+      lineHeight: 30,
+    },
     sceneMood: {
       fontSize: 16,
       fontStyle: "italic",
-      marginBottom: 10,
+      marginVertical: 10,
+      color: "#fff",
+      textAlign: "center",
     },
     symbolsTitle: {
-      fontSize: 18,
+      fontSize: 24,
       fontWeight: "bold",
-      marginBottom: 10,
+      marginVertical: 10,
+      marginLeft: 10,
+      color: "#fff",
+      textAlign: "center",
     },
     symbolItem: {
-      marginBottom: 5,
+      marginHorizontal: 10,
+      marginVertical: 7,
     },
     symbolName: {
-      fontSize: 16,
+      fontSize: 18,
       fontWeight: "bold",
+      color: "#fff",
+      marginBottom: 5,
     },
     symbolMeaning: {
-      fontSize: 14,
-      fontStyle: "italic",
+      fontSize: 16,
+      color: "#fff",
     },
     navigationContainer: {
       flexDirection: "row",
