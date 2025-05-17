@@ -61,4 +61,26 @@ export default StyleSheet.create({
         color: "#fff",
         marginHorizontal: 8,
       },
+      gridContainer: {
+        paddingHorizontal: 10, // Add padding around the grid
+        paddingBottom: 20, // Add padding at the bottom
+      },
+      dreamThumbnailContainer: {
+        flex: 1, // Ensure equal spacing
+        margin: 5, // Add spacing between items
+        alignItems: "center",
+      },
+      dreamThumbnail: {
+        width: 100, // Adjust the size of the thumbnails
+        height: 100,
+        borderRadius: 10,
+        resizeMode: "cover",
+      },
+      dreamTitle: {
+        marginTop: 5,
+        fontSize: 12,
+        fontWeight: "bold",
+        color: "#fff",
+        textAlign: "center",
+      },
   });

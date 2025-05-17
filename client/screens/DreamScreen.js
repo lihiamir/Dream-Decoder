@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, SafeAreaView, FlatList } from "react-native";
+import { View, Text, Image, TouchableOpacity, SafeAreaView, FlatList, ScrollView } from "react-native";
 import styles from "./styles/dreamScreenStyle";
 import Menu from "../components/Menu";
 
@@ -73,49 +73,52 @@ export default function DreamScreen({ navigation, route }) {
       <Image source={require("../assets/images/c2.png")} style={styles.c2} />
       <Image source={require("../assets/images/c3.png")} style={styles.c3} />
 
-      {/* Scene Details */}
-      <View style={styles.sceneContainer}>
+        {/* Scene Details */}
+        <View style={styles.sceneContainer}>
 
-        {/* Image with Navigation Arrows */}
-        <View style={styles.imageNavigationContainer}>
-          <TouchableOpacity
-            style={styles.arrowButton}
-            onPress={handlePrevious}
-            disabled={currentSceneIndex === 0}
-          >
-            <Text style={[styles.arrowText, currentSceneIndex === 0 && styles.disabledArrow]}>{"<"}</Text>
-          </TouchableOpacity>
+          {/* Image with Navigation Arrows */}
+          <View style={styles.imageNavigationContainer}>
+            <TouchableOpacity
+              style={styles.arrowButton}
+              onPress={handlePrevious}
+              disabled={currentSceneIndex === 0}
+            >
+              <Text style={[styles.arrowText, currentSceneIndex === 0 && styles.disabledArrow]}>{"<"}</Text>
+            </TouchableOpacity>
 
-          <Image source={currentScene.image} style={styles.sceneImage} />
+            <Image source={currentScene.image} style={styles.sceneImage} />
 
-          <TouchableOpacity
-            style={styles.arrowButton}
-            onPress={handleNext}
-            disabled={currentSceneIndex === scenes.length - 1}
-          >
-            <Text style={[styles.arrowText, currentSceneIndex === scenes.length - 1 && styles.disabledArrow]}>{">"}</Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={styles.arrowButton}
+              onPress={handleNext}
+              disabled={currentSceneIndex === scenes.length - 1}
+            >
+              <Text style={[styles.arrowText, currentSceneIndex === scenes.length - 1 && styles.disabledArrow]}>{">"}</Text>
+            </TouchableOpacity>
+          </View>
 
-        <Text style={styles.sceneTitle}>Scene {currentSceneIndex + 1}</Text>
-        <Text style={styles.sceneDescription}>{currentScene.scene}</Text>
+          {/* Scrollable Content */}
+            <View style={styles.interpretationContainer}>
+              <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+                <Text style={styles.sceneDescription}>{currentScene.scene}</Text>
+                <Text style={styles.sceneMood}>Mood: {currentScene.mood}</Text>
 
-        <Text style={styles.sceneMood}>Mood: {currentScene.mood}</Text>
-
-        {/* Symbols */}
-        <Text style={styles.symbolsTitle}>Symbols:</Text>
-        <FlatList
-          data={currentScene.symbols}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.symbolItem}>
-              <Text style={styles.symbolName}>{item.symbol}</Text>
-              <Text style={styles.symbolMeaning}>{item.meaning}</Text>
+                {/* Symbols */}
+                <Text style={styles.symbolsTitle}>Symbols:</Text>
+                <FlatList
+                  data={currentScene.symbols}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <View style={styles.symbolItem}>
+                      <Text style={styles.symbolName}>{item.symbol}</Text>
+                      <Text style={styles.symbolMeaning}>{item.meaning}</Text>
+                    </View>
+                  )}
+                />
+              </ScrollView>
             </View>
-          )}
-        />
-      </View>
-
+        
+        </View>
       <Menu navigation={navigation} />
     </SafeAreaView>
   );

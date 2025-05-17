@@ -1,73 +1,90 @@
-import React from "react";
-import { View, Text, Image, FlatList, ScrollView, SafeAreaView, TextInput } from "react-native";
-import RoundedMicIcon from "../assets/images/micOff.png";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, FlatList, SafeAreaView, TextInput, TouchableOpacity } from "react-native";
 import styles from "./styles/journalScreenStyle";
-import Search from "../components/SearchButton";
-import DreamCard from "../components/DreamCard";
+// import Search from "../components/SearchButton";
 import Menu from "../components/Menu";
-import { useState, useEffect } from "react";
 import { getAllDreams, getDreamById } from "../api/dream";
 import { auth } from "../config/firebase";
 
-export default function Journal ({ navigation, route }) {
-    // const { user } = route.params;
-    // // const { userKey } = user.key;
+export default function Journal({ navigation, route }) {
+  const { user } = route.params;
 
-    // const [dreams, setDreams] = useState([]);
-    // const [searchTerm, setSearchTerm] = useState("");
-    // const [filteredDreams, setFilteredDreams] = useState([]);
-  
-    // useEffect(() => {
-    //   // Fetch dreams from backend
-    //   const idToken = auth.currentUser.getIdToken();
-    //   dreams = getAllDreams(idToken, userKey);
-    // });
+  const [dreams, setDreams] = useState([]); // Store all dreams
+  const [searchTerm, setSearchTerm] = useState(""); // Search term
+  const [filteredDreams, setFilteredDreams] = useState([]); // Filtered dreams
 
-    // const handleSearch = () => {
-    //     const filtered = dreams.filter(dream =>
-    //       dream.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-    //     );
-    //     setFilteredDreams(filtered);
-    //   };
+  // Fetch dreams from the backend
+  const fetchDreams = async () => {
+    try {
+      const idToken = await auth.currentUser.getIdToken();
+      const dreamsData = await getAllDreams(idToken, user.key); // Fetch dreams
+      setDreams(dreamsData);
+    } catch (error) {
+      console.error("Error fetching dreams:", error);
+    }
+  };  
 
-    //   const dreamsToDisplay = searchTerm ? filteredDreams : dreams;
+  useEffect(() => {
+    fetchDreams();
+  }, [route.params?.refresh]);
 
+  // const handleSearch = () => {
+  //   const filtered = dreams.filter((dream) =>
+  //     dream.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+  //   );
+  //   setFilteredDreams(filtered);
+  // };
 
+  const dreamsToDisplay = searchTerm ? filteredDreams : dreams;
 
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       <Image source={require('../assets/images/background.png')} style={styles.rectangle} />
-//       <Image source={require("../assets/images/moon.png")} style={styles.moon} />                
-//       <Image source={require("../assets/images/c1.png")} style={styles.c1} />
-//       <Image source={require("../assets/images/c2.png")} style={styles.c2} />
-//       <Image source={require("../assets/images/c3.png")} style={styles.c3} />
+  const handleDreamPress = async (dreamId) => {
+    const idToken = await auth.currentUser.getIdToken();
+    const dream = await getDreamById(idToken, dreamId); // Fetch the selected dream by ID
+    console.log("Selected dream:", dream);
+    if (dream) {
+      navigation.navigate("Dream", { user: user, dream: dream }); // Navigate to DreamScreen with the selected dream
+    }
+  };
 
-//       <Text style={styles.sectionTitle}>Journal</Text>
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Background */}
+      <Image source={require("../assets/images/background.png")} style={styles.rectangle} />
+      <Image source={require("../assets/images/moon.png")} style={styles.moon} />
+      <Image source={require("../assets/images/c1.png")} style={styles.c1} />
+      <Image source={require("../assets/images/c2.png")} style={styles.c2} />
+      <Image source={require("../assets/images/c3.png")} style={styles.c3} />
 
-//       <View style={styles.searchBar}>
-//         <Search onPress={handleSearch}/>
-//         <TextInput
-//           placeholder="Search by tags..."
-//           placeholderTextColor="#fff"
-//           style={styles.searchInput}
-//           value={searchTerm}
-//           onChangeText={setSearchTerm}
-//         />
-//       </View>
+      <Text style={styles.sectionTitle}>Journal</Text>
 
-//       <Text style={styles.orderText}>
-//         <Text style={styles.orderLabel}>Order by: </Text>
-//         <Text style={styles.orderValue}>Date</Text>
-//       </Text>
+      {/* Search Bar */}
+      {/* <View style={styles.searchBar}>
+        <Search onPress={handleSearch} />
+        <TextInput
+          placeholder="Search by tags..."
+          placeholderTextColor="#fff"
+          style={styles.searchInput}
+          value={searchTerm}
+          onChangeText={setSearchTerm}
+        />
+      </View> */}
 
-//       <FlatList
-//         data={dreamsToDisplay}
-//         keyExtractor={(item) => item.id}
-//         renderItem={({ item }) => (
-//           <DreamCard dream={item} />
-//         )}
-//       />
-//         <Menu navigation={navigation} />
-//     </SafeAreaView>
-//   );
-};
+      {/* Dreams List */}
+      <FlatList
+        data={dreamsToDisplay}
+        keyExtractor={(item) => item.id}
+        numColumns={3} // Display 3 items per row
+        key={3} // Add a unique key to force re-render when numColumns changes
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleDreamPress(item.id)} style={styles.dreamThumbnailContainer}>
+            <Image source={{ uri: item.image }} style={styles.dreamThumbnail} />
+            {/* <Text style={styles.dreamTitle}>Dream {item.id}</Text> */}
+          </TouchableOpacity>
+        )}
+        contentContainerStyle={styles.gridContainer}
+      />
+
+      <Menu navigation={navigation} />
+    </SafeAreaView>
+  );
+}

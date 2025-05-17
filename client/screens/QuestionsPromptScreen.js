@@ -5,11 +5,12 @@ import ContinueButton from "../components/ContinueButton";
 import Menu from "../components/Menu";
 
 export default function QuestionPromptScreen({ navigation, route }) {
-  const { user } = route.params; // Get the user object from the route params
-  console.log(user); // Log the user object to check its structure
+  const { user, questions, text } = route.params;
+
+  console.log(route.params); // Log the user object to check its structure
 
   const handleContinue = () => {
-    navigation.navigate('QuestionScreen', route.params);
+    navigation.navigate("QuestionScreen", { user: user, questions: questions, text: text });
   }
 
   return (
@@ -26,7 +27,7 @@ export default function QuestionPromptScreen({ navigation, route }) {
         {"\n"}Can I ask you a few quick questions?</Text>
 
         <ContinueButton style={styles.continueButton} onPress={handleContinue}/>
-        <Menu navigation={navigation} />
+        {/* <Menu navigation={navigation} /> */}
         
         <Image source={require("../assets/images/step2.png")} style={styles.steps} />
         
