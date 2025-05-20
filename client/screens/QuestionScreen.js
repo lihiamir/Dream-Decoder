@@ -5,6 +5,8 @@ import {AudioButton, uploadAnswers} from "../components/AudioButton";
 import ContinueButton from "../components/ContinueButton";
 import Menu from "../components/Menu";
 import { auth } from "../config/firebase";
+import LoadingScreen from "../components/LoadingScreen";
+
 
 export default function QuestionScreen({ navigation, route }) {
   const { user, questions, text } = route.params;
@@ -62,12 +64,7 @@ export default function QuestionScreen({ navigation, route }) {
 
   if (loading) {
     // Show loading screen while waiting for the server response
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.loadingText}>Creating your new dream...</Text>
-        <ActivityIndicator size="large" color="#6200ee" />
-      </SafeAreaView>
-    );
+    return <LoadingScreen message="Creating your new dream..." />;
   }
 
 
