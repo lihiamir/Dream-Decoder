@@ -38,14 +38,8 @@ export default function MainDrawerNavigator({ route, navigation }) {
       <Drawer.Screen
         name="Journal"
         component={JournalScreen}
-        initialParams={{ user: user }}
-        listeners={{
-          focus: () => {
-            // Trigger a re-fetch of dreams when the Journal screen is focused
-            navigation.navigate("Journal", { refresh: true });
-          },
-        }}/>
-      
+        initialParams={{ user: user, refresh: true }}
+      />
       <Drawer.Screen
         name="New Dream"
         component={NewDreamScreen}

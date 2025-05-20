@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Text, Image, TouchableOpacity, TextInput, SafeAreaView } from "react-native";
+import { View, Text, Image, TextInput, SafeAreaView } from "react-native";
 import styles from "./styles/newDreamScreenStyle";
 import ContinueButton from "../components/ContinueButton";
 import Menu from "../components/Menu";
