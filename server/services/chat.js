@@ -47,22 +47,10 @@ exports.extractScenes = async (dreamText) => {
 }
 
 exports.findMissingSymbolsFromGPT = async (sceneText, knownSymbols = []) => {
-  const systemPrompt = `
-  You are a dream symbol analysis assistant.
-  You are given a dream scene and a list of known symbols that were already extracted from it.
-  Your task is to identify up to 5 additional symbolic elements (objects, animals, places, emotions, etc.) in the scene that are NOT already included in the known symbols.
-  If no additional meaningful symbols are clearly present in the scene, return an empty JSON array: []
-  Do not invent or guess.
-  Only include real, meaningful symbols that clearly appear in the scene.
-  For each symbol, return:
-  - symbol (a single word or short phrase)
-  - meanings: { positive, negative, neutral }
-  Return as a JSON array. Only include truly symbolic elements. Do not include known ones.
-  `;
+  const systemPrompt = `You are a dream symbol analysis assistant. You are given a dream scene and a list of known symbols that were already extracted from it. Your task is to identify up to 5 additional classic dream symbols that are commonly interpreted in dream analysis traditions, such as animals, emotions, archetypal themes, natural elements, symbolic actions, mythological or spiritual imagery. Do not include mundane or overly literal elements (e.g. furniture, tools, clothing) unless they clearly carry symbolic meaning. Colors may be included only if they are symbolically meaningful in the dream's context. For each symbol, return: - symbol (a short word or phrase) - meanings: { positive, neutral, negative }, where each value is 1–2 complete, thoughtful sentences. Avoid vague or shallow phrasing. If no valid symbols are found, return []. Respond only with valid JSON.`;
 
   const userPrompt = `
   Scene: ${sceneText}
-  
   Known symbols: ${knownSymbols.join(', ') || "None"}
   `;
 

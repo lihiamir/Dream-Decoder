@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "dreamapp",
+    "slug": "dreamapp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/moon.png",
+    "scheme": "dreamapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/moon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/moon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/moon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "4d08fb37-86db-44cb-8814-5f9e4686a17f"
+      }
+    },
+    "owner": "lihiamir"
+  }
+}

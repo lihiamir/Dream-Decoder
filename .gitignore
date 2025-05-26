@@ -1,9 +1,7 @@
-node_modules
-client/config/firebase
+client/config/*
 .env
 server/.env
 server/config/*
 server/firebaseServiceKey.json
 server/node_modules/ 
-node_modules/ 
 
