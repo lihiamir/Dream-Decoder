@@ -17,7 +17,7 @@ export default StyleSheet.create({
         width: '75%',
         height: '75%',
         position: "absolute",
-        top: "-55%",
+        top: "-45%",
         resizeMode: "contain",
         },
     c1: {

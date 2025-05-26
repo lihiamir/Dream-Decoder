@@ -18,7 +18,7 @@ export default StyleSheet.create({
     width: '75%',
     height: '75%',
     position: "absolute",
-    top: "-55%",
+    top: "-45%",
     resizeMode: "contain",
       },
     c1: {
@@ -41,7 +41,7 @@ export default StyleSheet.create({
         opacity: 0.4,
       },
     sectionTitle: {
-        paddingTop: 100,
+        paddingTop: 130,
         fontSize: 50,
         fontWeight: "bold",
         color: "#fff",
@@ -62,6 +62,7 @@ export default StyleSheet.create({
         marginHorizontal: 8,
       },
       gridContainer: {
+        marginTop: 20,
         paddingHorizontal: 10, // Add padding around the grid
         paddingBottom: 20, // Add padding at the bottom
       },
@@ -71,10 +72,11 @@ export default StyleSheet.create({
         alignItems: "center",
       },
       dreamThumbnail: {
-        width: 100, // Adjust the size of the thumbnails
-        height: 100,
+        width: 150, // Adjust the size of the thumbnails
+        height: 150,
         borderRadius: 10,
         resizeMode: "cover",
+        padding: 5,
       },
       dreamTitle: {
         marginTop: 5,

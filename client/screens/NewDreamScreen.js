@@ -54,7 +54,7 @@ export default function NewDreamScreen({ navigation, route }) {
       navigation.navigate("Dream", { user: user, response: response });
     };
   }
-
+  
   return (
     <SafeAreaView style={styles.container}>
       <Image source={require('../assets/images/background.png')} style={styles.rectangle} />
@@ -62,7 +62,7 @@ export default function NewDreamScreen({ navigation, route }) {
 
       <View style={styles.overlap}>
         <Text style={styles.description}>
-          Describe your dream in detail, including major events, characters, objects, and settings
+          Describe your dream in detail, including major events, characters, objects, and settings.
         </Text>
 
         <Image source={require("../assets/images/c1.png")} style={styles.c1} />
