@@ -13,73 +13,50 @@ const prompt = `Number of scenes: 4
 
 // const text = "אני רק חולמת לראות שזה מתרגם לי את החלום כמו שצריך אז אני חולמת שאני בשדות של טוטים עם ערנבים ליד מתכנתת ומתקבלתב לחברת אינדוליניה."
 
-  exports.processTextDream = async (uid, text, metadata = {}) => {
-    // const rawOutput = prompt;
-    const rawOutput = await chatService.extractScenes(text); 
-    const lines = rawOutput.trim().split('\n');
-    const sceneLines = lines.slice(2);
-    const scenes = sceneLines.map(line => line.replace(/^\d+\.\s*/, ''));
+exports.processTextDream = async (uid, text, metadata = {}) => {
+  // const rawOutput = prompt;
+  const rawOutput = await chatService.extractScenes(text);
+  const lines = rawOutput.trim().split('\n');
+  const sceneLines = lines.slice(2);
+  const scenes = sceneLines.map(line => line.replace(/^\d+\.\s*/, ''));
+
+  const { dreamMood, sceneMoods, tags } = await moodService.classifyDreamMood(scenes);
+  const symbolInterpretations = await symbolService.extractSymbolInterpretations(scenes, sceneMoods);
+
+  const db = admin.firestore();
+  const dreamDocRef = db.collection('users').doc(uid).collection('dreams').doc();
+  const dreamId = dreamDocRef.id;
+
+  const enrichedScenes = [];
+  for (let i = 0; i < scenes.length; i++) {
+    const scene = scenes[i];
+    const destinationPath = `users/${uid}/dreams/${dreamId}/scene_${i + 1}.png`;
+    const imageUrl = await imageService.generateAndUploadImage(scene, destinationPath);
     
-    const { dreamMood, sceneMoods, tags } = await moodService.classifyDreamMood(scenes);
-    const symbolInterpretations = await symbolService.extractSymbolInterpretations(scenes, sceneMoods);
- 
-    const dreamId = await saveDreamForUser({
-      uid,
-      ...metadata,
-      parsedText: text,
-      scenes,
-      dreamMood,
-      tags,
-      createdAt: new Date()
-    });
-
-    const imageUrls = [];   
-    for (let i = 0; i < scenes.length; i++) {
-        const scene = scenes[i];
-        const destinationPath = `users/${uid}/dreams/${dreamId}/scene_${i + 1}.png`;
-        console.log(destinationPath)
-        const imageUrl = await imageService.generateAndUploadImage(scene, destinationPath);
-        console.log(imageUrl, "URL");
-
-        imageUrls.push(imageUrl);
-      }
-    
-    await updateDreamImages(uid, dreamId, imageUrls);
-
-    const enrichedScenes = scenes.map((scene, i) => ({
+    enrichedScenes.push({
       scene,
-      image: imageUrls[i],
+      image: imageUrl,
       mood: symbolInterpretations[i].mood,
       symbols: symbolInterpretations[i].symbols
-    }));
-
-    return {
-      dreamId,
-      scenes: enrichedScenes
-    };
-  };
-
-const saveDreamForUser = async ({ uid, parsedText, scenes, dreamMood, tags, metadata }) => {
-  const db = admin.firestore();
-  const userDreamsRef = db.collection('users').doc(uid).collection('dreams');
+    });
+  }
 
   const dreamData = {
     ...metadata,
-    parsedText,
-    scenes,
+    parsedText: text,
     dreamMood,
     tags,
-    createdAt: new Date(),
+    scenes: enrichedScenes,
+    createdAt: new Date()
   };
 
-  const docRef = await userDreamsRef.add(dreamData);
-  return docRef.id;
-};
+  await dreamDocRef.set(dreamData);
 
-const updateDreamImages = async (uid, dreamId, imageUrls) => {
-  const db = admin.firestore();
-  await db.collection('users').doc(uid).collection('dreams').doc(dreamId).update({ images: imageUrls });
-};
+  return {
+    dreamId,
+    scenes: enrichedScenes
+  };
+}
 
 exports.getAllDreams = async (uid) => {
   const db = admin.firestore();
@@ -87,12 +64,18 @@ exports.getAllDreams = async (uid) => {
 
   const snapshot = await dreamsRef.orderBy('createdAt', 'desc').get();
 
-  const dreams = snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  }));
+  const dreams = snapshot.docs.map(doc => {
+    const data = doc.data();
+    const firstImage = data.scenes?.[0]?.image || null;
 
-  return dreams;
+    return {
+      id: doc.id,
+      createdAt: data.createdAt || null,
+      image: firstImage
+    };
+  });
+
+  return dreams;
 };
 
 exports.getDreamById = async (uid, dreamId) => {
@@ -111,6 +94,6 @@ exports.getDreamById = async (uid, dreamId) => {
 
   return {
     id: dreamDoc.id,
-    ...dreamDoc.data()
-  };
+    scenes: dreamDoc.data().scenes || []
+  };
 };

@@ -27,4 +27,21 @@ exports.register = async (req, res) => {
       res.status(401).json({ error: 'Invalid or expired token' });
     }
   };
+
+  exports.getUserDisplayName = async (req, res) => {
+    const uid = req.uid;
+  
+    try {
+      const displayName = await authService.getUserDisplayName(uid);
+  
+      if (!displayName) {
+        return res.status(404).json({ error: "User not found or displayName missing" });
+      }
+  
+      res.status(200).json({ displayName });
+    } catch (error) {
+      console.error("❌ Error getting user display name:", error.message);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  };
   
