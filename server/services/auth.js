@@ -34,3 +34,12 @@ exports.loginUser= async (token) => {
     displayName: decoded.name || null
   };
 }
+
+exports.getUserDisplayName = async (uid) => {
+  const userDoc = await admin.firestore().collection('users').doc(uid).get();
+
+  if (!userDoc.exists) return null;
+
+  const userData = userDoc.data();
+  return userData.displayName || null;
+};
