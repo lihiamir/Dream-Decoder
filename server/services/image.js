@@ -60,3 +60,4 @@ const uploadToFirebaseAndGetSignedUrl = async (localPath, destinationPath) => {
   return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(destinationPath)}?alt=media&token=${token}`;
 };
 
+

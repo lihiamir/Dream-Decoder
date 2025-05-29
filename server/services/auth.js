@@ -41,5 +41,5 @@ exports.getUserDisplayName = async (uid) => {
   if (!userDoc.exists) return null;
 
   const userData = userDoc.data();
-  return userData.displayName || null;
+  return userData.displayName || null;
 };

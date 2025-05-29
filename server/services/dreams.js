@@ -58,6 +58,7 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   };
 };
 
+
 exports.getAllDreams = async (uid) => {
   const db = admin.firestore();
   const dreamsRef = db.collection('users').doc(uid).collection('dreams');
@@ -66,13 +67,16 @@ exports.getAllDreams = async (uid) => {
 
   const dreams = snapshot.docs.map(doc => {
     const data = doc.data();
+    const firstImage = data.scenes?.[0]?.image || null;
+
     return {
       id: doc.id,
-      scenes: data.scenes || []
+      createdAt: data.createdAt || null,
+      image: firstImage
     };
   });
 
-  return dreams;
+  return dreams;
 };
 
 exports.getDreamById = async (uid, dreamId) => {

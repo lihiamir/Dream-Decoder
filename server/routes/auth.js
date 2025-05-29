@@ -7,5 +7,4 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.get('/user', authenticateToken, authController.getUserDisplayName);
 
-
 module.exports = router;
