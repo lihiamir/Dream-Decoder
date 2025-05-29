@@ -43,23 +43,21 @@ const downloadImageToTemp = async (url) => {
 };
 
 const uploadToFirebaseAndGetSignedUrl = async (localPath, destinationPath) => {
-  const token = uuidv4();
+  const token = uuidv4(); 
 
   const [file] = await bucket.upload(localPath, {
     destination: destinationPath,
     metadata: {
       contentType: "image/png",
       metadata: {
-        firebaseStorageDownloadTokens: token,
+        firebaseStorageDownloadTokens: token, 
       },
     },
   });
 
   fs.unlinkSync(localPath);
 
-  // יצירת URL קבוע בעצמך:
   return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(destinationPath)}?alt=media&token=${token}`;
 };
-
 
 

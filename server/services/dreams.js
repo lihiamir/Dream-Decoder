@@ -55,8 +55,9 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   return {
     dreamId,
     scenes: enrichedScenes
-  };
-}
+  };
+};
+
 
 exports.getAllDreams = async (uid) => {
   const db = admin.firestore();
@@ -94,6 +95,6 @@ exports.getDreamById = async (uid, dreamId) => {
 
   return {
     id: dreamDoc.id,
-    scenes: dreamDoc.data().scenes || []
-  };
+    scenes: dreamDoc.data().scenes  || []
+  };
 };
