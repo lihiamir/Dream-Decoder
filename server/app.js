@@ -13,8 +13,10 @@
     app.use(express.json());
     const authRoutes = require('./routes/auth.js');
     const dreamsRouts = require('./routes/dreams.js');
+    const profileRoutes = require('./routes/profile.js')
     app.use('/api/auth', authRoutes);
     app.use('/api/dreams',dreamsRouts);
+    app.use('/api/profile',profileRoutes);
 
     // For checking
     // app.get('/api/dreams/test-process', async (req, res) => {..
