@@ -2,12 +2,21 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, SafeAreaView, FlatList, ScrollView } from "react-native";
 import styles from "./styles/dreamScreenStyle";
 import Menu from "../components/Menu";
-import Background from "../components/Background.js"; // Import Background component
-
+import Background from "../components/Background.js";
+import tempImage from "../temp.png";
 
 export default function DreamScreen({ navigation, route }) {
-  const { scenes } = route.params.dream; // Assuming the dream object is passed via navigation
+  const { scenes } = route.params.dream;
   const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
+
+  // Mock data for similar dreams
+  const similarDreams = [
+    { id: "1", image: tempImage },
+    { id: "2", image: tempImage },
+    { id: "3", image: tempImage },
+    { id: "4", image: tempImage },
+    { id: "5", image: tempImage },
+  ];
 
   const handlePrevious = () => {
     if (currentSceneIndex > 0) {
@@ -21,12 +30,17 @@ export default function DreamScreen({ navigation, route }) {
     }
   };
 
-  const currentScene = scenes[currentSceneIndex]; // Get the current scene
+  const currentScene = scenes[currentSceneIndex];
+
+  const handleDreamPress = (dreamId) => {
+    // Navigate to the selected dream
+    navigation.navigate("Dream", { dreamId });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <Background />
-      
+
       {/* Scene Details */}
       <View style={styles.sceneContainer}>
         {/* Image with Navigation Arrows */}
@@ -57,7 +71,7 @@ export default function DreamScreen({ navigation, route }) {
             <Text style={styles.sceneMood}>Mood: {currentScene.mood}</Text>
 
             {/* Symbols */}
-            <Text style={styles.symbolsTitle}>Symbols:</Text>
+            <Text style={styles.symbolsTitle}>Symbols </Text>
             <FlatList
               data={currentScene.symbols}
               keyExtractor={(item, index) => index.toString()}
@@ -69,9 +83,29 @@ export default function DreamScreen({ navigation, route }) {
               )}
               nestedScrollEnabled={true} // Allow nested scrolling
             />
+
           </ScrollView>
+          {/* Similar Dreams Section */}
+          <View style={styles.similarDreamsContainer}>
+              <Text style={styles.similarDreamsTitle}>Similar Dreams</Text>
+              <FlatList
+                data={similarDreams}
+                horizontal
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => handleDreamPress(item.id)} style={styles.similarDreamThumbnailContainer}>
+                    <Image source={item.image} style={styles.similarDreamThumbnail} />
+                  </TouchableOpacity>
+                )}
+                contentContainerStyle={styles.similarDreamsList}
+                showsHorizontalScrollIndicator={false}
+              />
+            </View>
         </View>
+
+        
       </View>
+
       <Menu navigation={navigation} />
     </SafeAreaView>
   );

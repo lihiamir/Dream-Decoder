@@ -1,4 +1,3 @@
-import { auth } from '@/config/firebase';
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
@@ -36,18 +35,32 @@ export default StyleSheet.create({
     textAlign: "center",
   },
   similarDreamsContainer: {
+    borderRadius: 20,
+    height: 150,
     marginTop: 20,
+    marginBottom: 50,
     paddingHorizontal: 10,
   },
-  similarDreamItem: {
-    backgroundColor: "#f5f5f5",
-    padding: 10,
-    borderRadius: 5,
-    marginHorizontal: 5,
+  similarDreamsTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 10,
+    textAlign: "center",
   },
-  similarDreamText: {
-    fontSize: 14,
-    color: "#333",
+  similarDreamsList: {
+    flexDirection: "row",
+  },
+  similarDreamThumbnailContainer: {
+    marginRight: 10,
+  },
+  similarDreamThumbnail: {
+    width: 80,
+    height: 80,
+    resizeMode: "cover",
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#000",
   },
   sceneContainer: {
     flex: 1,
@@ -59,8 +72,8 @@ export default StyleSheet.create({
     padding: 20,
   },
   imageNavigationContainer: {
-    flexDirection: "row", // Align arrows and image horizontally
-    alignItems: "center", // Center arrows vertically with the image
+    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "center",
     marginVertical: 20,
   },
@@ -70,8 +83,8 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   sceneImage: { 
-    width: 200, // Adjust the width as needed
-    height: 200, // Adjust the height as needed
+    width: 200,
+    height: 200,
     resizeMode: "contain",
     borderRadius: 20,
     borderWidth: 3,
@@ -82,7 +95,7 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "rgba(97, 54, 164, 0.4)", // Semi-transparent white background
+    backgroundColor: "rgba(97, 54, 164, 0.4)",
     borderRadius: 20,
   },
   sceneDescription: {
