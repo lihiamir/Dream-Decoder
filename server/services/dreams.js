@@ -79,7 +79,8 @@ exports.getAllDreams = async (uid) => {
     return {
       id: doc.id,
       createdAt: data.createdAt || null,
-      image: firstImage
+      image: firstImage,
+      tags: data.tags || []
     };
   });
 
