@@ -1,31 +1,27 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../config/firebase";
 import styles from "./styles/FormStyles";
 import { useGoogleAuth } from '../config/googleAuth';
 import { checkRegister } from '../api/auth';
 
 export default function RegisterForm({ navigation }) { 
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setname] = useState("");
   const { promptAsync } = useGoogleAuth(navigation);
-
 
   const handleRegister = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       await updateProfile(user, { displayName: name, });
- 
       await user.reload();
       const idToken = await auth.currentUser.getIdToken(true);
       await checkRegister(idToken); //check if token is valid with the server
-      
       alert('Account created!');
-      navigation.navigate('Drawer', { user: user });
+      navigation.navigate("Drawer", { screen: "Settings" });
     } catch (error) {
       alert(error.message);
     }

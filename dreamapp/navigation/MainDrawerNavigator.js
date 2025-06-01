@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import DreamScreen from "../screens/DreamScreen";
 import LoginScreen from "../screens/LoginScreen";
@@ -58,18 +58,21 @@ export default function MainDrawerNavigator({ navigation }) {
 
   return (
     <Drawer.Navigator
-      initialRouteName="Settings"
+      initialRouteName="Journal"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
         headerShown: false,
         drawerStyle: {
-          backgroundColor: "#1e1e1e",
-          width: 260,
+          backgroundColor: "rgb(222, 209, 230)",
+          width: "50%",
+          height: "60%",
+          borderBottomEndRadius: 100,
+          borderTopRightRadius: 0,
         },
         drawerActiveTintColor: "#fff",
-        drawerInactiveTintColor: "#aaa",
         drawerLabelStyle: {
           fontSize: 16,
+          fontStyle: "normal",
         },
       }}
     >
@@ -79,21 +82,23 @@ export default function MainDrawerNavigator({ navigation }) {
         name="QuestionsPrompt"
         component={QuestionsPromptScreen}
         options={{
-          drawerItemStyle: { display: "none" }, // Hide this screen from the drawer
+          drawerItemStyle: { display: "none" },
+          swipeEnabled: false,
         }}
       />
       <Drawer.Screen
         name="QuestionScreen"
         component={QuestionScreen}
         options={{
-          drawerItemStyle: { display: "none" }, // Hide this screen from the drawer
+          drawerItemStyle: { display: "none" },
+          swipeEnabled: false,
         }}
       />
       <Drawer.Screen
         name="Dream"
         component={DreamScreen}
         options={{
-          drawerItemStyle: { display: "none" }, // Hide this screen from the drawer
+          drawerItemStyle: { display: "none" },
         }}
       />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
@@ -104,12 +109,13 @@ export default function MainDrawerNavigator({ navigation }) {
 
 const styles = StyleSheet.create({
   drawerLabel: {
-    fontSize: 16,
-    color: "#fff",
+    fontSize: 18,
+    color: "rgb(47, 28, 65)", // Change this to your desired color
+    fontWeight: "bold", // Optional: make it bold
   },
   bottomDrawerSection: {
-    borderTopWidth: 1,
-    borderTopColor: "#aaa",
+    borderTopWidth: 2,
+    borderTopColor: "rgb(89, 65, 111)",
     paddingTop: 10,
   },
 });

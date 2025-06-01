@@ -9,7 +9,7 @@ export default StyleSheet.create({
       height: "100%",
   },
     sectionTitle: {
-        paddingTop: 130,
+        paddingTop: 100,
         fontSize: 50,
         fontWeight: "bold",
         color: "#fff",
@@ -17,11 +17,10 @@ export default StyleSheet.create({
       },
       searchBar: {
         flexDirection: "row",
-        alignItems: "center",
+        width: "80%",
         borderBottomWidth: 1,
         borderColor: "#fff",
-        marginBottom: 20,
-        paddingHorizontal: 8,
+        paddingHorizontal: 10,
       },
       searchInput: {
         flex: 1,
@@ -30,20 +29,22 @@ export default StyleSheet.create({
         marginHorizontal: 8,
       },
       gridContainer: {
-        marginTop: 20,
-        paddingBottom: 20, // Add padding at the bottom
+        paddingBottom: 20,
       },
       dreamThumbnailContainer: {
-        flex: 1, // Ensure equal spacing
-        margin: 55, // Add spacing between items
+        flex: 1,
+        margin: 55,
         alignItems: "center",
+        
       },
       dreamThumbnail: {
-        width: 100, // Adjust the size of the thumbnails
+        width: 100,
         height: 100,
         borderRadius: 10,
         resizeMode: "cover",
         padding: 5,
+        borderWidth: 2,
+        borderColor: "#000",
       },
       dreamTitle: {
         marginTop: 5,

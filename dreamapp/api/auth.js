@@ -68,7 +68,6 @@ async function setPreferences(token, background, interpretationStyle) {
   if (!response.ok) {
     alert(result.error || 'Failed to save profile');
   }
-  console.log('✅ Saved profile:', result.message);
 };
 
 

@@ -68,12 +68,12 @@ export default function DreamScreen({ navigation, route }) {
         <View style={styles.interpretationContainer}>
           <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
             <Text style={styles.sceneDescription}>{currentScene.scene}</Text>
-            <Text style={styles.sceneMood}>Mood: {currentScene.mood}</Text>
 
             {/* Symbols */}
             <Text style={styles.symbolsTitle}>Symbols </Text>
             <FlatList
               data={currentScene.symbols}
+              Vertical
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
                 <View style={styles.symbolItem}>
@@ -81,31 +81,29 @@ export default function DreamScreen({ navigation, route }) {
                   <Text style={styles.symbolMeaning}>{item.meaning}</Text>
                 </View>
               )}
-              nestedScrollEnabled={true} // Allow nested scrolling
+              nestedScrollEnabled={true}
             />
-
           </ScrollView>
-          {/* Similar Dreams Section */}
-          <View style={styles.similarDreamsContainer}>
-              <Text style={styles.similarDreamsTitle}>Similar Dreams</Text>
-              <FlatList
-                data={similarDreams}
-                horizontal
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => handleDreamPress(item.id)} style={styles.similarDreamThumbnailContainer}>
-                    <Image source={item.image} style={styles.similarDreamThumbnail} />
-                  </TouchableOpacity>
-                )}
-                contentContainerStyle={styles.similarDreamsList}
-                showsHorizontalScrollIndicator={false}
-              />
-            </View>
         </View>
 
+        {/* Similar Dreams Section */}
+        <View style={styles.similarDreamsContainer}>
+          <Text style={styles.similarDreamsTitle}>Similar Dreams</Text>
+          <FlatList
+            data={similarDreams}
+            horizontal
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleDreamPress(item.id)} style={styles.similarDreamThumbnailContainer}>
+                <Image source={item.image} style={styles.similarDreamThumbnail} />
+              </TouchableOpacity>
+            )}
+            contentContainerStyle={styles.similarDreamsList}
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
         
       </View>
-
       <Menu navigation={navigation} />
     </SafeAreaView>
   );
