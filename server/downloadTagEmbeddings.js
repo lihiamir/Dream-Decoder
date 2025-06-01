@@ -3,7 +3,7 @@ const fs = require('fs');
 const { bucket } = require('./config/firebase'); // שימוש בקובץ firebase.js שלך
 
 async function downloadTagEmbeddings() {
-  const destinationFolder = path.join(__dirname, '../data');
+  const destinationFolder = path.join(__dirname, './data');
   const destinationPath = path.join(destinationFolder, 'tag_embeddings_openai.json');
 
   // ודא שהתיקייה קיימת
@@ -19,4 +19,4 @@ async function downloadTagEmbeddings() {
   }
 }
 
-downloadTagEmbeddings();
+module.exports = downloadTagEmbeddings;
