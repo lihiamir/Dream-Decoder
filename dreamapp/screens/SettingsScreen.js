@@ -33,9 +33,10 @@ export default function SettingsScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <BackGround />
 
-      <Text style={styles.title}></Text>
+      <Text style={styles.title}>
+        To provide a more meaningful experience, tell us a bit about yourself.
+      </Text>
       <Text style={styles.subtitle}>
-        To provide more meaningful interpretations, tell us a bit about yourself.
         You can skip this step and edit it later in Settings.
       </Text>
 

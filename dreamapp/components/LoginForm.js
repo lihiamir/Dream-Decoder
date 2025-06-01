@@ -14,16 +14,13 @@ import { checkLogin } from "../api/auth";
 
 
 export default function LoginForm({ navigation }) {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { promptAsync } = useGoogleAuth(navigation);
 
   const handleLogin = async () => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const idToken = await auth.currentUser.getIdToken(true);
-      
       await checkLogin(idToken); //check if token is valid with the server
       navigation.navigate('Drawer');
     } catch (error) {
@@ -36,7 +33,6 @@ export default function LoginForm({ navigation }) {
       alert("Please enter your email address first.");
       return;
     }
-  
     try {
       await sendPasswordResetEmail(auth, email);
       alert("Password reset email sent!");
