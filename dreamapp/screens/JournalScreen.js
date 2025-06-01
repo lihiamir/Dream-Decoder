@@ -39,6 +39,7 @@ export default function Journal({ navigation, route }) {
     const idToken = await auth.currentUser.getIdToken();
     const dream = await getDreamById(idToken, dreamId);
     if (dream) {
+      console.log("Dream found:", dream);
       navigation.navigate("Dream", { dream: dream });
     }
   };

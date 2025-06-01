@@ -42,11 +42,12 @@ export default function QuestionScreen({ navigation, route }) {
     } else {
       // All questions answered, send answers to the server
       try {
-      setLoading(true); // Show loading screen
-      const idToken = await auth.currentUser.getIdToken();
-      const response = await uploadAnswers(idToken, Object.values(answers), text);
+        console.log("Uploading answers:", answers);
+        setLoading(true); // Show loading screen
+        const idToken = await auth.currentUser.getIdToken();
+        const response = await uploadAnswers(idToken, Object.values(answers), text);
 
-      console.log("Server response:", response);
+        console.log("Server response:", response);
 
       // Navigate to the Dream screen with the server response
       navigation.getParent().navigate("Dream", { user: user, dream: response });

@@ -18,41 +18,42 @@ export default function NewDreamScreen({ navigation, route }) {
   const [text, setText] = useState("");
 
   const handleContinue = async () => {
-    // if (!audioUri && !text) {
-    //   alert("Please provide either a voice recording or text input.");
-    //   return;
-    // }
-    // const idToken = await auth.currentUser.getIdToken(true);
-    // let response;
-    // if (audioUri) { 
-    //   response = await uploadRecording(idToken, audioUri);
-    // } else {
-    //   response = await uploadDreamText(idToken, {text}).catch((error) => {
-    //     console.error('Error uploading recording:', error);
-    //     return;
-    //   });
-    // }
+    if (!audioUri && !text) {
+      alert("Please provide either a voice recording or text input.");
+      return;
+    }
+    const idToken = await auth.currentUser.getIdToken(true);
+    let response;
+    if (audioUri) { 
+      response = await uploadRecording(idToken, audioUri);
+    } else {
+      response = await uploadDreamText(idToken, {text}).catch((error) => {
+        console.error('Error uploading recording:', error);
+        return;
+      });
+    }
 
-    // if (!response) {
-    //   console.error("No response received from the server.");
-    //   return;
-    // }
+    if (!response) {
+      console.error("No response received from the server.");
+      return;
+    }
 
-    // if (response.followUp) {
+    if (response.followUp) {
 
-    const questions = [
-        "What is the significance of the book you were reading in your dream?",
-        "Can you describe the field of flowers in more detail?",
-        "Did you feel any specific emotions while reading the book in the field of flowers?"
-    ];
-    const ogText = "חלמתי שאני קוראת ספר בשדה של פרחים";
-    navigation.navigate('QuestionsPrompt', { questions: questions, text: ogText});
-    //   const questions = response.questions
-    //   const ogText = response.originalText
-    //   navigation.navigate("QuestionsPrompt", { questions: questions, text: ogText });
-    // } else {
-    //   navigation.navigate("Dream", { response: response });
-    // };
+    // const questions = [
+    //     "What is the significance of the book you were reading in your dream?",
+    //     "Can you describe the field of flowers in more detail?",
+    //     "Did you feel any specific emotions while reading the book in the field of flowers?"
+    // ];
+    // const ogText = "חלמתי שאני קוראת ספר בשדה של פרחים";
+    // navigation.navigate('QuestionsPrompt', { questions: questions, text: ogText});
+
+      const questions = response.questions
+      const ogText = response.originalText
+      navigation.navigate("QuestionsPrompt", { questions: questions, text: ogText });
+    } else {
+      navigation.navigate("Dream", { response: response });
+    };
   }
   
   return (

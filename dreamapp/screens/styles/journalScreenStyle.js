@@ -29,7 +29,8 @@ export default StyleSheet.create({
         marginHorizontal: 8,
       },
       gridContainer: {
-        paddingBottom: 20,
+        paddingBottom: 10,
+        width: "100%",
       },
       dreamThumbnailContainer: {
         flex: 1,
