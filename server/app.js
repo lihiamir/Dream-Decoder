@@ -5,6 +5,7 @@
     const port = process.env.PORT || 3000;
     // Allow to accept requests from diffrent origins
     const cors = require('cors');
+    const downloadTagEmbeddings = require('./utils/downloadTagEmbeddings');
 
     // For using postman.com  
     app.use(cors());
@@ -17,7 +18,12 @@
     app.use('/api/dreams',dreamsRouts);
     app.use('/api/profile',profileRoutes);
 
-
+    downloadTagEmbeddings().then(() => {
     app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+        console.log(`🚀 Server running on port ${port}`);
     });
+    });
+
+    // app.listen(port, () => {
+    // console.log(`Server running on port ${port}`);
+    // });
