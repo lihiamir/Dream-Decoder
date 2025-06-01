@@ -13,7 +13,6 @@ exports.saveInterpretationProfile = async (uid, data) => {
   // 🔁 ערכים שמגיעים מהפרונט – רק אם נשלחו
   if (data.background !== undefined) profileData.background = data.background;
   if (data.interpretationStyle !== undefined) profileData.interpretationStyle = data.interpretationStyle;
-  if (data.skipped !== undefined) profileData.skipped = data.skipped === true;
 
   // 🛡️ אם זו הפעם הראשונה – לקבוע ערכי ברירת מחדל
   if (isInitialSetup) {
