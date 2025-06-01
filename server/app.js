@@ -5,7 +5,6 @@
     const port = process.env.PORT || 3000;
     // Allow to accept requests from diffrent origins
     const cors = require('cors');
-    const dreamsService = require('./services/dreams.js')
 
     // For using postman.com  
     app.use(cors());
