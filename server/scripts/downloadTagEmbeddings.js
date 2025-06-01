@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const { bucket } = require('./config/firebase'); // שימוש בקובץ firebase.js שלך
+const { bucket } = require('../config/firebase'); // שימוש בקובץ firebase.js שלך
 
 async function downloadTagEmbeddings() {
   const destinationFolder = path.join(__dirname, '../data');
@@ -11,6 +11,11 @@ async function downloadTagEmbeddings() {
     fs.mkdirSync(destinationFolder);
   }
 
+  if (fs.existsSync(destinationPath)) {
+    console.log('📁 הקובץ כבר קיים, לא מתבצעת הורדה.');
+    return;
+  }
+
   try {
     await bucket.file('tag_embeddings_openai.json').download({ destination: destinationPath });
     console.log(`✅ הקובץ הורד ונשמר ב: ${destinationPath}`);
@@ -19,4 +24,4 @@ async function downloadTagEmbeddings() {
   }
 }
 
-downloadTagEmbeddings();
+module.exports = downloadTagEmbeddings;

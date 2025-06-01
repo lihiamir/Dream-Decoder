@@ -53,7 +53,7 @@ exports.findSymbolsFromGPT = async (sceneText, background, interpretationStyle) 
 
     Each symbol must include:
     - symbol: a short word or phrase
-    - meaning: a single thoughtful, symbolic interpretation (1–2 full sentences). 
+    - meaning: a concise symbolic meaning (MAX 1 sentence, clear and specific).
       It must be adapted to the user's cultural or spiritual background and preferred interpretation style.
 
     Guidelines:

@@ -14,7 +14,6 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   const { tags }  = await tagsService.extractTagsOnly(scenes);
   const { knnVector, meanEmbedding } = await tagsService.processDreamTags(tags);
 
-
   // משיכת פרופיל המשתמש (לצורך פרשנות)
   const userRef = admin.firestore().collection('users').doc(uid);
   const userSnap = await userRef.get();
@@ -64,7 +63,6 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
     scenes: enrichedScenes
   };
 };
-
 
 exports.getAllDreams = async (uid) => {
   const db = admin.firestore();
