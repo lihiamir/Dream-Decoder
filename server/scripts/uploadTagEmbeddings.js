@@ -1,5 +1,5 @@
 const path = require('path');
-const { bucket } = require('./config/firebase'); // ← שימוש ב־firebase.js הקיים
+const { bucket } = require('../config/firebase'); // ← שימוש ב־firebase.js הקיים
 
 async function uploadTagEmbeddings() {
   const localPath = path.join(__dirname, 'openai_tag_embeddings.json');

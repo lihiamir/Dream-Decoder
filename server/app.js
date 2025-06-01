@@ -5,7 +5,7 @@
     const port = process.env.PORT || 3000;
     // Allow to accept requests from diffrent origins
     const cors = require('cors');
-    const downloadTagEmbeddings = require('./downloadTagEmbeddings');
+    const downloadTagEmbeddings = require('./scripts/downloadTagEmbeddings.js');
 
     // For using postman.com  
     app.use(cors());
