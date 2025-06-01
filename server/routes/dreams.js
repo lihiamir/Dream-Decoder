@@ -9,5 +9,6 @@
     router.post('/clarify', authenticateToken, upload.array('audio'), dreamsController.clarifyDream);
     router.get('/my-dreams', authenticateToken, dreamsController.getAllDreams); 
     router.get('/my-dreams/:dreamId', authenticateToken, dreamsController.getDreamById);
+    router.get("/recommendations/:dreamId", authenticateToken, dreamsController.getRecommendedDreams);
 
     module.exports = router;

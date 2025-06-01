@@ -64,7 +64,6 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   };
 };
 
-
 exports.getAllDreams = async (uid) => {
   const db = admin.firestore();
   const dreamsRef = db.collection('users').doc(uid).collection('dreams');
