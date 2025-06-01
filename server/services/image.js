@@ -8,6 +8,7 @@ const { v4: uuidv4 } = require("uuid");
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 exports.generateAndUploadImage = async (prompt, destinationPath) => {
+  console.log("🖼️ Sending prompt to OpenAI:", prompt);
   try {
     const imageUrl = await generateImageFromPrompt(prompt);
     const tempPath = await downloadImageToTemp(imageUrl);

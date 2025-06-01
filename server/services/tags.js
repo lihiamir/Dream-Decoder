@@ -21,7 +21,7 @@ async function getEmbeddingsFromOpenAI(tags) {
   return response.data.map(entry => entry.embedding);
 }
 
-async function processDreamTags(predictedTags, similarityThreshold = 0.85) {
+async function processDreamTags(predictedTags, similarityThreshold = 0.70) {
   const knownData = JSON.parse(fs.readFileSync(KNOWN_EMBEDDINGS_PATH, 'utf8'));
   const knownTags = Object.keys(knownData);
   const knownVectors = knownTags.map(tag => knownData[tag]);

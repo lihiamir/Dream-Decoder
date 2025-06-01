@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const { bucket } = require('./config/firebase'); // שימוש בקובץ firebase.js שלך
+const { bucket } = require('../config/firebase'); // שימוש בקובץ firebase.js שלך
 
 async function downloadTagEmbeddings() {
   const destinationFolder = path.join(__dirname, './data');
