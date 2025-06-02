@@ -48,8 +48,10 @@ export default function NewDreamScreen({ navigation, route }) {
     // const ogText = "חלמתי שאני קוראת ספר בשדה של פרחים";
     // navigation.navigate('QuestionsPrompt', { questions: questions, text: ogText});
 
-      const questions = response.questions
-      const ogText = response.originalText
+      const questions = response.questions;
+      const ogText = response.originalText;
+      setText("");
+      setAudioUri(null);
       navigation.navigate("QuestionsPrompt", { questions: questions, text: ogText });
     } else {
       navigation.navigate("Dream", { response: response });

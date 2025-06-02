@@ -56,7 +56,6 @@ export default function SettingsScreen({ navigation }) {
         </Picker>
       </View>
 
-      {/* Gender Picker */}
       <View style={styles.pickerContainer}>
         <Text style={styles.label}>Interpretation style:</Text>
         <Picker

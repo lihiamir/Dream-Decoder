@@ -15,7 +15,7 @@ export default StyleSheet.create({
     textAlign: "center",
     marginHorizontal: 30,
     lineHeight: 45,
-    marginTop: 120,
+    marginTop: 100,
   },
   subtitle: {
     fontSize: 15,
@@ -64,13 +64,7 @@ export default StyleSheet.create({
     fontWeight: "500",
   },
   skipButton: {
-    backgroundColor: "rgb(130, 92, 191)",
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 40,
-    borderRadius: 25,
-    marginBottom: 10,
+    backgroundColor: "rgba(0, 0, 0, 0)",
   },
   skipButtonText: {
     color: "#fff",

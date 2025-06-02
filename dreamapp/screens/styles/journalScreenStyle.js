@@ -2,18 +2,18 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "flex-start",
-      width: "100%",
-      height: "100%",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    width: "100%",
+    height: "100%",
   },
-    sectionTitle: {
-        paddingTop: 100,
-        fontSize: 50,
-        fontWeight: "bold",
-        color: "#fff",
-        marginBottom: 10,
+  sectionTitle: {
+    paddingTop: 100,
+    fontSize: 50,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 10,
       },
       searchBar: {
         flexDirection: "row",
@@ -29,12 +29,15 @@ export default StyleSheet.create({
         marginHorizontal: 8,
       },
       gridContainer: {
+        marginTop: 30,
+        alignItems: "flex-start",
         paddingBottom: 10,
         width: "100%",
       },
       dreamThumbnailContainer: {
         flex: 1,
-        margin: 55,
+        marginHorizontal: 55,
+        marginVertical: 5,
         alignItems: "center",
         
       },
@@ -54,4 +57,86 @@ export default StyleSheet.create({
         color: "#fff",
         textAlign: "center",
       },
+
+      timelineTime: {
+    color: "#fff",
+    fontSize: 18,
+  },
+  timeline: {
+    flex: 1,
+    width: "80%",
+    alignSelf: "center",
+    marginTop: 30,
+    marginVertical: 20,
+    marginHorizontal: 20,
+    paddingHorizontal: 40,
+    scrollbarWidth: "none",
+  },
+  dreamDetailRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 8,
+    width: "100%",
+    paddingVertical: 15,
+  },
+  dreamImage: {
+    width: 70,
+    height: 70,
+    borderRadius: 10,
+    marginRight: 10,
+    borderWidth: 2,
+    borderColor: "#000",
+  },
+
+      modalOverlay: {
+    flex: 1,
+    backgroundColor: "#000a",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 20,
+    width: "80%",
+    alignItems: "center",
+  },
+  modalImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 10,
+    borderWidth: 2,
+    borderColor: "#351b64",
+  },
+  modalDescription: {
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  modalClose: {
+    marginTop: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    backgroundColor: "#351b64",
+    borderRadius: 20,
+  },
+  modalCloseText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+  },
+  tag: {
+    backgroundColor: "rgb(130, 92, 191)",
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    margin: 3,
+  },
+  tagText: {
+    color: "#fff",
+    fontSize: 12,
+  },
   });

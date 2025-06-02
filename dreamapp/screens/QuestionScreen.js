@@ -50,7 +50,7 @@ export default function QuestionScreen({ navigation, route }) {
         console.log("Server response:", response);
 
       // Navigate to the Dream screen with the server response
-      navigation.getParent().navigate("Dream", { user: user, dream: response });
+      navigation.getParent().navigate("Dream", { dream: response });
 
       } catch (error) {
         console.error("Error uploading answers:", error);

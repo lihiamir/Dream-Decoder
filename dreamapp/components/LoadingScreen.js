@@ -1,15 +1,11 @@
 import React from "react";
-import { SafeAreaView, Text, ActivityIndicator, StyleSheet, Image, View } from "react-native";
+import { SafeAreaView, Text, ActivityIndicator, StyleSheet, View } from "react-native";
+import Background from "./Background";
 
 export default function LoadingScreen({ message }) {
   return (
     <SafeAreaView style={styles.container}>
-        {/* Background */}
-        <Image source={require("../assets/images/background.png")} style={styles.rectangle} />
-        <Image source={require("../assets/images/moon.png")} style={styles.moon} />
-        <Image source={require("../assets/images/c1.png")} style={styles.c1} />
-        <Image source={require("../assets/images/c2.png")} style={styles.c2} />
-        <Image source={require("../assets/images/c3.png")} style={styles.c3} />
+        <Background />
         <View style={styles.overlay}>
             <Text style={styles.loadingText}>{message || "Loading..."}</Text>
             <ActivityIndicator size="large" color="#6200ee" />

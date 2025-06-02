@@ -1,22 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, SafeAreaView, FlatList, ScrollView } from "react-native";
 import styles from "./styles/dreamScreenStyle";
 import Menu from "../components/Menu";
 import Background from "../components/Background.js";
 import tempImage from "../temp.png";
+import { auth } from "../config/firebase"; // Import Firebase auth
+import {getSimilarDreams} from "../api/dream"; // Import the function to fetch similar dreams
 
 export default function DreamScreen({ navigation, route }) {
-  const { scenes } = route.params.dream;
+  const { dream } = route.params;
+  
+  const scenes = dream.scenes || [];
+  const dreamId = dream.id; // Assuming dream has an id property
+  console.log("dreamId:", dreamId);
   const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
+  const [similarDreams, setSimilarDreams] = useState([]);
 
-  // Mock data for similar dreams
-  const similarDreams = [
-    { id: "1", image: tempImage },
-    { id: "2", image: tempImage },
-    { id: "3", image: tempImage },
-    { id: "4", image: tempImage },
-    { id: "5", image: tempImage },
-  ];
+  const fetchSimilarDreams = async () => {
+    const idToken = await auth.currentUser.getIdToken(true);
+    const resposne = await getSimilarDreams(idToken, dreamId);
+    console.log("Similar Dreams Response:", resposne);
+    if (resposne) {
+      setSimilarDreams(resposne);
+    } else {
+      console.error("Failed to fetch similar dreams");
+    }
+  }
+
+  useEffect(() => {
+  if (dreamId) {
+    fetchSimilarDreams();
+  }
+}, [dreamId]);
+
 
   const handlePrevious = () => {
     if (currentSceneIndex > 0) {
@@ -53,7 +69,9 @@ export default function DreamScreen({ navigation, route }) {
             <Text style={[styles.arrowText, currentSceneIndex === 0 && styles.disabledArrow]}>{"<"}</Text>
           </TouchableOpacity>
 
-          <Image source={{ uri: currentScene.image }} style={styles.sceneImage} />
+          {currentScene && currentScene.image ? (
+            <Image source={{ uri: currentScene.image }} style={styles.sceneImage} />
+          ) : null}
 
           <TouchableOpacity
             style={styles.arrowButton}
@@ -93,11 +111,13 @@ export default function DreamScreen({ navigation, route }) {
             data={similarDreams}
             horizontal
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => handleDreamPress(item.id)} style={styles.similarDreamThumbnailContainer}>
-                <Image source={item.image} style={styles.similarDreamThumbnail} />
-              </TouchableOpacity>
-            )}
+            renderItem={({ item }) =>
+              item && item.image ? (
+                <TouchableOpacity onPress={() => handleDreamPress(item.id)} style={styles.similarDreamThumbnailContainer}>
+                  <Image source={item.image} style={styles.similarDreamThumbnail} />
+                </TouchableOpacity>
+              ) : null
+            }
             contentContainerStyle={styles.similarDreamsList}
             showsHorizontalScrollIndicator={false}
           />
