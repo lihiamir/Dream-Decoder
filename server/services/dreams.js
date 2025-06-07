@@ -9,7 +9,9 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   const rawOutput = await chatService.extractScenes(text);
   const lines = rawOutput.trim().split('\n');
   const sceneLines = lines.slice(2);
-  const scenes = sceneLines.map(line => line.replace(/^\d+\.\s*/, ''));
+  const scenes = sceneLines.map(line =>
+    line.replace(/^\d+\.\s*Scene description \d+:\s*/i, '').trim()
+  );
 
   const { tags }  = await tagsService.extractTagsOnly(scenes);
   const { knnVector, meanEmbedding } = await tagsService.processDreamTags(tags);
@@ -76,7 +78,7 @@ exports.getAllDreams = async (uid) => {
 
     return {
       id: doc.id,
-      createdAt: data.createdAt || null,
+      createdAt: data.createdAt ? data.createdAt.toDate() : null,
       image: firstImage,
       tags: data.tags || []
     };

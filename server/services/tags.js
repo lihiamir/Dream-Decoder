@@ -93,5 +93,6 @@ async function extractTagsOnly(scenes) {
 
 module.exports = {
   processDreamTags,
-  extractTagsOnly
+  extractTagsOnly,
+  cosineSimilarity
 };

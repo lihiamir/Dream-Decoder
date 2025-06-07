@@ -18,6 +18,36 @@
     app.use('/api/dreams',dreamsRouts);
     app.use('/api/profile',profileRoutes);
 
+
+    const { admin } = require('./config/firebase');
+
+    // קריאה של חלום לפי UID ו־DreamID
+    const printDreamById = async (uid, dreamId) => {
+    try {
+        const db = admin.firestore();
+        const dreamRef = db.collection('users').doc(uid).collection('dreams').doc(dreamId);
+        const dreamDoc = await dreamRef.get();
+
+        if (!dreamDoc.exists) {
+        console.log(`❌ Dream not found for user ${uid} with ID ${dreamId}`);
+        return;
+        }
+
+        const dreamData = dreamDoc.data();
+        console.log(`✅ Dream data for user ${uid}, dream ${dreamId}:\n`);
+        console.dir(dreamData, { depth: null });
+
+    } catch (error) {
+        console.error('❌ Error fetching dream:', error.message);
+    }
+    };
+
+    // הפעלת הפונקציה
+    const uid = '94ixwXPd9EggX2gpznwfeE61FQs1';
+    const dreamId = 'Yo0Z0Mqda5S1VIv7grDG';
+    printDreamById(uid, dreamId);
+
+
     downloadTagEmbeddings().then(() => {
     app.listen(port, () => {
         console.log(`🚀 Server running on port ${port}`);

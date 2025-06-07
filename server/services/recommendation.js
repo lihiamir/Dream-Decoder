@@ -12,7 +12,7 @@ exports.getRecommendedDreamsForUser = async (uid, dreamId) => {
     throw new Error("Dream not found");
   }
 
-  const targetEmbedding = dreamDoc.data().meanEmbedding;
+  const targetEmbedding = dreamDoc.data().tagEmbedding;
   if (!targetEmbedding) {
     throw new Error("Dream has no embedding");
   }
@@ -23,9 +23,8 @@ exports.getRecommendedDreamsForUser = async (uid, dreamId) => {
   snapshot.forEach(doc => {
     if (doc.id === dreamId) return;
     const data = doc.data();
-    if (data.meanEmbedding) {
-      const score = cosineSimilarity(targetEmbedding, data.meanEmbedding);
-      if (score >= THRESHOLD) {
+    if (data.tagEmbedding) {
+        const score = cosineSimilarity(targetEmbedding, data.tagEmbedding);      if (score >= THRESHOLD) {
         similarities.push({
           id: doc.id,
           score,
