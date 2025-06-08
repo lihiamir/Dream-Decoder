@@ -3,32 +3,33 @@ import { View, Text, Image, TouchableOpacity, SafeAreaView, FlatList, ScrollView
 import styles from "./styles/dreamScreenStyle";
 import Menu from "../components/Menu";
 import Background from "../components/Background.js";
-import tempImage from "../temp.png";
-import { auth } from "../config/firebase"; // Import Firebase auth
-import {getSimilarDreams} from "../api/dream"; // Import the function to fetch similar dreams
+import { auth } from "../config/firebase";
+import {getSimilarDreams, getDreamById} from "../api/dream";
 
 export default function DreamScreen({ navigation, route }) {
   const { dream } = route.params;
-  
   const scenes = dream.scenes || [];
-  const dreamId = dream.id; // Assuming dream has an id property
+  const dreamId = dream.id;
   console.log("dreamId:", dreamId);
   const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
   const [similarDreams, setSimilarDreams] = useState([]);
 
   const fetchSimilarDreams = async () => {
     const idToken = await auth.currentUser.getIdToken(true);
-    const resposne = await getSimilarDreams(idToken, dreamId);
-    console.log("Similar Dreams Response:", resposne);
-    if (resposne) {
-      setSimilarDreams(resposne);
+    const response = await getSimilarDreams(idToken, dreamId);
+    console.log("Similar Dreams Response:", response);
+    if (response && response.recommendations) {
+      setSimilarDreams(response.recommendations);
+      console.log("Similar Dreams:", similarDreams);
     } else {
+      setSimilarDreams([]);
       console.error("Failed to fetch similar dreams");
     }
   }
 
   useEffect(() => {
   if (dreamId) {
+    setCurrentSceneIndex(0);
     fetchSimilarDreams();
   }
 }, [dreamId]);
@@ -48,9 +49,13 @@ export default function DreamScreen({ navigation, route }) {
 
   const currentScene = scenes[currentSceneIndex];
 
-  const handleDreamPress = (dreamId) => {
-    // Navigate to the selected dream
-    navigation.navigate("Dream", { dreamId });
+  const handleDreamPress = async (dreamId) => {
+    const idToken = await auth.currentUser.getIdToken();
+    const dream = await getDreamById(idToken, dreamId);
+    if (dream) {
+      setCurrentSceneIndex(0);
+      navigation.navigate("Dream", { dream: dream });
+    }
   };
 
   return (
@@ -89,18 +94,16 @@ export default function DreamScreen({ navigation, route }) {
 
             {/* Symbols */}
             <Text style={styles.symbolsTitle}>Symbols </Text>
-            <FlatList
-              data={currentScene.symbols}
-              Vertical
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <View style={styles.symbolItem}>
+            {currentScene.symbols && currentScene.symbols.length > 0 ? (
+              currentScene.symbols.map((item, index) => (
+                <View key={index} style={styles.symbolItem}>
                   <Text style={styles.symbolName}>{item.symbol}</Text>
                   <Text style={styles.symbolMeaning}>{item.meaning}</Text>
                 </View>
-              )}
-              nestedScrollEnabled={true}
-            />
+              ))
+            ) : (
+              <Text style={styles.noSymbolsText}>No symbols found.</Text>
+            )}
           </ScrollView>
         </View>
 
@@ -114,7 +117,7 @@ export default function DreamScreen({ navigation, route }) {
             renderItem={({ item }) =>
               item && item.image ? (
                 <TouchableOpacity onPress={() => handleDreamPress(item.id)} style={styles.similarDreamThumbnailContainer}>
-                  <Image source={item.image} style={styles.similarDreamThumbnail} />
+                  <Image source={{uri: item.image}} style={styles.similarDreamThumbnail} />
                 </TouchableOpacity>
               ) : null
             }

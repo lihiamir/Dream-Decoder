@@ -16,6 +16,7 @@ export default StyleSheet.create({
     marginHorizontal: 30,
     lineHeight: 45,
     marginTop: 100,
+    marginBottom: 20,
   },
   subtitle: {
     fontSize: 15,
@@ -23,8 +24,7 @@ export default StyleSheet.create({
     fontWeight: "500",
     textAlign: "center",
     marginHorizontal: 30,
-    lineHeight: 40,
-    margin: 10,
+    marginBottom: 20,
   },
   pickerContainer: {
     width: "80%",

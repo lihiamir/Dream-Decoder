@@ -45,4 +45,47 @@ export default StyleSheet.create({
     position: "absolute",
     top: '90%',
   },
-  });
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 20,
+    width: "90%",
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#351b64",
+  },
+  modalInput: {
+    width: "100%",
+    height: 180,
+    borderColor: "#351b64",
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 16,
+    color: "#222",
+    backgroundColor: "#f9f9f9",
+    marginBottom: 20,
+    textAlignVertical: "top",
+  },
+  modalButton: {
+    backgroundColor: "#351b64",
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+  },
+  modalButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+});

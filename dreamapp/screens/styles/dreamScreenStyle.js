@@ -50,6 +50,7 @@ export default StyleSheet.create({
   },
   similarDreamsList: {
     flexDirection: "row",
+    width: "100%",
   },
   similarDreamThumbnailContainer: {
     marginRight: 10,

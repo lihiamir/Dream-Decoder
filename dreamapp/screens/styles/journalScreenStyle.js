@@ -60,11 +60,12 @@ export default StyleSheet.create({
 
       timelineTime: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
+    width: 73,
   },
   timeline: {
     flex: 1,
-    width: "80%",
+    width: "100%",
     alignSelf: "center",
     marginTop: 30,
     marginVertical: 20,
@@ -88,7 +89,7 @@ export default StyleSheet.create({
     borderColor: "#000",
   },
 
-      modalOverlay: {
+  modalOverlay: {
     flex: 1,
     backgroundColor: "#000a",
     justifyContent: "center",

@@ -12,15 +12,19 @@ export default function Journal({ navigation, route }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid"); // "grid" or "timeline"
   const [selectedDream, setSelectedDream] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   // Fetch dreams from the backend
   const fetchDreams = async () => {
     try {
+      setRefreshing(true);
       const idToken = await auth.currentUser.getIdToken();
       const dreamsData = await getAllDreams(idToken);
       setDreams(dreamsData);
     } catch (error) {
       console.error("Error fetching dreams:", error);
+    } finally {
+      setRefreshing(false);
     }
   };
 
@@ -34,15 +38,22 @@ export default function Journal({ navigation, route }) {
     const lower = searchTerm.toLowerCase();
     return (
       (dream.tags && dream.tags.some((tag) => tag.toLowerCase().includes(lower))
-    // dream.createdAt.toLowerCase().includes(lower)
     ));
   });
 
+  // Group dreams by date
+  const dreamsByDate = dreamsToDisplay.reduce((acc, dream) => {
+    const dateObj = new Date(dream.createdAt);
+    const formatted = dateObj.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+    if (!acc[formatted]) acc[formatted] = [];
+    acc[formatted].push(dream);
+    return acc;
+  }, {});
+
   // Timeline data
-  const timelineData = dreamsToDisplay.map(dream => ({
-    time: new Date(dream.createdAt).toLocaleDateString(),
-    imageUrl: dream.image,
-    dream,
+  const timelineData = Object.entries(dreamsByDate).map(([date, dreams]) => ({
+    time: date,
+    dreams,
   }));
 
   const handleDreamPress = async (dreamId) => {
@@ -51,6 +62,12 @@ export default function Journal({ navigation, route }) {
     if (dream) {
       navigation.navigate("Dream", { dream: dream });
     }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchDreams();
+    setRefreshing(false);
   };
 
   return (
@@ -116,6 +133,8 @@ export default function Journal({ navigation, route }) {
             </TouchableOpacity>
           )}
           contentContainerStyle={styles.gridContainer}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
         />
       ) : (
         <Timeline
@@ -126,16 +145,26 @@ export default function Journal({ navigation, route }) {
           timeStyle={styles.timelineTime}
           style={styles.timeline}
           renderDetail={rowData => (
-            <TouchableOpacity onPress={() => 
-            console.log("Dream selected:", rowData) ||
-            setSelectedDream(rowData.dream)}>
-              <View style={styles.dreamDetailRow}>
-                {rowData.imageUrl && (
-                  <Image source={{ uri: rowData.imageUrl }} style={styles.dreamImage} />
-                )}
-              </View>
-            </TouchableOpacity>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ alignItems: "center", paddingVertical: 4 }}
+            >
+              {rowData.dreams.map((dream, idx) => (
+                <TouchableOpacity
+                  key={dream.id}
+                  onPress={() => setSelectedDream(dream)}
+                  style={{ marginRight: 8 }}
+                >
+                  {dream.image && (
+                    <Image source={{ uri: dream.image }} style={styles.dreamImage} />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           )}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
         />
       )}
 

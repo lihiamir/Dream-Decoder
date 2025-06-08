@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Text, Image, TextInput, SafeAreaView } from "react-native";
+import { View, Text, Image, TextInput, SafeAreaView, TouchableOpacity, Modal, TouchableWithoutFeedback } from "react-native";
 import styles from "./styles/newDreamScreenStyle";
 import ContinueButton from "../components/ContinueButton";
 import Menu from "../components/Menu";
@@ -10,12 +10,10 @@ import Background from "../components/Background.js"; // Import Background compo
 
 
 
-export default function NewDreamScreen({ navigation, route }) {
-
+export default function NewDreamScreen({ navigation }) {
   const [audioUri, setAudioUri] = useState(null);
-  
-
   const [text, setText] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleContinue = async () => {
     if (!audioUri && !text) {
@@ -68,22 +66,56 @@ export default function NewDreamScreen({ navigation, route }) {
       <AudioButton style={styles.voice} setAudioUri={setAudioUri} />
 
       <View style={styles.textArea}>
-        <TextInput
-          placeholder="Or type here..."
-          placeholderTextColor="#FFF"
-          style={styles.input}
-          value={text}
-          onChangeText={setText}
-          multiline
-        />
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <View pointerEvents="none">
+            <TextInput
+              placeholder="Or type here..."
+              placeholderTextColor="#FFF"
+              style={styles.input}
+              value={text}
+              editable={false}
+              multiline
+            />
+          </View>
+        </TouchableOpacity>
       </View>
 
       <ContinueButton style={styles.continueButton} onPress={handleContinue}/>
-        
       <Image source={require("../assets/images/step1.png")} style={styles.steps} />
 
       {/* Menu Button */}
       <Menu navigation={navigation} />
+
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Describe your dream</Text>
+                <TextInput
+                  style={styles.modalInput}
+                  placeholder="I was dreaming that I..."
+                  placeholderTextColor="#888"
+                  value={text}
+                  onChangeText={setText}
+                  multiline
+                  autoFocus
+                  scrollEnabled={true}
+                  textAlignVertical="top"
+                />
+                <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+                  <Text style={styles.modalButtonText}>Done</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </SafeAreaView>
   );
 }

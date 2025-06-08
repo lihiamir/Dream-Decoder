@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../config/firebase";
 import styles from "./styles/FormStyles";
@@ -10,6 +10,7 @@ export default function RegisterForm({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setname] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { promptAsync } = useGoogleAuth(navigation);
 
   const handleRegister = async () => {
@@ -21,7 +22,7 @@ export default function RegisterForm({ navigation }) {
       const idToken = await auth.currentUser.getIdToken(true);
       await checkRegister(idToken); //check if token is valid with the server
       alert('Account created!');
-      navigation.navigate("Drawer", { screen: "Settings" });
+      navigation.navigate("Drawer", { screen: "Settings", params: { fromRegister: true } });
     } catch (error) {
       alert(error.message);
     }
@@ -65,13 +66,26 @@ export default function RegisterForm({ navigation }) {
         <View style={styles.inputContainer}>
           <Image source={require('../assets/images/passIcon.png')} style={styles.icon} />
           <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#351b64"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#351b64"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
           />
+          <TouchableOpacity
+            style={styles.eyeIcon}
+            onPress={() => setShowPassword((prev) => !prev)}
+          >
+            <Image
+              source={
+                showPassword
+                  ? require('../assets/images/eye-closed.png')
+                  : require('../assets/images/eye-open.png')
+              }
+              style={{ width: 24, height: 24, tintColor: "#351b64" }}
+            />
+          </TouchableOpacity>
         </View>
 
         {/* Register button */}
@@ -88,7 +102,7 @@ export default function RegisterForm({ navigation }) {
         </View>
 
         {/* Or with Google/Apple */}
-        <View style={styles.orContainer}>
+        {/* <View style={styles.orContainer}>
           <View style={styles.line} />
           <View style={styles.orTextContainer}>
             <Text style={styles.orText}>Or continue with</Text>
@@ -102,7 +116,7 @@ export default function RegisterForm({ navigation }) {
           <TouchableOpacity style={styles.authIconButton}>
             <Image source={require('../assets/images/apple.png')} style={styles.authIcon} />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </View>
   );
