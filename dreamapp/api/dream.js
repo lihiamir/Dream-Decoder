@@ -91,4 +91,20 @@ async function getDreamById(token, id) {
   }
 }
 
-export { uploadDreamAudio, uploadDreamText, sendClarifications, getAllDreams, getDreamById };
+async function getSimilarDreams(token, id) {
+  try {
+    const response = await fetch(`http://${server}/api/dreams/recommendations/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }});
+      
+    const result = await response.json();
+    return result;
+  }
+  catch (error) {
+    console.error('Error fetching similar dreams:', error);
+  }
+}
+
+export { uploadDreamAudio, uploadDreamText, sendClarifications, getAllDreams, getDreamById, getSimilarDreams };

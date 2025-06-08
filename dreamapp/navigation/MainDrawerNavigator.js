@@ -31,6 +31,7 @@ export default function MainDrawerNavigator({ navigation }) {
             label="Journal"
             onPress={() => props.navigation.navigate("Journal")}
             labelStyle={styles.drawerLabel}
+
           />
           <DrawerItem
             label="New Dream"
@@ -76,7 +77,7 @@ export default function MainDrawerNavigator({ navigation }) {
         },
       }}
     >
-      <Drawer.Screen name="Journal" component={JournalScreen} />
+      <Drawer.Screen name="Journal" component={JournalScreen} initialParams={{refresh : true}} />
       <Drawer.Screen name="New Dream" component={NewDreamScreen} />
       <Drawer.Screen
         name="QuestionsPrompt"
@@ -100,6 +101,7 @@ export default function MainDrawerNavigator({ navigation }) {
         options={{
           drawerItemStyle: { display: "none" },
         }}
+        initialParams={{ dream: {} }}
       />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
       <Drawer.Screen name="Log out" component={LoginScreen} />
@@ -110,8 +112,8 @@ export default function MainDrawerNavigator({ navigation }) {
 const styles = StyleSheet.create({
   drawerLabel: {
     fontSize: 18,
-    color: "rgb(47, 28, 65)", // Change this to your desired color
-    fontWeight: "bold", // Optional: make it bold
+    color: "rgb(47, 28, 65)",
+    fontWeight: "bold",
   },
   bottomDrawerSection: {
     borderTopWidth: 2,

@@ -164,4 +164,11 @@ export default StyleSheet.create({
     fontSize: 13,
     textDecorationLine: 'underline',
   },
+  eyeIcon: {
+    position: "absolute",
+    right: 10,
+    top: "40%",
+    transform: [{ translateY: -12 }],
+    padding: 4,
+  },
 });

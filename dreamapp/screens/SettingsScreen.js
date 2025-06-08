@@ -13,7 +13,8 @@ import Menu from "../components/Menu";
 import { auth } from "../config/firebase";
 import { setPreferences } from "../api/auth";
 
-export default function SettingsScreen({ navigation }) {
+export default function SettingsScreen({ navigation, route }) {
+  const fromRegister = route?.params?.fromRegister;
   const [religion, setReligion] = useState("");
   const [style, setStyle] = useState("");
 
@@ -36,9 +37,11 @@ export default function SettingsScreen({ navigation }) {
       <Text style={styles.title}>
         To provide a more meaningful experience, tell us a bit about yourself.
       </Text>
-      <Text style={styles.subtitle}>
-        You can skip this step and edit it later in Settings.
-      </Text>
+      {fromRegister && (
+        <Text style={styles.subtitle}>
+          You can skip this step and edit it later in Settings.
+        </Text>
+      )}
 
       {/* Religion Picker */}
       <View style={styles.pickerContainer}>
@@ -56,7 +59,6 @@ export default function SettingsScreen({ navigation }) {
         </Picker>
       </View>
 
-      {/* Gender Picker */}
       <View style={styles.pickerContainer}>
         <Text style={styles.label}>Interpretation style:</Text>
         <Picker
@@ -77,7 +79,9 @@ export default function SettingsScreen({ navigation }) {
           <Text style={styles.buttonText}>Save Preferences</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-          <Text style={styles.skipButtonText}>Skip for now</Text>
+          <Text style={styles.skipButtonText}>
+            {fromRegister ? "Skip for now" : "Cancel"}
+          </Text>
         </TouchableOpacity>
       </View>
 

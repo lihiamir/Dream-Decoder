@@ -42,30 +42,33 @@ export default function QuestionScreen({ navigation, route }) {
     } else {
       // All questions answered, send answers to the server
       try {
-      setLoading(true); // Show loading screen
-      const idToken = await auth.currentUser.getIdToken();
-      const response = await uploadAnswers(idToken, Object.values(answers), text);
+        console.log("Uploading answers:", answers);
+        setLoading(true); // Show loading screen
+        const idToken = await auth.currentUser.getIdToken();
+        const response = await uploadAnswers(idToken, Object.values(answers), text);
 
-      console.log("Server response:", response);
+        console.log("Server response:", response);
 
       // Navigate to the Dream screen with the server response
-      navigation.getParent().navigate("Dream", { user: user, dream: response });
+      navigation.getParent().navigate("Dream", { dream: response });
 
       } catch (error) {
         console.error("Error uploading answers:", error);
         alert("Failed to upload answers. Please try again.");
-        // navigation.navigate("Dream", { user: user, response: {} });
-
       } finally {
-        setLoading(false); // Hide loading screen
+        setLoading(false);
       }
     };
   };
 
 
   if (loading) {
-    // Show loading screen while waiting for the server response
-    return <LoadingScreen message="Creating your new dream..." />;
+    return (
+      <LoadingScreen
+        message="Creating your new dream..."
+        onBack={() => navigation.navigate("Journal")}
+      />
+    );
   }
 
 
@@ -75,7 +78,7 @@ export default function QuestionScreen({ navigation, route }) {
 
         <View style={styles.overlap}>
           <Text style={styles.question}>
-            {questionArray[currentQuestionIndex]} {/* Display the current question */}
+            {questionArray[currentQuestionIndex]}
           </Text>
 
           <View style={styles.textArea}>
@@ -94,8 +97,6 @@ export default function QuestionScreen({ navigation, route }) {
       <ContinueButton style={styles.continueButton} onPress={handleContinue}/>
 
       <Image source={require("../assets/images/step2.png")} style={styles.steps}/>
-
-      {/* <Menu navigation={navigation} /> */}
           
     </SafeAreaView>
   );

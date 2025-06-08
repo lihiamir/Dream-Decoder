@@ -3,7 +3,8 @@ client/config/*
 server/.env
 server/config/*
 server/firebaseServiceKey.json
-server/node_modules/ 
+server/node_modules/
+server/data/tag_embeddings_openai.json
 node_modules/
 client/node_modules
 structure.txt

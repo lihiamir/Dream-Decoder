@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -16,15 +16,27 @@ import { checkLogin } from "../api/auth";
 export default function LoginForm({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { promptAsync } = useGoogleAuth(navigation);
+  const [showPassword, setShowPassword] = useState(false);
+  // const { promptAsync } = useGoogleAuth(navigation);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigation.replace('Drawer'); // or navigation.navigate('Drawer')
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   const handleLogin = async () => {
     try {
+      await signInWithEmailAndPassword(auth, email, password);
       const idToken = await auth.currentUser.getIdToken(true);
-      await checkLogin(idToken); //check if token is valid with the server
+      await checkLogin(idToken);
       navigation.navigate('Drawer');
     } catch (error) {
       alert(error.message);
+      await auth.signOut();
     }
   };
 
@@ -75,8 +87,21 @@ export default function LoginForm({ navigation }) {
             placeholderTextColor="#351b64"
             value={password}
             onChangeText={setPassword}
-            secureTextEntry
+            secureTextEntry={!showPassword}
           />
+          <TouchableOpacity
+            style={styles.eyeIcon}
+            onPress={() => setShowPassword((prev) => !prev)}
+          >
+            <Image
+              source={
+                showPassword
+                  ? require('../assets/images/eye-closed.png')
+                  : require('../assets/images/eye-open.png')
+              }
+              style={{ width: 24, height: 24, tintColor: "#351b64" }}
+            />
+          </TouchableOpacity>
         </View>
 
         {/* Forgot Password */}
@@ -100,7 +125,7 @@ export default function LoginForm({ navigation }) {
         </View>
 
         {/* Or with Google/Apple */}
-        <View style={styles.orContainer}>
+        {/* <View style={styles.orContainer}>
           <View style={styles.line} />
           <View style={styles.orTextContainer}>
             <Text style={styles.orText}>Or continue with</Text>
@@ -114,7 +139,7 @@ export default function LoginForm({ navigation }) {
           <TouchableOpacity style={styles.authIconButton}>
             <Image source={require('../assets/images/apple.png')} style={styles.authIcon} />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </View>
   );
