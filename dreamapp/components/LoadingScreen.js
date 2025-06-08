@@ -1,14 +1,19 @@
 import React from "react";
-import { SafeAreaView, Text, ActivityIndicator, StyleSheet, View } from "react-native";
+import { SafeAreaView, Text, ActivityIndicator, StyleSheet, View, TouchableOpacity } from "react-native";
 import Background from "./Background";
 
-export default function LoadingScreen({ message }) {
+export default function LoadingScreen({ message, onBack }) {
   return (
     <SafeAreaView style={styles.container}>
         <Background />
         <View style={styles.overlay}>
             <Text style={styles.loadingText}>{message || "Loading..."}</Text>
             <ActivityIndicator size="large" color="#6200ee" />
+            {onBack && (
+              <TouchableOpacity style={styles.backButton} onPress={onBack}>
+                <Text style={styles.backButtonText}>Back to Journal</Text>
+              </TouchableOpacity>
+            )}
         </View>
     </SafeAreaView>
   );
@@ -63,6 +68,19 @@ const styles = StyleSheet.create({
         fontSize: 22,
         color: "#fff",
         marginBottom: 20,
+        textAlign: "center",
+    },
+    backButton: {
+        marginTop: 24,
+        paddingVertical: 10,
+        paddingHorizontal: 24,
+        backgroundColor: "#351b64",
+        borderRadius: 20,
+    },
+    backButtonText: {
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: 16,
         textAlign: "center",
     },
 });

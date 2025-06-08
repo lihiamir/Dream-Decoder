@@ -14,51 +14,77 @@ export default StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 10,
-      },
-      searchBar: {
-        flexDirection: "row",
-        width: "80%",
-        borderBottomWidth: 1,
-        borderColor: "#fff",
-        paddingHorizontal: 10,
-      },
-      searchInput: {
-        flex: 1,
-        fontSize: 16,
-        color: "#fff",
-        marginHorizontal: 8,
-      },
-      gridContainer: {
-        marginTop: 30,
-        alignItems: "flex-start",
-        paddingBottom: 10,
-        width: "100%",
-      },
-      dreamThumbnailContainer: {
-        flex: 1,
-        marginHorizontal: 55,
-        marginVertical: 5,
-        alignItems: "center",
-        
-      },
-      dreamThumbnail: {
-        width: 100,
-        height: 100,
-        borderRadius: 10,
-        resizeMode: "cover",
-        padding: 5,
-        borderWidth: 2,
-        borderColor: "#000",
-      },
-      dreamTitle: {
-        marginTop: 5,
-        fontSize: 12,
-        fontWeight: "bold",
-        color: "#fff",
-        textAlign: "center",
-      },
-
-      timelineTime: {
+  },
+  toggleButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: 10,
+  },
+  toggleButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    borderRadius: 20,
+    marginHorizontal: 5,
+    borderWidth: 1,
+    borderColor: "#351b64",
+  },
+  toggleButtonActive: {
+    backgroundColor: "#fff",
+  },
+  toggleButtonInactive: {
+    backgroundColor: "#351b64",
+  },
+  toggleButtonText: {
+    fontWeight: "bold",
+  },
+  toggleButtonTextActive: {
+    color: "#351b64",
+  },
+  toggleButtonTextInactive: {
+    color: "#fff",
+  },
+  searchBar: {
+    flexDirection: "row",
+    width: "80%",
+    borderBottomWidth: 1,
+    borderColor: "#fff",
+    paddingHorizontal: 10,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: "#fff",
+    marginHorizontal: 8,
+  },
+  gridContainer: {
+    marginTop: 30,
+    alignItems: "flex-start",
+    paddingBottom: 10,
+    width: "100%",
+  },
+  dreamThumbnailContainer: {
+    flex: 1,
+    marginHorizontal: 55,
+    marginVertical: 5,
+    alignItems: "center",
+  },
+  dreamThumbnail: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    resizeMode: "cover",
+    padding: 5,
+    borderWidth: 2,
+    borderColor: "#000",
+  },
+  dreamTitle: {
+    marginTop: 5,
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
+  },
+  timelineTime: {
     color: "#fff",
     fontSize: 16,
     width: 73,
@@ -88,12 +114,23 @@ export default StyleSheet.create({
     borderWidth: 2,
     borderColor: "#000",
   },
-
+  loadingContainer: {
+    flex: 1,
+    paddingTop: 40,
+    alignItems: "center",
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: "#000a",
     justifyContent: "center",
     alignItems: "center",
+  },
+  modalOverlayTouchable: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   modalContent: {
     backgroundColor: "#fff",
@@ -109,6 +146,17 @@ export default StyleSheet.create({
     marginBottom: 10,
     borderWidth: 2,
     borderColor: "#351b64",
+  },
+  modalTagsContainer: {
+    height: 120,
+    width: "100%",
+  },
+  modalTagsScroll: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    paddingVertical: 4,
   },
   modalDescription: {
     fontSize: 16,
@@ -140,4 +188,4 @@ export default StyleSheet.create({
     color: "#fff",
     fontSize: 12,
   },
-  });
+});

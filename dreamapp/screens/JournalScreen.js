@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, FlatList, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback } from "react-native";
+import { View, Text, Image, FlatList, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, ActivityIndicator } from "react-native";
 import Timeline from "react-native-timeline-flatlist";
 import styles from "./styles/journalScreenStyle";
 import Menu from "../components/Menu";
@@ -18,8 +18,10 @@ export default function Journal({ navigation, route }) {
   const fetchDreams = async () => {
     try {
       setRefreshing(true);
+      console.log("Fetching dreams...");
       const idToken = await auth.currentUser.getIdToken();
       const dreamsData = await getAllDreams(idToken);
+      console.log("Fetched Dreams:", dreamsData);
       setDreams(dreamsData);
     } catch (error) {
       console.error("Error fetching dreams:", error);
@@ -77,34 +79,38 @@ export default function Journal({ navigation, route }) {
       <Text style={styles.sectionTitle}>Journal</Text>
 
       {/* Toggle Buttons */}
-      <View style={{ flexDirection: "row", justifyContent: "center", marginVertical: 10 }}>
+      <View style={styles.toggleButtonsContainer}>
         <TouchableOpacity
-          style={{
-            backgroundColor: viewMode === "grid" ? "#fff" : "#351b64",
-            paddingVertical: 8,
-            paddingHorizontal: 24,
-            borderRadius: 20,
-            marginHorizontal: 5,
-            borderWidth: 1,
-            borderColor: "#351b64",
-          }}
+          style={[
+            styles.toggleButton,
+            viewMode === "grid" ? styles.toggleButtonActive : styles.toggleButtonInactive,
+          ]}
           onPress={() => setViewMode("grid")}
         >
-          <Text style={{ color: viewMode === "grid" ? "#351b64" : "#fff", fontWeight: "bold" }}>Library</Text>
+          <Text
+            style={[
+              styles.toggleButtonText,
+              viewMode === "grid" ? styles.toggleButtonTextActive : styles.toggleButtonTextInactive,
+            ]}
+          >
+            Library
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{
-            backgroundColor: viewMode === "timeline" ? "#fff" : "#351b64",
-            paddingVertical: 8,
-            paddingHorizontal: 24,
-            borderRadius: 20,
-            marginHorizontal: 5,
-            borderWidth: 1,
-            borderColor: "#351b64",
-          }}
+          style={[
+            styles.toggleButton,
+            viewMode === "timeline" ? styles.toggleButtonActive : styles.toggleButtonInactive,
+          ]}
           onPress={() => setViewMode("timeline")}
         >
-          <Text style={{ color: viewMode === "timeline" ? "#351b64" : "#fff", fontWeight: "bold" }}>Timeline</Text>
+          <Text
+            style={[
+              styles.toggleButtonText,
+              viewMode === "timeline" ? styles.toggleButtonTextActive : styles.toggleButtonTextInactive,
+            ]}
+          >
+            Timeline
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -122,7 +128,11 @@ export default function Journal({ navigation, route }) {
       </View>
 
       {/* Dreams List or Timeline */}
-      {viewMode === "grid" ? (
+      {refreshing ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#fff" />
+        </View>
+      ) : viewMode === "grid" ? (
         <FlatList
           data={dreamsToDisplay}
           keyExtractor={(item) => item.id}
@@ -148,7 +158,7 @@ export default function Journal({ navigation, route }) {
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ alignItems: "center", paddingVertical: 4 }}
+              contentContainerStyle={styles.dreamDetailRow}
             >
               {rowData.dreams.map((dream, idx) => (
                 <TouchableOpacity
@@ -168,7 +178,7 @@ export default function Journal({ navigation, route }) {
         />
       )}
 
-      {/* Modal for dream  */}
+      {/* Modal for dream */}
       <Modal
         visible={!!selectedDream}
         transparent
@@ -177,22 +187,16 @@ export default function Journal({ navigation, route }) {
       >
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback onPress={() => setSelectedDream(null)}>
-            <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }} />
+            <View style={styles.modalOverlayTouchable} />
           </TouchableWithoutFeedback>
           <View style={styles.modalContent}>
             {selectedDream?.image && (
               <Image source={{ uri: selectedDream.image }} style={styles.modalImage} />
             )}
-            <View style={{ height: 120, width: "100%" }}>
+            <View style={styles.modalTagsContainer}>
               <ScrollView
-                contentContainerStyle={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
-                  paddingVertical: 4,
-                }}
-                showsVerticalScrollIndicator={false} // Changed to false
+                contentContainerStyle={styles.modalTagsScroll}
+                showsVerticalScrollIndicator={false}
               >
                 {selectedDream?.tags && selectedDream.tags.length > 0 ? (
                   selectedDream.tags.map((tag, idx) => (

@@ -7,6 +7,7 @@ import {AudioButton, uploadRecording} from "../components/AudioButton";
 import { uploadDreamText } from "../api/dream";
 import { auth } from "../config/firebase";
 import Background from "../components/Background.js"; // Import Background component
+import LoadingScreen from "../components/LoadingScreen"; // Import LoadingScreen component
 
 
 
@@ -55,7 +56,7 @@ export default function NewDreamScreen({ navigation }) {
       navigation.navigate("Dream", { response: response });
     };
   }
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <Background />

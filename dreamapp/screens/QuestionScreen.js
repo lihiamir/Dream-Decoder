@@ -55,18 +55,20 @@ export default function QuestionScreen({ navigation, route }) {
       } catch (error) {
         console.error("Error uploading answers:", error);
         alert("Failed to upload answers. Please try again.");
-        // navigation.navigate("Dream", { user: user, response: {} });
-
       } finally {
-        setLoading(false); // Hide loading screen
+        setLoading(false);
       }
     };
   };
 
 
   if (loading) {
-    // Show loading screen while waiting for the server response
-    return <LoadingScreen message="Creating your new dream..." />;
+    return (
+      <LoadingScreen
+        message="Creating your new dream..."
+        onBack={() => navigation.navigate("Journal")}
+      />
+    );
   }
 
 
@@ -76,7 +78,7 @@ export default function QuestionScreen({ navigation, route }) {
 
         <View style={styles.overlap}>
           <Text style={styles.question}>
-            {questionArray[currentQuestionIndex]} {/* Display the current question */}
+            {questionArray[currentQuestionIndex]}
           </Text>
 
           <View style={styles.textArea}>
@@ -95,8 +97,6 @@ export default function QuestionScreen({ navigation, route }) {
       <ContinueButton style={styles.continueButton} onPress={handleContinue}/>
 
       <Image source={require("../assets/images/step2.png")} style={styles.steps}/>
-
-      {/* <Menu navigation={navigation} /> */}
           
     </SafeAreaView>
   );
