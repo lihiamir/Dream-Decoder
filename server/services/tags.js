@@ -4,8 +4,6 @@ require('dotenv').config();
 const { OpenAI } = require('openai');
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const KNOWN_EMBEDDINGS_PATH = path.join(__dirname, '../data/tag_embeddings_openai.json');
-
 function cosineSimilarity(vecA, vecB) {
   const dot = vecA.reduce((sum, a, i) => sum + a * vecB[i], 0);
   const normA = Math.sqrt(vecA.reduce((sum, a) => sum + a * a, 0));
@@ -21,17 +19,9 @@ async function getEmbeddingsFromOpenAI(tags) {
   return response.data.map(entry => entry.embedding);
 }
 
-async function processDreamTags(predictedTags, similarityThreshold = 0.70) {
-  const knownData = JSON.parse(fs.readFileSync(KNOWN_EMBEDDINGS_PATH, 'utf8'));
-  const knownTags = Object.keys(knownData);
-  const knownVectors = knownTags.map(tag => knownData[tag]);
-  
+async function processDreamTags(predictedTags) {
   const lowerTags = predictedTags.map(t => t.toLowerCase());
   const newVectors = await getEmbeddingsFromOpenAI(lowerTags);
-
-  const knnVector = knownVectors.map((knownVec) => {
-    return newVectors.some(newVec => cosineSimilarity(knownVec, newVec) >= similarityThreshold) ? 1 : 0;
-  });
 
   const dim = newVectors[0].length;
   const meanEmbedding = Array(dim).fill(0);
@@ -45,8 +35,7 @@ async function processDreamTags(predictedTags, similarityThreshold = 0.70) {
   }
 
   return {
-    knnVector,
-    meanEmbedding
+    tagEmbedding: meanEmbedding
   };
 }
 
@@ -93,5 +82,6 @@ async function extractTagsOnly(scenes) {
 
 module.exports = {
   processDreamTags,
-  extractTagsOnly
+  extractTagsOnly,
+  cosineSimilarity
 };

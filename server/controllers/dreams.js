@@ -1,7 +1,7 @@
 const dreamsService = require('../services/dreams');
 const speechService = require('../services/speech');
 const clarificationService = require('../services/clarification');
-const { getRecommendedDreamsForUser } = require('../services/recommendation');
+const recommendationsService = require('../services/recommendation');
 
 // Handles dream submission (from either audio or text)
 exports.submitDream = async(req, res) => {
@@ -161,7 +161,7 @@ exports.getRecommendedDreams = async (req, res) => {
   const { dreamId } = req.params;
 
   try {
-    const recommendations = await getRecommendedDreamsForUser(uid, dreamId);
+    const recommendations = await recommendationsService.getRecommendedDreamsForUser(uid, dreamId);
     res.json({ recommendations });
   } catch (err) {
     console.error("❌ Error fetching recommended dreams:", err.message);
