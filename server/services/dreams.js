@@ -14,7 +14,12 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   );
 
   const { tags }  = await tagsService.extractTagsOnly(scenes);
-  const { meanEmbedding } = await tagsService.processDreamTags(tags);
+  const { tagEmbedding } = await tagsService.processDreamTags(tags);
+
+  if (!tagEmbedding || !tagEmbedding.length) {
+  console.error('❌ tagEmbedding is undefined or empty – aborting save');
+  throw new Error('tagEmbedding calculation failed');
+  }
 
   // משיכת פרופיל המשתמש (לצורך פרשנות)
   const userRef = admin.firestore().collection('users').doc(uid);
@@ -33,12 +38,12 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
 
   const db = admin.firestore();
   const dreamDocRef = db.collection('users').doc(uid).collection('dreams').doc();
-  const dreamId = dreamDocRef.id;
+  const id = dreamDocRef.id;
 
   const enrichedScenes = [];
   for (let i = 0; i < scenes.length; i++) {
     const scene = scenes[i];
-    const destinationPath = `users/${uid}/dreams/${dreamId}/scene_${i + 1}.png`;
+    const destinationPath = `users/${uid}/dreams/${id}/scene_${i + 1}.png`;
     const imageUrl = await imageService.generateAndUploadImage(scene, destinationPath);
     
     enrichedScenes.push({
@@ -52,7 +57,7 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
     ...metadata,
     parsedText: text,
     tags,
-    tagEmbedding: meanEmbedding,
+    tagEmbedding,
     scenes: enrichedScenes,
     createdAt: new Date()
   };
@@ -60,7 +65,7 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   await dreamDocRef.set(dreamData);
 
   return {
-    dreamId,
+    id,
     scenes: enrichedScenes
   };
 };

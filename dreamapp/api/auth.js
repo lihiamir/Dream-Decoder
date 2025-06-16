@@ -1,5 +1,5 @@
 /** @format */
-const server = "192.168.32.43:5000";
+const server = "172.18.67.131:5000";
 
 
 async function checkRegister(token) {

@@ -6,8 +6,7 @@ exports.analyzeDreamForClarifications = async (text) => {
   try {
     const prompt = `
 You are an assistant analyzing dream content.
-
-Given the following dream, determine whether it contains unclear references to people, places, or emotional situations that may require clarification.
+Given the following dream, determine whether it contains unclear references to people, places that may require clarification.
 
 If yes, return 1–3 short, neutral follow-up questions to ask the user.
 
@@ -16,7 +15,6 @@ Only return JSON in the following format:
   "needsFollowUp": true,
   "questions": ["..."]
 }
-
 If the dream is clear and needs no clarification, return:
 {
   "needsFollowUp": false

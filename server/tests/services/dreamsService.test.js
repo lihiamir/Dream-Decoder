@@ -1,55 +1,137 @@
-// tests/services/dreamsService.test.js
-
 const dreamsService = require('../../services/dreams');
 
-// Mock Firestore structure
+// Mock dependencies
+jest.mock('../../services/chat', () => ({
+  extractScenes: jest.fn().mockResolvedValue(`Number of scenes: 2
+
+1. Scene description 1: A forest at night
+2. Scene description 2: A beach with stars`)
+}));
+
+jest.mock('../../services/symbol', () => ({
+  extractSymbolInterpretations: jest.fn().mockResolvedValue([
+    { scene: 'A forest at night', symbols: [{ symbol: 'tree', meaning: 'growth' }] },
+    { scene: 'A beach with stars', symbols: [{ symbol: 'star', meaning: 'hope' }] }
+  ])
+}));
+
+jest.mock('../../services/tags', () => ({
+  extractTagsOnly: jest.fn().mockResolvedValue({ tags: ['forest', 'night'] }),
+  processDreamTags: jest.fn().mockResolvedValue({ tagEmbedding: [0.1, 0.2, 0.3] })
+}));
+
+jest.mock('../../services/image', () => ({
+  generateAndUploadImage: jest.fn()
+    .mockResolvedValueOnce('image1.png')
+    .mockResolvedValueOnce('image2.png')
+}));
+
 jest.mock('../../config/firebase', () => {
-  const get = jest.fn().mockResolvedValue({
-    exists: true,
-    data: () => ({
-      background: 'Test',
-      interpretationStyle: 'Symbolic',
-      scenes: [{ scene: 'A forest', image: 'url1' }],
-      tags: ['nature'],
-      createdAt: { toDate: () => new Date() }
+
+  const dreamByIdDoc = (id) => ({
+    get: jest.fn().mockResolvedValue({
+      exists: true,
+      id,
+      data: () => ({
+      scenes: [{
+        scene: 'A forest at night',
+        image: 'image1.png',
+        symbols: [{ symbol: 'tree', meaning: 'growth' }]
+      }]
+    })
     })
   });
 
   const dreamsCollection = {
+  doc: jest.fn((id) => {
+    if (id === 'dream456') return dreamByIdDoc(id); 
+    return {
+      id: 'dream123',
+      set: jest.fn().mockResolvedValue(true)
+    };
+  }),
     orderBy: jest.fn(() => ({
-      get: jest.fn().mockResolvedValue({ docs: [] }) // getAllDreams
+      get: jest.fn().mockResolvedValue({
+        docs: [{
+          id: 'dream456',
+          data: () => ({
+            createdAt: { toDate: () => new Date('2024-01-01') },
+            scenes: [{ image: 'image1.png' }],
+            tags: ['symbolic']
+          })
+        }]
+      })
     }))
   };
 
-  const dreamDoc = {
-    get, // for getDreamById
-    collection: jest.fn(() => dreamsCollection) // for getAllDreams
+  const userDoc = {
+    get: jest.fn().mockResolvedValue({
+      exists: true,
+      data: () => ({
+        background: 'Test',
+        interpretationStyle: 'Symbolic'
+      })
+    }),
+    collection: jest.fn((name) => {
+      if (name === 'dreams') return dreamsCollection;
+      return null;
+    })
   };
-
-  const collection = jest.fn(() => ({
-    doc: jest.fn(() => dreamDoc)
-  }));
 
   return {
     admin: {
       firestore: () => ({
-        collection
+      collection: jest.fn((name) => {
+        return {
+          doc: jest.fn((id) => {
+            if (name === 'users' && id === 'uid123') return userDoc;
+            return null;
+          })
+        };
+      })
       })
     }
   };
 });
 
-describe('dreamsService.getAllDreams', () => {
-  test('should return empty array when no dreams exist', async () => {
-    const result = await dreamsService.getAllDreams('fake_uid');
-    expect(result).toEqual([]);
+// Tests
+describe('processTextDream', () => {
+  test('should process and save dream correctly', async () => {
+    const result = await dreamsService.processTextDream('uid123', 'I was in a forest, then at the beach.');
+
+    expect(result.id).toBe('dream123');
+    expect(result.scenes.length).toBe(2);
+    expect(result.scenes[0]).toMatchObject({
+      scene: 'A forest at night',
+      image: 'image1.png',
+      symbols: [{ symbol: 'tree', meaning: 'growth' }]
+    });
   });
 });
 
-describe('dreamsService.getDreamById', () => {
-  test('should return dream with scenes if it exists', async () => {
-    const result = await dreamsService.getDreamById('fake_uid', 'dream123');
-    expect(result).toHaveProperty('id', 'dream123');
-    expect(Array.isArray(result.scenes)).toBe(true);
+describe('getAllDreams', () => {
+  test('should return formatted dream list', async () => {
+    const result = await dreamsService.getAllDreams('uid123');
+    expect(Array.isArray(result)).toBe(true);
+    expect(result[0]).toMatchObject({
+      id: 'dream456',
+      image: 'image1.png',
+      tags: ['symbolic']
+    });
+  });
+});
+
+
+describe('getDreamById', () => {
+  test('should return dream scenes if dream exists', async () => {
+    const result = await dreamsService.getDreamById('uid123', 'dream456');
+    expect(result).toEqual({
+      id: 'dream456',
+      scenes: [{
+        scene: 'A forest at night',
+        image: 'image1.png',
+        symbols: [{ symbol: 'tree', meaning: 'growth' }]
+      }]
+    });
   });
 });

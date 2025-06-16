@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const { cosineSimilarity } = require('./tags'); // מניח ששם הפונקציה שלך
+const { cosineSimilarity } = require('./tags'); 
 
 const THRESHOLD = 0.75;
 
@@ -24,7 +24,8 @@ exports.getRecommendedDreamsForUser = async (uid, dreamId) => {
     if (doc.id === dreamId) return;
     const data = doc.data();
     if (data.tagEmbedding) {
-        const score = cosineSimilarity(targetEmbedding, data.tagEmbedding);      if (score >= THRESHOLD) {
+        const score = cosineSimilarity(targetEmbedding, data.tagEmbedding);
+        if (score >= THRESHOLD) {
         similarities.push({
           id: doc.id,
           score,
