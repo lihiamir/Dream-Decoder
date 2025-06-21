@@ -2,13 +2,13 @@ require('dotenv').config();
 const fs = require('fs');
 const { OpenAI } = require('openai');
 
+// Transcribes Hebrew audio file using OpenAI Whisper
 exports.transcribeAudio = async (audioPath) =>  {
     try {
       const stats = fs.statSync(audioPath);
-      console.log('📦 File size:', stats.size);
-      // console.log(audioFile, "p");
+      console.log('File size:', stats.size);
       if (!fs.existsSync(audioPath)) {
-        console.error('❌ ');
+        console.error('Audio file not found');
         return;
       }
       const audioFile = fs.createReadStream(audioPath);
@@ -26,7 +26,7 @@ exports.transcribeAudio = async (audioPath) =>  {
       console.log(response.text);
       return response.text;
     } catch (error) {
-      console.error('❌ Transcription error:', error.message);
+      console.error('Transcription error:', error.message);
     }
   }
 

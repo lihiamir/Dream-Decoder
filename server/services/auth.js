@@ -1,5 +1,6 @@
 const { admin } = require('../config/firebase');
 
+// Registers a new user based on the decoded token
 exports.registerUser = async (token) => {
     const decoded = await this.verifyToken(token);
     const uid = decoded.uid;
@@ -15,6 +16,7 @@ exports.registerUser = async (token) => {
     return userData;
 };
 
+// Saves or updates the user data in Firestore (merge avoids overwriting other fields)
 exports.saveUserToFirestore = async(userData) => {
   const db = admin.firestore();
   const usersCollection = db.collection('users');
@@ -22,10 +24,12 @@ exports.saveUserToFirestore = async(userData) => {
   await usersCollection.doc(userData.uid).set(userData, { merge: true });
 }
 
+// Verifies the Firebase ID token and returns the decoded info
 exports.verifyToken = async (idToken) => {
   return await admin.auth().verifyIdToken(idToken);
 };
 
+// Logs in the user by verifying the token and returning basic user info
 exports.loginUser= async (token) => {
   const decoded = await this.verifyToken(token);
   return {
@@ -35,6 +39,7 @@ exports.loginUser= async (token) => {
   };
 }
 
+// Return the user's display name from Firestore
 exports.getUserDisplayName = async (uid) => {
   const userDoc = await admin.firestore().collection('users').doc(uid).get();
 

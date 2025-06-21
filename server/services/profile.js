@@ -5,7 +5,7 @@ exports.saveInterpretationProfile = async (uid, data) => {
   const existingDoc = await userRef.get();
   const existingData = existingDoc.exists ? existingDoc.data() : {};
 
-  // Is this the first time the user sets up their profile?
+  // Check if this is the user's first time setting a profile
   const isInitialSetup = !('background' in existingData) && !('interpretationStyle' in existingData);
 
   const profileData = {};
@@ -14,7 +14,7 @@ exports.saveInterpretationProfile = async (uid, data) => {
   if (data.background !== undefined) profileData.background = data.background;
   if (data.interpretationStyle !== undefined) profileData.interpretationStyle = data.interpretationStyle;
 
-  // Set default values if this is the first time and values were not provided
+  // If first-time setup and values are missing, use defaults
   if (isInitialSetup) {
     if (!profileData.background) profileData.background = 'Other'; 
     if (!profileData.interpretationStyle) profileData.interpretationStyle = 'Symbolic';

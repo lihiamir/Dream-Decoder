@@ -5,7 +5,7 @@ const tagsService = require('./tags');
 const { admin } = require('../config/firebase');
 
 exports.processTextDream = async (uid, text, metadata = {}) => {
-  // const rawOutput = prompt;
+  // Get raw scene output from GPT
   const rawOutput = await chatService.extractScenes(text);
   const lines = rawOutput.trim().split('\n');
   const sceneLines = lines.slice(2);
@@ -13,11 +13,12 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
     line.replace(/^\d+\.\s*Scene description \d+:\s*/i, '').trim()
   );
 
+  // Extract tags from scenes and calculate mean embedding
   const { tags }  = await tagsService.extractTagsOnly(scenes);
   const { tagEmbedding } = await tagsService.processDreamTags(tags);
 
   if (!tagEmbedding || !tagEmbedding.length) {
-  console.error('❌ tagEmbedding is undefined or empty – aborting save');
+  console.error('tagEmbedding is undefined or empty – aborting save');
   throw new Error('tagEmbedding calculation failed');
   }
 
@@ -36,11 +37,12 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
     interpretationStyle
   );
 
-  // Save dream data and generated images 
+  // Create a new dream document
   const db = admin.firestore();
   const dreamDocRef = db.collection('users').doc(uid).collection('dreams').doc();
   const id = dreamDocRef.id;
 
+  // Generate image and attach symbols to each scene
   const enrichedScenes = [];
   for (let i = 0; i < scenes.length; i++) {
     const scene = scenes[i];
@@ -54,6 +56,7 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
     });
   }
 
+  // Save full dream data to Firestore
   const dreamData = {
     ...metadata,
     parsedText: text,
@@ -75,6 +78,7 @@ exports.getAllDreams = async (uid) => {
   const db = admin.firestore();
   const dreamsRef = db.collection('users').doc(uid).collection('dreams');
 
+  // Fetch all dreams, sorted by creation date
   const snapshot = await dreamsRef.orderBy('createdAt', 'desc').get();
 
   const dreams = snapshot.docs.map(doc => {
@@ -100,6 +104,7 @@ exports.getDreamById = async (uid, dreamId) => {
     .collection('dreams')
     .doc(dreamId);
 
+  // Fetch specific dream by ID
   const dreamDoc = await dreamRef.get();
 
   if (!dreamDoc.exists) {
