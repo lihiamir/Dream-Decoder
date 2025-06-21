@@ -51,4 +51,20 @@ describe('Auth Service', () => {
       displayName: 'Test User'
     });
   });
+
+  test('saveUserToFirestore should write user data to Firestore with merge', async () => {
+  const userData = {
+    uid: 'abc123',
+    email: 'user@example.com',
+    displayName: 'User Test'
+  };
+
+  // Spy on the mocked Firestore set function
+  const db = require('../../config/firebase').admin.firestore();
+  const setSpy = db.collection().doc().set;
+
+  await authService.saveUserToFirestore(userData);
+
+  expect(setSpy).toHaveBeenCalledWith(userData, { merge: true });
+});
 });

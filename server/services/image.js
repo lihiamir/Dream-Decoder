@@ -13,7 +13,7 @@ exports.generateAndUploadImage = async (prompt, destinationPath) => {
     const signedUrl = await uploadToFirebaseAndGetSignedUrl(tempPath, destinationPath);
     return signedUrl;
   } catch (error) {
-    console.error("❌ שגיאה ביצירת/העלאת תמונה:", error.message);
+    console.error("❌ Error generating/uploading image:", error.message);
     return null;
   }
 };

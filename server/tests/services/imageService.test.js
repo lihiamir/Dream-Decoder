@@ -108,7 +108,7 @@ describe('generateAndUploadImage', () => {
     // Verify fallback behavior
     expect(result).toBeNull();
     expect(consoleSpy).toHaveBeenCalledWith(
-      "❌ שגיאה ביצירת/העלאת תמונה:",
+      "❌ Error generating/uploading image:",
       "Simulated API failure"
     );
 

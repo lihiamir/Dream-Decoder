@@ -13,13 +13,15 @@ describe('transcribeAudio', () => {
 
     // Mock OpenAI initialization
     mockCreate = jest.fn();
-    OpenAI.mockImplementation(() => ({
-      audio: {
+    OpenAI.mockImplementation(() => {
+    return {
+        audio: {
         transcriptions: {
-          create: mockCreate
+            create: mockCreate
         }
-      }
-    }));
+        }
+    };
+    });
   });
 
   test('successfully transcribes audio and returns text', async () => {
@@ -73,7 +75,7 @@ describe('transcribeAudio', () => {
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const result = await transcribeAudio(dummyPath);
 
-    expect(consoleSpy).toHaveBeenCalledWith('שגיאה בתמלול:', 'OpenAI failed');
+    expect(consoleSpy).toHaveBeenCalledWith('❌ Transcription error:', 'OpenAI failed');
     expect(result).toBeUndefined();
 
     consoleSpy.mockRestore();

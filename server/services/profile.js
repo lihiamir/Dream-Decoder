@@ -5,23 +5,23 @@ exports.saveInterpretationProfile = async (uid, data) => {
   const existingDoc = await userRef.get();
   const existingData = existingDoc.exists ? existingDoc.data() : {};
 
-  // 🧠 האם זו הפעם הראשונה שהמשתמש ממלא הגדרות?
+  // Is this the first time the user sets up their profile?
   const isInitialSetup = !('background' in existingData) && !('interpretationStyle' in existingData);
 
   const profileData = {};
 
-  // 🔁 ערכים שמגיעים מהפרונט – רק אם נשלחו
+  // Only add fields if the frontend sent them
   if (data.background !== undefined) profileData.background = data.background;
   if (data.interpretationStyle !== undefined) profileData.interpretationStyle = data.interpretationStyle;
 
-  // 🛡️ אם זו הפעם הראשונה – לקבוע ערכי ברירת מחדל
+  // Set default values if this is the first time and values were not provided
   if (isInitialSetup) {
-    if (!profileData.background) profileData.background = 'Other'; // ← ללא עדה או דת מסוימת
-    if (!profileData.interpretationStyle) profileData.interpretationStyle = 'Symbolic'; // ← פרשנות כללית
+    if (!profileData.background) profileData.background = 'Other'; 
+    if (!profileData.interpretationStyle) profileData.interpretationStyle = 'Symbolic';
   }
 
   profileData.completedAt = new Date();
 
-  // 🧷 merge כדי לא לדרוס שדות אחרים
+  // Use merge to avoid removing other fields in the document
   await userRef.set(profileData, { merge: true });
 };

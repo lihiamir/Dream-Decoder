@@ -21,7 +21,7 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   throw new Error('tagEmbedding calculation failed');
   }
 
-  // משיכת פרופיל המשתמש (לצורך פרשנות)
+  // Load user's interpretation profile
   const userRef = admin.firestore().collection('users').doc(uid);
   const userSnap = await userRef.get();
   const userProfile = userSnap.exists ? userSnap.data() : {};
@@ -29,13 +29,14 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   const background = userProfile.background || 'Other';
   const interpretationStyle = userProfile.interpretationStyle || 'Symbolic';
 
-  // פרשנות סמלים (מעבירים גם רקע וסגנון)
+  // Get symbol interpretations from GPT
   const symbolInterpretations = await symbolService.extractSymbolInterpretations(
     scenes,
     background,
     interpretationStyle
   );
 
+  // Save dream data and generated images 
   const db = admin.firestore();
   const dreamDocRef = db.collection('users').doc(uid).collection('dreams').doc();
   const id = dreamDocRef.id;

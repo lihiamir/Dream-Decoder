@@ -22,7 +22,7 @@ jest.mock('openai', () => {
         }
       }
     })),
-    __mockCreate: mockCreate // נחשף לטסטים שרוצים לשנות ערך זמני
+    __mockCreate: mockCreate
   };
 });
 
@@ -58,7 +58,7 @@ describe('extractTagsOnly', () => {
   test('throws on invalid JSON', async () => {
     const { __mockCreate } = require('openai');
 
-    // שורת הקסם – שינוי התשובה רק לפעם הזו
+    
     __mockCreate.mockReturnValueOnce(Promise.resolve({
       choices: [{ message: { content: 'not valid JSON' } }]
     }));
