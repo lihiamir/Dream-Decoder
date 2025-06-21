@@ -5,7 +5,6 @@ const fs = require("fs");
 const axios = require("axios");
 const { v4: uuidv4 } = require("uuid");
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 exports.generateAndUploadImage = async (prompt, destinationPath) => {
   try {
@@ -20,6 +19,7 @@ exports.generateAndUploadImage = async (prompt, destinationPath) => {
 };
 
 const generateImageFromPrompt = async (prompt) => {
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   const response = await openai.images.generate({
     model: "dall-e-3",
     prompt,

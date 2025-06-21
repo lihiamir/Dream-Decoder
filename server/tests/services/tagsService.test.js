@@ -1,25 +1,30 @@
 const { processDreamTags, cosineSimilarity, extractTagsOnly } = require('../../services/tags');
 
-jest.mock('openai', () => ({
-  OpenAI: jest.fn().mockImplementation(() => ({
-    embeddings: {
-      create: jest.fn(({ input }) => Promise.resolve({
-        data: input.map(() => ({ embedding: [0.1, 0.2, 0.3] }))
-      }))
-    },
-    chat: {
-      completions: {
-        create: jest.fn(() => Promise.resolve({
-          choices: [{
-            message: {
-              content: JSON.stringify({ tags: ['forest', 'night', 'escape'] })
-            }
-          }]
-        }))
+jest.mock('openai', () => {
+  const mockCreate = jest.fn(() => Promise.resolve({
+    choices: [{
+      message: {
+        content: JSON.stringify({ tags: ['forest', 'night', 'escape'] })
       }
-    }
-  }))
-}));
+    }]
+  }));
+
+  return {
+    OpenAI: jest.fn().mockImplementation(() => ({
+      embeddings: {
+        create: jest.fn(({ input }) => Promise.resolve({
+          data: input.map(() => ({ embedding: [0.1, 0.2, 0.3] }))
+        }))
+      },
+      chat: {
+        completions: {
+          create: mockCreate
+        }
+      }
+    })),
+    __mockCreate: mockCreate // נחשף לטסטים שרוצים לשנות ערך זמני
+  };
+});
 
 describe('processDreamTags', () => {
   test('returns mean tag embedding', async () => {
@@ -51,19 +56,11 @@ describe('extractTagsOnly', () => {
   });
 
   test('throws on invalid JSON', async () => {
-    const { OpenAI } = require('openai');
-    OpenAI.mockImplementation(() => ({
-      chat: {
-        completions: {
-          create: jest.fn(() => Promise.resolve({
-            choices: [{
-              message: {
-                content: 'not valid JSON'
-              }
-            }]
-          }))
-        }
-      }
+    const { __mockCreate } = require('openai');
+
+    // שורת הקסם – שינוי התשובה רק לפעם הזו
+    __mockCreate.mockReturnValueOnce(Promise.resolve({
+      choices: [{ message: { content: 'not valid JSON' } }]
     }));
 
     await expect(extractTagsOnly(['test'])).rejects.toThrow('Invalid JSON from GPT');
