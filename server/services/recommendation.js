@@ -1,12 +1,14 @@
 const admin = require('firebase-admin');
-const { cosineSimilarity } = require('./tags'); // מניח ששם הפונקציה שלך
+const { cosineSimilarity } = require('./tags'); 
 
+// Similarity score threshold for recommendations
 const THRESHOLD = 0.75;
 
 exports.getRecommendedDreamsForUser = async (uid, dreamId) => {
   const db = admin.firestore();
   const userDreamsRef = db.collection("users").doc(uid).collection("dreams");
 
+  // Get the selected dream
   const dreamDoc = await userDreamsRef.doc(dreamId).get();
   if (!dreamDoc.exists) {
     throw new Error("Dream not found");
@@ -21,10 +23,13 @@ exports.getRecommendedDreamsForUser = async (uid, dreamId) => {
   const similarities = [];
 
   snapshot.forEach(doc => {
+    // Skip current dream
     if (doc.id === dreamId) return;
     const data = doc.data();
     if (data.tagEmbedding) {
-        const score = cosineSimilarity(targetEmbedding, data.tagEmbedding);      if (score >= THRESHOLD) {
+        const score = cosineSimilarity(targetEmbedding, data.tagEmbedding);
+        // Add only if similarity is above threshold
+        if (score >= THRESHOLD) {
         similarities.push({
           id: doc.id,
           score,
@@ -33,7 +38,8 @@ exports.getRecommendedDreamsForUser = async (uid, dreamId) => {
       }
     }
   });
-
+  // Sort by highest similarity first
   similarities.sort((a, b) => b.score - a.score);
+  // Return only id and image
   return similarities.map(({ id, image }) => ({ id, image }));
 };

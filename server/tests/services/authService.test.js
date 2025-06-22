@@ -35,4 +35,22 @@ describe('Auth Service', () => {
     const name = await authService.getUserDisplayName('123');
     expect(name).toBe('Test User');
   });
+
+  test('registerUser should decode token and save user to Firestore', async () => {
+    const user = await authService.registerUser('valid_token');
+    expect(user.uid).toBe('123');
+    expect(user.email).toBe('test@example.com');
+    expect(user.displayName).toBe('Test User');
+  });
+
+  test('loginUser should decode token and return user info', async () => {
+    const user = await authService.loginUser('valid_token');
+    expect(user).toEqual({
+      uid: '123',
+      email: 'test@example.com',
+      displayName: 'Test User'
+    });
+  });
+
+  
 });

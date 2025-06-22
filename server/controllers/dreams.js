@@ -2,6 +2,7 @@ const dreamsService = require('../services/dreams');
 const speechService = require('../services/speech');
 const clarificationService = require('../services/clarification');
 const recommendationsService = require('../services/recommendation');
+const MAX_CLARIFICATION_ANSWERS = 3;
 
 // Handles dream submission (from either audio or text)
 exports.submitDream = async(req, res) => {
@@ -23,12 +24,12 @@ exports.submitDream = async(req, res) => {
       });
     }
 
-    //Else process dream normally (generate scenes, images)
+    // Else process dream normally (generate scenes, images)
     const result = await dreamsService.processTextDream(uid, text);
     res.status(200).json({ followUp: false, ...result });
 
   } catch (error) {
-    console.error("❌ Error in submitDream:", error);
+    console.error("Error in submitDream:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -37,7 +38,7 @@ exports.submitDream = async(req, res) => {
 exports.clarifyDream = async(req, res) => {
   const uid = req.uid;
   
-  // This is the original dream text (before user clarifications), not the clarification response
+  // This is the original dream text (before user clarifications)
   const { text } = req.body;
 
   if (!text) return res.status(400).json({ error: 'Missing original dream text' });
@@ -64,7 +65,7 @@ exports.clarifyDream = async(req, res) => {
     res.status(200).json(result);
 
   } catch (error) {
-    console.error("❌ Error in clarifyDream:", error);
+    console.error("Error in clarifyDream:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -89,7 +90,7 @@ async function getDreamText(req) {
 async function getClarificationsText(req) {
   const combinedAnswers = [];
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < MAX_CLARIFICATION_ANSWERS; i++) {
     const type = req.body[`answer_${i}_type`];
 
     if (!type) continue;
@@ -125,6 +126,7 @@ async function checkForClarifications(text) {
   return { followUp: false };
 }
 
+// Get all dreams for a specific user
 exports.getAllDreams = async (req, res) => {
   const uid = req.uid;
   if (!uid) return res.status(400).json({ error: "Missing user ID" });
@@ -133,11 +135,12 @@ exports.getAllDreams = async (req, res) => {
     const dreams = await dreamsService.getAllDreams(uid);
     res.status(200).json(dreams);
   } catch (error) {
-    console.error("❌ Error fetching user dreams:", error.message);
+    console.error("Error fetching user dreams:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
 
+// Get specific dream by ID
 exports.getDreamById = async (req, res) => {
   const { uid } = req.user;
   const { dreamId } = req.params;
@@ -156,6 +159,7 @@ exports.getDreamById = async (req, res) => {
   }
 };
 
+// Return recommended dreams based on similarity to a specific dream
 exports.getRecommendedDreams = async (req, res) => {
   const uid = req.user.uid;
   const { dreamId } = req.params;
@@ -164,7 +168,7 @@ exports.getRecommendedDreams = async (req, res) => {
     const recommendations = await recommendationsService.getRecommendedDreamsForUser(uid, dreamId);
     res.json({ recommendations });
   } catch (err) {
-    console.error("❌ Error fetching recommended dreams:", err.message);
+    console.error("Error fetching recommended dreams:", err.message);
     res.status(500).json({ error: "Server error" });
   }
 };

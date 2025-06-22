@@ -1,10 +1,12 @@
 require('dotenv').config();
 const { OpenAI } = require('openai');
 
+// Initialize OpenAI client using API key from environment variables
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// System prompt used to instruct GPT to extract visual scenes from a dream
 const prompt = `
 You are a dream analysis assistant.  
 Break down the following dream into between 2 and 6 distinct visual scenes.  
@@ -23,6 +25,7 @@ Avoid interpretation, metaphors, or abstract concepts unless they can be visuali
 Do not add any text before or after the list.
 `;
 
+// Extracts visual scenes from raw dream text
 exports.extractScenes = async (dreamText) => {
   try {
     const completion = await openai.chat.completions.create({
@@ -39,13 +42,13 @@ exports.extractScenes = async (dreamText) => {
       ],
     });
 
-    // console.log(completion.choices[0].message.content);
     return completion.choices[0].message.content;
   } catch (error) {
     console.error("Error:", error);
   }
 }
 
+// Extracts symbolic elements from a single dream scene, based on user background and interpretation style
 exports.findSymbolsFromGPT = async (sceneText, background, interpretationStyle) => {
   const systemPrompt = `
     You are a dream symbol interpretation assistant. 
@@ -87,7 +90,7 @@ exports.findSymbolsFromGPT = async (sceneText, background, interpretationStyle) 
     const content = completion.choices[0].message.content.trim();
     return JSON.parse(content);
   } catch (err) {
-    console.error("❌ Failed to parse GPT response:", err.message);
+    console.error("Failed to parse GPT response:", err.message);
     return [];
   }
 };

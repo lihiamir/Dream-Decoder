@@ -4,14 +4,16 @@ require('dotenv').config();
 const { OpenAI } = require('openai');
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-function cosineSimilarity(vecA, vecB) {
+// Calculates cosine similarity between two vectors
+exports.cosineSimilarity = (vecA, vecB) => {
   const dot = vecA.reduce((sum, a, i) => sum + a * vecB[i], 0);
   const normA = Math.sqrt(vecA.reduce((sum, a) => sum + a * a, 0));
   const normB = Math.sqrt(vecB.reduce((sum, b) => sum + b * b, 0));
   return dot / (normA * normB);
 }
 
-async function getEmbeddingsFromOpenAI(tags) {
+// Gets embedding vectors from OpenAI for a list of tags
+const getEmbeddingsFromOpenAI = async (tags) => {
   const response = await openai.embeddings.create({
     model: 'text-embedding-3-small',
     input: tags,
@@ -19,7 +21,8 @@ async function getEmbeddingsFromOpenAI(tags) {
   return response.data.map(entry => entry.embedding);
 }
 
-async function processDreamTags(predictedTags) {
+// Generates an average embedding vector from dream tags
+exports.processDreamTags = async (predictedTags) => {
   const lowerTags = predictedTags.map(t => t.toLowerCase());
   const newVectors = await getEmbeddingsFromOpenAI(lowerTags);
 
@@ -39,7 +42,8 @@ async function processDreamTags(predictedTags) {
   };
 }
 
-async function extractTagsOnly(scenes) {
+// Extracts tags from dream scenes using GPT
+exports.extractTagsOnly = async (scenes) => {
   const systemPrompt = `
     You are an assistant for analyzing dream scenes.
 
@@ -76,12 +80,6 @@ async function extractTagsOnly(scenes) {
     try {
         return JSON.parse(raw);
     } catch (error) {
-        console.error("❌ Failed to parse GPT response:", raw);
+        console.error("Failed to parse GPT response:", raw);
         throw new Error("Invalid JSON from GPT");
     }};
-
-module.exports = {
-  processDreamTags,
-  extractTagsOnly,
-  cosineSimilarity
-};

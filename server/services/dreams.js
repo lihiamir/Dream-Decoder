@@ -5,7 +5,7 @@ const tagsService = require('./tags');
 const { admin } = require('../config/firebase');
 
 exports.processTextDream = async (uid, text, metadata = {}) => {
-  // const rawOutput = prompt;
+  // Get raw scene output from GPT
   const rawOutput = await chatService.extractScenes(text);
   const lines = rawOutput.trim().split('\n');
   const sceneLines = lines.slice(2);
@@ -13,10 +13,16 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
     line.replace(/^\d+\.\s*Scene description \d+:\s*/i, '').trim()
   );
 
+  // Extract tags from scenes and calculate mean embedding
   const { tags }  = await tagsService.extractTagsOnly(scenes);
-  const { meanEmbedding } = await tagsService.processDreamTags(tags);
+  const { tagEmbedding } = await tagsService.processDreamTags(tags);
 
-  // משיכת פרופיל המשתמש (לצורך פרשנות)
+  if (!tagEmbedding || !tagEmbedding.length) {
+  console.error('tagEmbedding is undefined or empty – aborting save');
+  throw new Error('tagEmbedding calculation failed');
+  }
+
+  // Load user's interpretation profile
   const userRef = admin.firestore().collection('users').doc(uid);
   const userSnap = await userRef.get();
   const userProfile = userSnap.exists ? userSnap.data() : {};
@@ -24,21 +30,23 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   const background = userProfile.background || 'Other';
   const interpretationStyle = userProfile.interpretationStyle || 'Symbolic';
 
-  // פרשנות סמלים (מעבירים גם רקע וסגנון)
+  // Get symbol interpretations from GPT
   const symbolInterpretations = await symbolService.extractSymbolInterpretations(
     scenes,
     background,
     interpretationStyle
   );
 
+  // Create a new dream document
   const db = admin.firestore();
   const dreamDocRef = db.collection('users').doc(uid).collection('dreams').doc();
-  const dreamId = dreamDocRef.id;
+  const id = dreamDocRef.id;
 
+  // Generate image and attach symbols to each scene
   const enrichedScenes = [];
   for (let i = 0; i < scenes.length; i++) {
     const scene = scenes[i];
-    const destinationPath = `users/${uid}/dreams/${dreamId}/scene_${i + 1}.png`;
+    const destinationPath = `users/${uid}/dreams/${id}/scene_${i + 1}.png`;
     const imageUrl = await imageService.generateAndUploadImage(scene, destinationPath);
     
     enrichedScenes.push({
@@ -48,11 +56,12 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
     });
   }
 
+  // Save full dream data to Firestore
   const dreamData = {
     ...metadata,
     parsedText: text,
     tags,
-    tagEmbedding: meanEmbedding,
+    tagEmbedding,
     scenes: enrichedScenes,
     createdAt: new Date()
   };
@@ -60,7 +69,7 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   await dreamDocRef.set(dreamData);
 
   return {
-    dreamId,
+    id,
     scenes: enrichedScenes
   };
 };
@@ -69,6 +78,7 @@ exports.getAllDreams = async (uid) => {
   const db = admin.firestore();
   const dreamsRef = db.collection('users').doc(uid).collection('dreams');
 
+  // Fetch all dreams, sorted by creation date
   const snapshot = await dreamsRef.orderBy('createdAt', 'desc').get();
 
   const dreams = snapshot.docs.map(doc => {
@@ -94,6 +104,7 @@ exports.getDreamById = async (uid, dreamId) => {
     .collection('dreams')
     .doc(dreamId);
 
+  // Fetch specific dream by ID
   const dreamDoc = await dreamRef.get();
 
   if (!dreamDoc.exists) {

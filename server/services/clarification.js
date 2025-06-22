@@ -1,13 +1,12 @@
 const { OpenAI } = require('openai');
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// Analyzes the user's dream and determines whether clarification is needed.
+// Analyzes the user's dream and determines whether clarification is needed
 exports.analyzeDreamForClarifications = async (text) => {
   try {
     const prompt = `
 You are an assistant analyzing dream content.
-
-Given the following dream, determine whether it contains unclear references to people, places, or emotional situations that may require clarification.
+Given the following dream, determine whether it contains unclear references to people, places that may require clarification.
 
 If yes, return 1–3 short, neutral follow-up questions to ask the user.
 
@@ -16,7 +15,6 @@ Only return JSON in the following format:
   "needsFollowUp": true,
   "questions": ["..."]
 }
-
 If the dream is clear and needs no clarification, return:
 {
   "needsFollowUp": false
@@ -32,17 +30,15 @@ Dream:
         { role: 'system', content: 'You are a dream clarification assistant.' },
         { role: 'user', content: prompt }
       ],
-      temperature: 0.3, // Low randomness to keep questions consistent
+      // Low randomness to keep questions consistent
+      temperature: 0.3, 
     });
 
     const content = response.choices[0].message.content;
-
-    const result = JSON.parse(content);
-
-    return result;
+    return JSON.parse(content);
 
   } catch (error) {
-    console.error("❌ Clarification analysis error:", error.message);
+    console.error("Clarification analysis error:", error.message);
     return { needsFollowUp: false };
   }
 };
@@ -72,16 +68,15 @@ exports.parseClarifications = async (text) => {
           { role: 'system', content: 'You are a helpful assistant that extracts clarifications as JSON.' },
           { role: 'user', content: prompt }
         ],
-        temperature: 0.2, // Keep responses consistent and structured
+        // Keep responses consistent and structured
+        temperature: 0.2, 
       });
   
       const content = response.choices[0].message.content;
-  
-      const clarifications = JSON.parse(content);
-      return clarifications;
+      return JSON.parse(content);
   
     } catch (error) {
-      console.error("❌ Error parsing clarifications:", error.message);
+      console.error("Error parsing clarifications:", error.message);
       return {};
     }
   };
