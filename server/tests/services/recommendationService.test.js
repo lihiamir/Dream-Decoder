@@ -2,10 +2,12 @@
 const { getRecommendedDreamsForUser } = require('../../services/recommendation');
 const { cosineSimilarity } = require('../../services/tags');
 
+// Mock cosine similarity function
 jest.mock('../../services/tags', () => ({
   cosineSimilarity: jest.fn()
 }));
 
+// Mock Firestore structure for user and dream documents
 jest.mock('firebase-admin', () => {
   const dreamDocs = {
     dream1: {
@@ -34,12 +36,14 @@ jest.mock('firebase-admin', () => {
 
   return {
     firestore: () => ({
-      collection: (collectionName) => ({
-        doc: (uid) => ({
-          collection: (subCollectionName) => ({
+      collection: () => ({
+        doc: () => ({
+          collection: () => ({
+            // Simulate get dream by ID
             doc: (dreamId) => ({
               get: jest.fn().mockResolvedValue(dreamDocs[dreamId] || { exists: false })
             }),
+            // Simulate get all dreams (except the target)
             get: jest.fn().mockResolvedValue({
               forEach: (cb) => {
                 Object.entries(dreamDocs).forEach(([id, val]) => {
@@ -69,11 +73,13 @@ describe('getRecommendedDreamsForUser', () => {
   });
 
   test('returns recommended dreams with image if cosine similarity >= threshold', async () => {
+    // Expect dream2 to be returned due to high similarity and image presence
     const result = await getRecommendedDreamsForUser('uid123', 'dream1');
     expect(result).toEqual([{ id: 'dream2', image: 'url' }]);
   });
 
   test('throws if target dream does not exist', async () => {
+    // Simulate case where requested dream ID doesn't exist
     const { firestore } = require('firebase-admin');
     firestore().collection().doc().get = jest.fn().mockResolvedValue({ exists: false });
 

@@ -37,6 +37,7 @@ describe('transcribeAudio', () => {
 
     const result = await transcribeAudio(dummyPath);
 
+    // Validate all expected steps
     expect(fs.statSync).toHaveBeenCalledWith(dummyPath);
     expect(fs.existsSync).toHaveBeenCalledWith(dummyPath);
     expect(fs.createReadStream).toHaveBeenCalledWith(dummyPath);
@@ -45,12 +46,14 @@ describe('transcribeAudio', () => {
       model: 'whisper-1',
       language: 'he'
     });
+    // Expect final return value
     expect(result).toBe('This is a test transcription.');
   });
 
   test('returns undefined if file does not exist', async () => {
     const dummyPath = '/missing/audio.mp3';
-
+    
+    // Simulate file missing
     fs.existsSync.mockReturnValue(false);
 
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -66,16 +69,18 @@ describe('transcribeAudio', () => {
   test('handles OpenAI error and logs it', async () => {
     const dummyPath = '/error/audio.mp3';
 
+    // Simulate valid file setup
     fs.existsSync.mockReturnValue(true);
     fs.statSync.mockReturnValue({ size: 5555 });
     fs.createReadStream.mockReturnValue('stream');
-
+    
+    // Simulate OpenAI API failure
     mockCreate.mockRejectedValue(new Error('OpenAI failed'));
 
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const result = await transcribeAudio(dummyPath);
 
-    expect(consoleSpy).toHaveBeenCalledWith('❌ Transcription error:', 'OpenAI failed');
+    expect(consoleSpy).toHaveBeenCalledWith('Transcription error:', 'OpenAI failed');
     expect(result).toBeUndefined();
 
     consoleSpy.mockRestore();

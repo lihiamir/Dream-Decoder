@@ -11,7 +11,9 @@ jest.mock('../../config/firebase', () => {
       firestore: () => ({
         collection: () => ({
           doc: () => ({
+            // Mock for checking existing profile
             get: getMock,
+            // Mock for saving profile data
             set: setMock
           })
         })
@@ -24,6 +26,7 @@ describe('saveInterpretationProfile', () => {
   let getMock, setMock;
 
   beforeEach(() => {
+    // Reset mock state before each test
     jest.clearAllMocks();
     const firestore = admin.firestore();
     const doc = firestore.collection().doc();
@@ -37,10 +40,11 @@ describe('saveInterpretationProfile', () => {
     getMock.mockResolvedValueOnce({ exists: false });
 
     const uid = 'user123';
-    const data = {}; // no values provided
+    const data = {}; 0
 
     await saveInterpretationProfile(uid, data);
 
+    // Should apply defaults and set completedAt timestam
     expect(setMock).toHaveBeenCalledWith(
       expect.objectContaining({
         background: 'Other',

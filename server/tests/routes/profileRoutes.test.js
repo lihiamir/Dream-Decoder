@@ -7,6 +7,7 @@ const profileService = require('../../services/profile');
 jest.mock('../../services/profile');
 jest.mock('../../middlewares/auth', () => ({
   authenticateToken: (req, res, next) => {
+    // Simulate authenticated user
     req.uid = 'test-user-id';
     next();
   }
@@ -19,6 +20,7 @@ app.use('/profile', profileRouter);
 
 describe('POST /profile/setup', () => {
   it('should save profile successfully', async () => {
+    // Simulate success response from profile service
     profileService.saveInterpretationProfile.mockResolvedValueOnce();
 
     const res = await request(app)
@@ -30,6 +32,7 @@ describe('POST /profile/setup', () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe('Profile saved successfully');
+    // Verify correct arguments were passed to the service
     expect(profileService.saveInterpretationProfile).toHaveBeenCalledWith('test-user-id', {
       background: 'Jewish',
       interpretationStyle: 'Symbolic'
@@ -37,6 +40,7 @@ describe('POST /profile/setup', () => {
   });
 
   it('should return 500 if service fails', async () => {
+    // Simulate failure in saving the profile
     profileService.saveInterpretationProfile.mockRejectedValueOnce(new Error('DB error'));
 
     const res = await request(app)

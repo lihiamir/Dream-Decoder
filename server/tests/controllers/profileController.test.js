@@ -11,15 +11,17 @@ jest.mock('../../services/profile');
 const app = express();
 app.use(bodyParser.json());
 
-// Middleware to inject req.uid like your auth middleware
+// Middleware to inject req.uid like auth middleware
 app.use((req, res, next) => {
   req.uid = 'mocked_uid';
   next();
 });
 
+// Register route for testing
 app.post('/profile', profileController.saveInterpretationProfile);
 
 describe('Profile Controller - saveInterpretationProfile', () => {
+  // Reset mocks before each test
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -31,6 +33,7 @@ describe('Profile Controller - saveInterpretationProfile', () => {
       .post('/profile')
       .send({ background: 'Jewish', interpretationStyle: 'Symbolic' });
 
+    // Ensure the service was called with the correct UID and data
     expect(profileService.saveInterpretationProfile).toHaveBeenCalledWith(
       'mocked_uid',
       { background: 'Jewish', interpretationStyle: 'Symbolic' }
@@ -40,6 +43,7 @@ describe('Profile Controller - saveInterpretationProfile', () => {
   });
 
   test('should return 500 when service throws an error', async () => {
+    // Simulate failure in the service layer
     profileService.saveInterpretationProfile.mockRejectedValueOnce(
       new Error('DB failure')
     );
