@@ -8,10 +8,12 @@ jest.mock('openai', () => {
     OpenAI: jest.fn().mockImplementation(() => ({
       chat: {
         completions: {
+          // Main function to mock GPT responses
           create: mockCreate
         }
       }
     })),
+    // Expose the mock for use in tests
     __mockCreate: mockCreate
   };
 });
@@ -43,7 +45,8 @@ Number of scenes: 3
     const result = await extractScenes(dream);
 
     expect(result).toContain("Number of scenes:");
-    expect(result).toMatch(/1\..+2\..+3\./s); // Check for 3 scene lines
+    // Check for 3 scene lines
+    expect(result).toMatch(/1\..+2\..+3\./s); 
   });
 
   test('returns undefined and logs error on failure', async () => {
@@ -107,7 +110,7 @@ describe('findSymbolsFromGPT', () => {
     const result = await findSymbolsFromGPT("scene", "bg", "style");
 
     expect(result).toEqual([]);
-    expect(consoleSpy).toHaveBeenCalledWith("❌ Failed to parse GPT response:", expect.any(String));
+    expect(consoleSpy).toHaveBeenCalledWith("Failed to parse GPT response:", expect.any(String));
 
     consoleSpy.mockRestore();
   });

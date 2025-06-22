@@ -27,15 +27,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// Mount controller routes
 app.post('/dreams', upload.single('file'), dreamsController.submitDream);
 app.post('/dreams/clarify', upload.any(), dreamsController.clarifyDream);
 app.get('/dreams', dreamsController.getAllDreams);
 app.get('/dreams/:dreamId', dreamsController.getDreamById);
 app.get('/dreams/:dreamId/recommend', dreamsController.getRecommendedDreams);
 
-// ------------------ TESTS ------------------
 
 describe('Dreams Controller', () => {
+  // Clear mocks before each test to ensure isolation
   beforeEach(() => jest.clearAllMocks());
 
   describe('submitDream', () => {
@@ -81,6 +82,7 @@ describe('Dreams Controller', () => {
 
   describe('clarifyDream', () => {
     test('should enrich dream and return result', async () => {
+      // Simulate successful clarification and transcription
       clarificationService.parseClarifications.mockResolvedValue({ Dana: 'My boss' });
       speechService.transcribeAudio.mockResolvedValue('Dana is my boss');
       dreamsService.processTextDream.mockResolvedValue({ id: 'dream789', scenes: [] });

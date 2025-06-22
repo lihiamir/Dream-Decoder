@@ -1,12 +1,13 @@
 const { extractSymbolInterpretations } = require('../../services/symbol');
 const chatService = require('../../services/chat');
 
-// Mock the dependent function
+// Mock the GPT-based symbol extraction function
 jest.mock('../../services/chat', () => ({
   findSymbolsFromGPT: jest.fn()
 }));
 
 describe('extractSymbolInterpretations', () => {
+  // Reset mocks before each test
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -31,6 +32,7 @@ describe('extractSymbolInterpretations', () => {
 
     const result = await extractSymbolInterpretations(scenes, background, style);
 
+    // Ensure GPT was called for each scene
     expect(chatService.findSymbolsFromGPT).toHaveBeenCalledTimes(2);
     expect(chatService.findSymbolsFromGPT).toHaveBeenCalledWith(
       scenes[0], background, style
@@ -39,6 +41,7 @@ describe('extractSymbolInterpretations', () => {
       scenes[1], background, style
     );
 
+    // Validate structured output
     expect(result).toEqual([
       {
         scene: scenes[0],
@@ -58,10 +61,12 @@ describe('extractSymbolInterpretations', () => {
 
   test('handles scenes with no symbols returned gracefully', async () => {
     const scenes = ['Nothing happened'];
+    // Simulate GPT returning empty result
     chatService.findSymbolsFromGPT.mockResolvedValueOnce([]);
 
     const result = await extractSymbolInterpretations(scenes, 'Other', 'Jungian');
 
+    // Expect empty symbol array for the scene
     expect(result).toEqual([
       {
         scene: 'Nothing happened',
@@ -71,10 +76,12 @@ describe('extractSymbolInterpretations', () => {
   });
 
   test('throws if findSymbolsFromGPT fails', async () => {
-    chatService.findSymbolsFromGPT.mockRejectedValueOnce(
+      // Simulate GPT API failure
+      chatService.findSymbolsFromGPT.mockRejectedValueOnce(
       new Error('GPT call failed')
     );
 
+    // Expect the wrapper function to throw as well
     await expect(
       extractSymbolInterpretations(['Scene text'], 'Any', 'Any')
     ).rejects.toThrow('GPT call failed');

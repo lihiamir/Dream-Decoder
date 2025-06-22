@@ -8,23 +8,27 @@ jest.mock('openai', () => {
     OpenAI: jest.fn().mockImplementation(() => ({
       chat: {
         completions: {
+          // Mock GPT API
           create: mockCreate
         }
       }
     })),
+    // Expose the mock for test control
     __mockCreate: mockCreate
   };
 });
 
 describe('analyzeDreamForClarifications', () => {
   beforeEach(() => {
+    // Reset mock state before each test
     const { __mockCreate } = require('openai');
     __mockCreate.mockReset();
   });
 
   test('returns follow-up questions when needed', async () => {
     const { __mockCreate } = require('openai');
-    
+
+    // Simulate GPT returning a structured follow-up JSON
     const mockResponse = JSON.stringify({
       needsFollowUp: true,
       questions: ["Who is Dana?", "Where did the dream take place?"]
@@ -43,6 +47,7 @@ describe('analyzeDreamForClarifications', () => {
   test('returns needsFollowUp: false on clear dreams', async () => {
     const { __mockCreate } = require('openai');
 
+    // Simulate a valid response indicating no clarifications needed
     __mockCreate.mockReturnValueOnce(Promise.resolve({
       choices: [{ message: { content: JSON.stringify({ needsFollowUp: false }) } }]
     }));
@@ -56,14 +61,15 @@ describe('analyzeDreamForClarifications', () => {
     const { __mockCreate } = require('openai');
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
+    // Simulate GPT returning invalid (non-JSON) content
     __mockCreate.mockReturnValueOnce(Promise.resolve({
       choices: [{ message: { content: 'not valid JSON' } }]
     }));
 
     const result = await analyzeDreamForClarifications("Something weird happened.");
-
+    // Should fallback
     expect(result).toEqual({ needsFollowUp: false });
-    expect(consoleSpy).toHaveBeenCalledWith("❌ Clarification analysis error:", expect.any(String));
+    expect(consoleSpy).toHaveBeenCalledWith("Clarification analysis error:", expect.any(String));
 
     consoleSpy.mockRestore();
   });
@@ -78,6 +84,7 @@ describe('parseClarifications', () => {
   test('returns parsed clarifications as object', async () => {
     const { __mockCreate } = require('openai');
 
+    // Simulate valid JSON response mapping names to explanations
     const mockResponse = JSON.stringify({
       "דנה": "חברה שלי מהעבודה",
       "יוסי": "המורה למתמטיקה"
@@ -98,14 +105,16 @@ describe('parseClarifications', () => {
     const { __mockCreate } = require('openai');
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
+    // Simulate GPT returning non-JSON content
     __mockCreate.mockReturnValueOnce(Promise.resolve({
       choices: [{ message: { content: "not valid JSON" } }]
     }));
 
     const result = await parseClarifications("This is not really structured.");
 
+    // Should return empty object on failure
     expect(result).toEqual({});
-    expect(consoleSpy).toHaveBeenCalledWith("❌ Error parsing clarifications:", expect.any(String));
+    expect(consoleSpy).toHaveBeenCalledWith("Error parsing clarifications:", expect.any(String));
 
     consoleSpy.mockRestore();
   });

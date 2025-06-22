@@ -14,11 +14,13 @@ jest.mock('uuid', () => ({ v4: () => 'mock-token' }));
 jest.mock('../../config/firebase', () => ({
   bucket: {
     name: 'mock-bucket',
+    // Firebase upload mock
     upload: jest.fn()
   }
 }));
 
 describe('generateAndUploadImage', () => {
+  // Reset mocks between tests
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -108,7 +110,7 @@ describe('generateAndUploadImage', () => {
     // Verify fallback behavior
     expect(result).toBeNull();
     expect(consoleSpy).toHaveBeenCalledWith(
-      "❌ Error generating/uploading image:",
+      "Error generating/uploading image:",
       "Simulated API failure"
     );
 
