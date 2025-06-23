@@ -1,8 +1,6 @@
 const admin = require('firebase-admin');
 const { cosineSimilarity } = require('./tags'); 
-
-// Similarity score threshold for recommendations
-const THRESHOLD = 0.75;
+const { TAG_SIMILARITY_THRESHOLD } = require('../config/constants');
 
 exports.getRecommendedDreamsForUser = async (uid, dreamId) => {
   const db = admin.firestore();
@@ -29,7 +27,7 @@ exports.getRecommendedDreamsForUser = async (uid, dreamId) => {
     if (data.tagEmbedding) {
         const score = cosineSimilarity(targetEmbedding, data.tagEmbedding);
         // Add only if similarity is above threshold
-        if (score >= THRESHOLD) {
+        if (score >= TAG_SIMILARITY_THRESHOLD) {
         similarities.push({
           id: doc.id,
           score,

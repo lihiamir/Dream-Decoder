@@ -3,6 +3,7 @@ const imageService = require('./image');
 const symbolService = require('./symbol');
 const tagsService = require('./tags');
 const { admin } = require('../config/firebase');
+const { DEFAULT_IMAGE_URL } = require('../config/constants');
 
 exports.processTextDream = async (uid, text, metadata = {}) => {
   // Get raw scene output from GPT
@@ -47,7 +48,16 @@ exports.processTextDream = async (uid, text, metadata = {}) => {
   for (let i = 0; i < scenes.length; i++) {
     const scene = scenes[i];
     const destinationPath = `users/${uid}/dreams/${id}/scene_${i + 1}.png`;
-    const imageUrl = await imageService.generateAndUploadImage(scene, destinationPath);
+
+    let imageUrl = await imageService.generateAndUploadImage(scene, destinationPath);
+
+    if (!imageUrl) {
+      imageUrl = await imageService.generateAndUploadImage(scene, destinationPath);
+    }
+
+    if (!imageUrl) {
+      imageUrl = DEFAULT_IMAGE_URL;
+    }
     
     enrichedScenes.push({
       scene,

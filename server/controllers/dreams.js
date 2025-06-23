@@ -2,7 +2,7 @@ const dreamsService = require('../services/dreams');
 const speechService = require('../services/speech');
 const clarificationService = require('../services/clarification');
 const recommendationsService = require('../services/recommendation');
-const MAX_CLARIFICATION_ANSWERS = 3;
+const { MAX_CLARIFICATION_ANSWERS } = require('../config/constants');
 
 // Handles dream submission (from either audio or text)
 exports.submitDream = async(req, res) => {
