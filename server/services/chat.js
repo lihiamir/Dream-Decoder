@@ -9,8 +9,11 @@ const openai = new OpenAI({
 // System prompt used to instruct GPT to extract visual scenes from a dream
 const prompt = `
 You are a dream analysis assistant.  
-Break down the following dream into between 2 and 6 distinct visual scenes.  
-Each scene should be clear, concrete, and suitable for image generation (e.g., using DALL·E).  
+Break down the following dream into between 2 and 6 distinct visual scenes. 
+Scenes must be suitable for image generation with DALL·E.  
+You may include events involving injury or fear, but describe them symbolically or gently.  
+Avoid graphic words like “blood”, “dead”, “explosion”, etc.  
+Use artistic or dreamlike language to express intense moments safely.
 
 Format your response exactly as follows (with no extra text or explanation):
 
