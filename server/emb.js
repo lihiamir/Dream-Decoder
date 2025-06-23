@@ -4,7 +4,7 @@ require('dotenv').config();
 
 async function updateTagEmbeddingForDream(uid, dreamId, tags) {
   if (!uid || !dreamId || !Array.isArray(tags) || tags.length === 0) {
-    console.error('❌ Missing or invalid input. Please provide uid, dreamId, and a non-empty tags array.');
+    console.error('Missing or invalid input. Please provide uid, dreamId, and a non-empty tags array.');
     return;
   }
 
@@ -13,7 +13,7 @@ async function updateTagEmbeddingForDream(uid, dreamId, tags) {
     const { tagEmbedding } = await processDreamTags(tags);
 
     if (!tagEmbedding || tagEmbedding.length === 0) {
-      throw new Error('⚠️ Failed to generate valid embedding.');
+      throw new Error('Failed to generate valid embedding.');
     }
 
     const db = admin.firestore();
@@ -21,13 +21,12 @@ async function updateTagEmbeddingForDream(uid, dreamId, tags) {
 
     await dreamRef.update({ tagEmbedding });
 
-    console.log('✅ tagEmbedding successfully updated in Firestore.');
+    console.log('tagEmbedding successfully updated in Firestore.');
   } catch (error) {
-    console.error('❌ Error updating tagEmbedding:', error.message);
+    console.error('Error updating tagEmbedding:', error.message);
   }
 }
 
-// 👇 כאן שימי את הפרטים של החלום שאת רוצה לעדכן
 const uid = '94ixwXPd9EggX2gpznwfeE61FQs1';
 const dreamId = '8r5iCxCi7WXA95yZNxai';
 const tags = [
