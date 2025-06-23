@@ -1,4 +1,4 @@
-client/config/*
+client/config/firebase.js
 .env
 server/.env
 server/config/*
