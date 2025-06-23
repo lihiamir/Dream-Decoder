@@ -1,7 +1,7 @@
-client/config/firebase.js
+client/config/*
 .env
 server/.env
-server/config/*
+server/config/firebase.js
 server/firebaseServiceKey.json
 server/node_modules/
 server/data/tag_embeddings_openai.json
