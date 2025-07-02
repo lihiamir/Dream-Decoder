@@ -7,11 +7,16 @@ This project helps users **record**, **visualize**, and **understand** their dre
 
 ## 🚀 Running the Application
 
-1. Clone this repository to your local machine 💻  
-2. Run `npm install` to install dependencies 📦  
-3. Start the development server using `npm start` ▶️  
-4. Ensure you have a `.env` file with your Firebase and OpenAI credentials  
-5. Make sure Firebase Authentication, Firestore, and Storage are properly configured
+This project consists of two main parts:
+- **Server** – Node.js backend for API, dream processing, and Firebase integration
+- **Client** – React Native app (using Expo) for user interaction
+
+1. Clone this repository to your local machine 💻
+2. To run the server, navigate to the `server` folder, run `npm install`, and then start the server using `node server.js` ▶️  
+4. Ensure you have a `.env` file in the `server` folder with your Firebase and OpenAI credentials  
+5. To run the client, navigate to the `DreamApp` folder, run `npm install`, and then start the app using `npx expo start` 📱  
+6. Make sure Firebase Authentication, Firestore, and Storage are properly configured  
+7. Keep both the server and client running in parallel for the app to function correctly
 
 ---
 
