@@ -88,7 +88,29 @@ Tests are implemented using the **Jest** framework. Examples:
 
 ## 🖼️ Screenshots
 
-> (Add relevant screenshots here – login, journal, visual dream, settings, etc.)
+### 📝 Register
+![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf](https://github.com/user-attachments/assets/187b89a2-70d6-4983-8b2f-e3dfc28c31f5)
+---
+### 🔐 Login
+![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (4)](https://github.com/user-attachments/assets/fafc2f98-9576-431a-8792-7843e5f1ee32)
+---
+### ✔️ User Preferences Settings
+![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (3)](https://github.com/user-attachments/assets/90f15b4c-3700-4aa2-8e29-44e3ff4b65be)
+---
+### 📔 Journal
+![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (5)](https://github.com/user-attachments/assets/bf680d63-ddd2-4d78-a650-b14c995c1734)
+---
+### 📍 Timeline
+![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (2)](https://github.com/user-attachments/assets/4330f40f-aa13-4085-bb0f-de4697854f09)
+---
+### ➕ Record New Dream
+![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (1)](https://github.com/user-attachments/assets/ec6e8533-c5a8-4b38-9ec2-439a64ad683e)
+---
+### ✍️ Personalized Questions
+![תמונה של WhatsApp_ 2025-06-22 בשעה 23 05 04_ffa81eed](https://github.com/user-attachments/assets/5124b7f2-9ecf-4ff2-9161-bcfe7f2e6025)
+---
+### ✨ Dream Screen
+![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (6)](https://github.com/user-attachments/assets/ba8464a8-4556-487d-b76a-387b4d362b3b)
 
 ---
 
@@ -107,8 +129,3 @@ Tests are implemented using the **Jest** framework. Examples:
 
 ---
 
-## 🔄 Typical User Flows
-
-1. **Login/Register → Select interpretation style → Dream Journal**
-2. **New Dream → Record/Type → Clarification (if needed) → Scene Generation**
-3. **View Dream → Interpretation → Similar dreams**
