@@ -89,35 +89,28 @@ Tests are implemented using the **Jest** framework. Examples:
 ## 🖼️ Screenshots
 
 ### 📝 Register
-![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf](https://github.com/user-attachments/assets/187b89a2-70d6-4983-8b2f-e3dfc28c31f5)
-
-<img src="https://github.com/user-attachments/assets/187b89a2-70d6-4983-8b2f-e3dfc28c31f5.jpg" width="232" height="500">
-
-
-
+![registerr](https://github.com/user-attachments/assets/f8a73f94-2d51-4595-8248-aeeb09d7f1f1)
 ---
-
 ### 🔐 Login
-![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (4)](https://github.com/user-attachments/assets/fafc2f98-9576-431a-8792-7843e5f1ee32)
+![register](https://github.com/user-attachments/assets/60eae006-4727-48e1-93c9-83423836719c)
 ---
 ### ✔️ User Preferences Settings
-![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (3)](https://github.com/user-attachments/assets/90f15b4c-3700-4aa2-8e29-44e3ff4b65be)
+![settings](https://github.com/user-attachments/assets/e03fa7af-991b-455a-bcab-0fd6ec77fa69)
 ---
 ### 📔 Journal
-![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (5)](https://github.com/user-attachments/assets/bf680d63-ddd2-4d78-a650-b14c995c1734)
+![journal](https://github.com/user-attachments/assets/934f1c9f-2d0a-41a5-be20-848be2f4c954)
 ---
 ### 📍 Timeline
-![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (2)](https://github.com/user-attachments/assets/4330f40f-aa13-4085-bb0f-de4697854f09)
+![timeline](https://github.com/user-attachments/assets/368d016e-73fa-4ceb-b454-603bdd4a94f8)
 ---
 ### ➕ Record New Dream
-![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (1)](https://github.com/user-attachments/assets/ec6e8533-c5a8-4b38-9ec2-439a64ad683e)
+![new dream](https://github.com/user-attachments/assets/41fc0072-d44b-4f4f-92ef-d120499c53f7)
 ---
 ### ✍️ Personalized Questions
-![תמונה של WhatsApp_ 2025-06-22 בשעה 23 05 04_ffa81eed](https://github.com/user-attachments/assets/5124b7f2-9ecf-4ff2-9161-bcfe7f2e6025)
+![q](https://github.com/user-attachments/assets/1721349b-5d1d-4fcb-a9fa-e2ab615a162b)
 ---
 ### ✨ Dream Screen
-![תמונה של WhatsApp_ 2025-06-22 בשעה 23 03 21_e586ecaf (6)](https://github.com/user-attachments/assets/ba8464a8-4556-487d-b76a-387b4d362b3b)
-
+![dream](https://github.com/user-attachments/assets/b3f4dd5b-c73a-4586-b2ee-347a407d8246)
 ---
 
 ## 🧱 Tech Stack
