@@ -50,11 +50,10 @@ Each scene includes symbolic tags and descriptions.
 
 - ### 📚 Dream Journal
 View your dreams in a **gallery** or **timeline** view.  
-Each dream card shows a thumbnail and interpretation summary.
+Each dream card shows a thumbnail picture.
 
 - ### 🔍 Search & Filter
-Search dreams using keywords or tags.  
-Filtering by date, mood, or symbol is supported.
+Search dreams using keywords and tags.  
 
 - ### 🤝 Similar Dreams (KNN)
 The app recommends semantically related dreams using OpenAI Embeddings and cosine similarity.
